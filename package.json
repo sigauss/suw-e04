@@ -5,7 +5,7 @@
   "author": "cytronn <arnaud.villani@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
     "start": "nuxt build && nuxt start",
     "precommit": "npm run lint",
@@ -14,6 +14,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "cross-env": "^5.0.1",
+    "eslint-plugin-vue": "^4.5.0",
     "express": "^4.15.3",
     "nuxt": "latest",
     "source-map-support": "^0.4.15"
@@ -27,6 +28,7 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "nodemon": "^1.11.0"
   }
 }
