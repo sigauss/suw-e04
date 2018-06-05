@@ -1,16 +1,16 @@
-const express = require('express')
+const express = require("express");
 
 // Create express instnace
-const app = express()
+const app = express();
 
-// Require API routes
-const users = require('./routes/users')
+const repos = require("./routes/repos");
 
 // Import API Routes
-app.use(users)
+app.use(repos);
 
 // Export the server middleware
 module.exports = {
-  path: '/api',
-  handler: app
-}
+  path: "/api",
+  handler: app,
+  debug: true
+};
