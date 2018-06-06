@@ -19,13 +19,13 @@ import axios from '~/plugins/axios'
 export default {
   name: 'id',
   asyncData ({ params, error }) {
-    return axios.get('/api/users/')
-      .then((res) => {
-        return { user: res }
-      })
-      .catch((e) => {
-        error({ statusCode: 404, message: 'User not found' })
-      })
+    // return axios.get('/api/users/')
+    //   .then((res) => {
+    //     return { user: res }
+    //   })
+    //   .catch((e) => {
+    //     error({ statusCode: 404, message: 'User not found' })
+    //   })
   },
   head () {
     return {
