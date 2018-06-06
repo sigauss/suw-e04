@@ -9,10 +9,8 @@
       <button type="submit">Create</button>
     </form>
     <ul class="repos">
-      <li v-for="(repo, index) in repos" :key="index" class="repos">
-        <nuxt-link :to="{ name: 'id', params: { id: index }}">
-          {{ repo.name }}
-        </nuxt-link>
+      <li v-for="(repo, name) in repos" :key="name" class="repos">
+        <router-link :to="`/repos/${repo.name}`">{{ repo.name }}</router-link>
       </li>
     </ul>
   </section>
@@ -48,7 +46,7 @@ export default {
           "https://api.github.com/user/repos?access_token=" +
           this.$store.getters.access_token,
         data: {
-          name: this.$refs.form.repoName.value,
+          name: "Accio-" + this.$refs.form.repoName.value,
           private: true
         },
         headers: {

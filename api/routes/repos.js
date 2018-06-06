@@ -9,18 +9,14 @@ router.get("/repos", function(req, res, next) {
   res.json(repos);
 });
 
-router.get("/repos/create", function(req, res, next) {
-  res.json(repos);
-});
-
-/* GET repos by ID. */
-router.get("/repos/:name", function(req, res, next) {
-  const name = parseInt(req.params.name);
+/* GET repos by slug. 
+router.get("/repo/:slug", function(req, res, next) {
+  const name = req.params.name;
   if (name) {
     res.json(repos[name]);
   } else {
     res.sendStatus(404);
   }
-});
+}); */
 
 module.exports = router;
