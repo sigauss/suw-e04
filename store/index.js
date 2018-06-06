@@ -11,13 +11,13 @@ const createStore = () => {
         },
     },
     mutations: {
-        SET_ACCESSTOKEN (state, accessToken) {
-          state.access_token = accessToken;
+        SET_ACCESSTOKEN (state, access_token) {
+          state.access_token = access_token;
         },
       },
     actions: {
-      setAccessToken ({ commit }, accessToken) {
-        commit('SET_ACCESSTOKEN', accessToken);
+      setAccessToken ({ commit }, access_token) {
+        commit('SET_ACCESSTOKEN', access_token);
       },
     }
     })

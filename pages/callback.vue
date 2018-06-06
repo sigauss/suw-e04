@@ -5,6 +5,7 @@
       Login
     </h1>
     <h2>wesh c'est le callback ici!!!!!!</h2>
+   <nuxt-link to="/repos">repos</nuxt-link>
   </section>
 </template>
 
@@ -39,7 +40,9 @@ export default {
         .then((res) => {
             this.access_token = JSON.parse(res.data).access_token;
             console.log(JSON.parse(res.data))
+            this.$store.dispatch('setAccessToken', this.access_token);
             console.log(this.access_token);
+            console.log(this.$store.getters.access_token)
         })
         .catch((e) => {
             // error({ statusCode: 404, message: 'User not found' })

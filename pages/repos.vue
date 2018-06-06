@@ -3,6 +3,7 @@
     <h1 class="title">
       REPOS LIST
     </h1>
+    <h2>{{ $store.getters.access_token }}</h2>
     <ul class="repos">
       <li v-for="(repo, index) in repos" :key="index" class="repos">
         <nuxt-link :to="{ name: 'id', params: { id: index }}">
@@ -27,6 +28,14 @@ export default {
     return {
       title: "Repos"
     };
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      console.log(this.$store.getters.access_token)
+    }
   }
 };
 </script> 
