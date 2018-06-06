@@ -4,7 +4,10 @@
       REPOS LIST
     </h1>
     <h2>{{ $store.getters.access_token }}</h2>
-    <nuxt-link to="/create">Create repo</nuxt-link>
+    <form ref="form" name="createRepo"  @submit.prevent="submitRepo">
+      <input type="text" name="repoName" />
+      <button type="submit">Create</button>
+    </form>
     <ul class="repos">
       <li v-for="(repo, index) in repos" :key="index" class="repos">
         <nuxt-link :to="{ name: 'id', params: { id: index }}">
@@ -37,6 +40,23 @@ export default {
   methods: {
     init() {
       console.log(this.$store.getters.access_token);
+    },
+    submitRepo() {
+      return axios({
+        method: "post",
+        url:
+          "https://api.github.com/user/repos?access_token=" +
+          this.$store.getters.access_token,
+        data: {
+          name: this.$refs.form.repoName.value,
+          private: true
+        },
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }).then(res => {
+        alert("repo created");
+      });
     }
   }
 };
