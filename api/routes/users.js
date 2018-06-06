@@ -4,12 +4,6 @@ const { Router } = require('express')
 const User = require("../models/User")
 const router = Router()
 
-// Mock Users
-const users = [
-  { name: 'Alexandre' },
-  { name: 'Pooya' },
-  { name: 'Sébastien' }
-]
 
 /* GET users listing. */
 router.get('/users', function (req, res, next) {
@@ -102,7 +96,6 @@ router.get('/github/user/:token', function (req, res, next) {
       "cache-control": "no-cache",
     }
   };
-  console.log()
   var request = http.request(options, function (response) {
     var chunks = [];
     var body;
@@ -112,7 +105,6 @@ router.get('/github/user/:token', function (req, res, next) {
   
     response.on("end", function () {
       body = Buffer.concat(chunks);
-      console.log('aloha', body.toString());
       res.json(body.toString());
       // res.sendStatus(200);
     });

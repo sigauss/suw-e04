@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 
 
 if (typeof localStorage === "undefined" || localStorage === null) {
-  console.log('dabedabedouuu')
   var LocalStorage = require('node-localstorage').LocalStorage;
   localStorage = new LocalStorage('./scratch');
 }
