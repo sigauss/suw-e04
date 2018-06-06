@@ -1,14 +1,14 @@
-import Vuex from 'vuex'
+import Vuex from "vuex";
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
-      access_token: null,
+      access_token: null
     },
     getters: {
-        access_token (state) {
-          return state.access_token
-        },
+      access_token(state) {
+        return state.access_token;
+      }
     },
     mutations: {
         SET_ACCESSTOKEN (state, access_token) {
@@ -20,7 +20,7 @@ const createStore = () => {
         commit('SET_ACCESSTOKEN', access_token);
       },
     }
-    })
-  };
+  });
+};
 
-  export default createStore;
+export default createStore;

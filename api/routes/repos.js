@@ -9,11 +9,15 @@ router.get("/repos", function(req, res, next) {
   res.json(repos);
 });
 
+router.get("/repos/create", function(req, res, next) {
+  res.json(repos);
+});
+
 /* GET repos by ID. */
-router.get("/repos/:id", function(req, res, next) {
-  const id = parseInt(req.params.id);
-  if (id >= 0 && id < repos.length) {
-    res.json(repos[id]);
+router.get("/repos/:name", function(req, res, next) {
+  const name = parseInt(req.params.name);
+  if (name) {
+    res.json(repos[name]);
   } else {
     res.sendStatus(404);
   }

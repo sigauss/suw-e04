@@ -1,27 +1,29 @@
 <template>
   <section class="container">
-    <img src="~assets/img/logo.png" alt="Nuxt.js Logo" class="logo" />
     <h1 class="title">
-      Login
+      CREATE REPO
     </h1>
-    <h2>OAOO</h2>
-    <a href="https://github.com/login/oauth/authorize?scope=user,repo,repo:invite,&client_id=6512280b0626a7722d81">Click here to begin!</a>
+    <a @click="createRepo" href="#">Create</a>
   </section>
 </template>
 
 <script>
 import axios from "~/plugins/axios";
 
+const token = "b7ca31bece98e7e48b3831e4f29e89372e1ff81a";
+
+function createRepo() {
+  axios.post("https://api.github.com/user/repos?name='testtt'");
+}
+
 export default {
-  async asyncData () {
-  },
-  head () {
+  head() {
     return {
-      title: "Users"
+      title: "Repos"
     };
   }
 };
-</script>
+</script> 
 
 <style scoped>
 .title {

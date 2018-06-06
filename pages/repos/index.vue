@@ -3,10 +3,12 @@
     <h1 class="title">
       REPOS LIST
     </h1>
-    <h2>{{ $store.getters.access_token }}</h2>
+    <nuxt-link to="/repos/create">
+      Create repo
+    </nuxt-link>
     <ul class="repos">
-      <li v-for="(repo, index) in repos" :key="index" class="repos">
-        <nuxt-link :to="{ name: 'id', params: { id: index }}">
+      <li v-for="(repo) in repos" :key="repo.name" class="repos">
+        <nuxt-link :to="{ name: 'name', params: { name: name }}">
           {{ repo.name }}
         </nuxt-link>
       </li>
@@ -18,10 +20,11 @@
 import axios from "~/plugins/axios";
 
 export default {
-  async asyncData(store) {
+  async asyncData() {
+    // this.$store.getters.accessToken get accesstoken
+    console.log(this);
     let { data } = await axios.get(
-      "https://api.github.com/user/repos?access_token=" +
-        store.store.getters.access_token
+      "https://api.github.com/user/repos?access_token=d70fd7b0123e01cbff71dd7cffe51809eabba827"
     );
     return { repos: data };
   },
@@ -29,14 +32,6 @@ export default {
     return {
       title: "Repos"
     };
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init() {
-      console.log(this.$store.getters.access_token);
-    }
   }
 };
 </script> 
