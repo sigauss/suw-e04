@@ -34,18 +34,18 @@ export default {
       this.init();
     },
     methods: {
-
       init() {
         return axios.get(`/api/auth/${this.$route.query.code}`)
         .then((res) => {
             this.access_token = JSON.parse(res.data).access_token;
             this.$store.dispatch('setAccessToken', this.access_token);
-            console.log(JSON.parse(res.data))
-            console.log(this.access_token);
-            console.log(this.$store.getters.access_token)
             return axios.get(`/api/github/user/${this.access_token}`)
             .then((res) => {
                 console.log(JSON.parse(res.data))
+                return axios.post(`/api/users/`)
+                .then((res) => {
+                    console.log(JSON.parse(res.data))
+                });
             });
         })
         .catch((e) => {
@@ -55,6 +55,7 @@ export default {
           // error({ statusCode: 404, message: 'User not found' })
         });
     }
+    
   }
 };
 </script>

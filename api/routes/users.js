@@ -19,11 +19,11 @@ router.get('/users', function (req, res, next) {
 
 router.post('/users', function (req, res, next) {
     var userData = {
-      access_token: 'bliblibli',
-      username: 'test',
-      email: 'arnaud',
+      access_token: "ofoffofod",
+      username: "duludulusq",
+      email: "abilibiqssq",
     }
-
+    console.log(userData);
     User.create(userData, function (error, user) {
       if (error) {
         return next(error);
