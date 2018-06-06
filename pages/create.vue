@@ -1,17 +1,8 @@
 <template>
   <section class="container">
     <h1 class="title">
-      REPOS LIST
+      new repo created
     </h1>
-    <h2>{{ $store.getters.access_token }}</h2>
-    <nuxt-link to="/create">Create repo</nuxt-link>
-    <ul class="repos">
-      <li v-for="(repo, index) in repos" :key="index" class="repos">
-        <nuxt-link :to="{ name: 'id', params: { id: index }}">
-          {{ repo.name }}
-        </nuxt-link>
-      </li>
-    </ul>
   </section>
 </template>
 
@@ -20,11 +11,18 @@ import axios from "~/plugins/axios";
 
 export default {
   async asyncData(store) {
-    let { data } = await axios.get(
-      "https://api.github.com/user/repos?access_token=" +
-        store.store.getters.access_token
-    );
-    return { repos: data };
+    axios({
+      method: "post",
+      url:
+        "https://api.github.com/user/repos?access_token=" +
+        store.store.getters.access_token,
+      data: {
+        name: "testaccioapi"
+      },
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
   },
   head() {
     return {
