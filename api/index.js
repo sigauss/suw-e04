@@ -1,6 +1,17 @@
 const express = require("express");
 const session = require('express-session')
 const mongoose = require('mongoose');
+
+
+if (typeof localStorage === "undefined" || localStorage === null) {
+  console.log('dabedabedouuu')
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./scratch');
+}
+ 
+localStorage.setItem('myFirstKey', 'myFirstValue');
+console.log(localStorage.getItem('myFirstKey'));
+
 // const MongoStore = require('connect-mongo')(session);
 
 //connect to MongoDB
