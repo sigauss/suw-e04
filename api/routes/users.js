@@ -18,21 +18,23 @@ router.get('/users', function (req, res, next) {
 })
 
 router.post('/users', function (req, res, next) {
+
     var userData = {
-      access_token: "ofoffofod",
-      username: "duludulusq",
-      email: "abilibiqssq",
+      username: req.body.username,
+      access_token: req.body.access_token,
+      avatar: req.body.avatar,
+      email: 'm'
     }
     console.log(userData);
     User.create(userData, function (error, user) {
       if (error) {
         return next(error);
-      } else {
-        // req.session.userId = user._id;
-        // return res.redirect('/profile');
       }
+      res.json(user)
     });
-})
+
+    res.sendStatus(201)
+  })
 
 /* GET user by ID. */
 router.get('/users/:id', function (req, res, next) {
