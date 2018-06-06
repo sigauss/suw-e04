@@ -80,14 +80,45 @@ router.get('/auth/:id', function (req, res, next) {
   
     response.on("end", function () {
       body = Buffer.concat(chunks);
+      console.log('auth', body.toString());
       res.json(body.toString());
       // res.sendStatus(200);
     });
     // res.json(body.toString())
   }, body);
-    
   request.end();
+})
+
+router.get('/github/user/:token', function (req, res, next) {
+  let body;
+  var options = {
+    "method": "GET",
+    "hostname": "api.github.com",
+    "port": null,
+    "path": `/user?access_token=${req.params.token}`,
+    "headers": {
+      "user-agent": "Awesome-Octocat-App",
+      "accept": "application/json",
+      "cache-control": "no-cache",
+    }
+  };
+  console.log()
+  var request = http.request(options, function (response) {
+    var chunks = [];
+    var body;
+    response.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
   
+    response.on("end", function () {
+      body = Buffer.concat(chunks);
+      console.log('aloha', body.toString());
+      res.json(body.toString());
+      // res.sendStatus(200);
+    });
+    // res.json(body.toString())
+  }, body);
+  request.end();
 })
 
 module.exports = router
