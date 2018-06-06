@@ -5,7 +5,7 @@
       Login
     </h1>
     <h2>OAOO</h2>
-    <a href="https://github.com/login/oauth/authorize?scope=user:email&client_id=6512280b0626a7722d81">Click here to begin!</a>
+    <a href="https://github.com/login/oauth/authorize?scope=user,repo,repo:invite,&client_id=6512280b0626a7722d81">Click here to begin!</a>
   </section>
 </template>
 

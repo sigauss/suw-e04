@@ -1,7 +1,7 @@
 const axios = require('axios')
-const http = require("https");
+const http = require("https")
 const { Router } = require('express')
-
+const User = require("../models/User")
 const router = Router()
 
 // Mock Users
@@ -13,17 +13,48 @@ const users = [
 
 /* GET users listing. */
 router.get('/users', function (req, res, next) {
-  res.json(users)
+  console.log('hey');
+  User.find(function(err, users){
+    if (err){
+        res.send(err); 
+    }
+    // res.json(users); 
+    console.log(users);
+  });
+})
+
+router.post('/users', function (req, res, next) {
+    var userData = {
+      access_token: 'bliblibli',
+      username: 'test',
+      email: 'arnaud',
+    }
+
+    User.create(userData, function (error, user) {
+      if (error) {
+        return next(error);
+      } else {
+        // req.session.userId = user._id;
+        // return res.redirect('/profile');
+      }
+    });
 })
 
 /* GET user by ID. */
 router.get('/users/:id', function (req, res, next) {
-  const id = parseInt(req.params.id)
-  if (id >= 0 && id < users.length) {
-    res.json(users[id])
-  } else {
-    res.sendStatus(404)
-  }
+  // const id = parseInt(req.params.id)
+  // if (id >= 0 && id < users.length) {
+  //   res.json(users[id])
+  // } else {
+  //   res.sendStatus(404)
+  // }
+  console.log('hey');
+  User.find(function(err, users){
+    if (err){
+        res.send(err); 
+    }
+    res.json(users); 
+  });
 })
 
 router.get('/auth/:id', function (req, res, next) {

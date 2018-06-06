@@ -38,6 +38,7 @@ export default {
         return axios.get(`/api/auth/${this.$route.query.code}`)
         .then((res) => {
             this.access_token = JSON.parse(res.data).access_token;
+            console.log(JSON.parse(res.data))
             console.log(this.access_token);
         })
         .catch((e) => {
