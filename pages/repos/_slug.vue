@@ -19,13 +19,21 @@ import axios from "~/plugins/axios";
 
 export default {
   async asyncData(store) {
+    let repoOwner = null;
+    const repos = store.store.getters.user.repos;
+    repos.forEach(repo => {
+      if (repo.name === store.params.slug) {
+        repoOwner = repo.owner.login;
+      }
+    });
     let { data } = await axios.get(
-      "https://api.github.com/repos/cytronn/" +
-        store.route.params.slug +
+      "https://api.github.com/repos/" +
+        repoOwner +
+        "/" +
+        store.params.slug +
         "/contents/?access_token=" +
         store.store.getters.access_token
     );
-    console.log(data);
     return { contents: data };
   },
   head() {
@@ -37,9 +45,7 @@ export default {
     this.init();
   },
   methods: {
-    init() {
-      console.log(this.$store.getters.access_token);
-    }
+    init() {}
   }
 };
 </script> 
