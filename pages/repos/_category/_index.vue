@@ -9,7 +9,9 @@
     </form>
     <ul class="repos">
       <li v-for="(file, name) in components" :key="name" class="repos">
-        {{ file.name }}
+         <span v-if="file.type === 'dir'"><i class="fa fa-folder-o"></i></span>
+         <span v-else><i class="fa fa-file-o"></i></span>
+         {{ file.name }}
       </li>
     </ul>
   </section>

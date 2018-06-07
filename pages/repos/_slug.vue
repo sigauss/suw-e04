@@ -10,7 +10,8 @@
     <ul class="repos">
       <li v-for="(file, name) in contents" :key="name" class="repos">
         <router-link :to="`./${$store.getters.active_repo.name}/${file.name}`">
-          <span v-if="file.type === 'dir'">Folder ->  </span>
+          <span v-if="file.type === 'dir'"><i class="fa fa-folder-o"></i></span>
+          <span v-else><i class="fa fa-file-o"></i></span>
           {{ file.name }}
         </router-link>
       </li>

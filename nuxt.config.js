@@ -15,7 +15,9 @@ module.exports = {
   ** Global CSS
   */
   css: ["~/assets/css/main.css"],
+  modules: ["@nuxtjs/font-awesome"],
   /*
+  
   ** Add axios globally
   */
   build: {
