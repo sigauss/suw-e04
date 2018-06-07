@@ -3,6 +3,7 @@
     <h1 class="title">
       SINGLE REPO PAGE
     </h1>
+    <button v-on:click="createFolder">Create category</button>
     <ul class="repos">
       <li v-for="(file, name) in contents" :key="name" class="repos">
         <nuxt-link to="/">
@@ -19,13 +20,25 @@ import axios from "~/plugins/axios";
 
 export default {
   async asyncData(store) {
+    let repoOwner = null;
+    const repos = store.store.getters.user.repos;
+    repos.forEach(repo => {
+      if (repo.name === store.params.slug) {
+        repoOwner = repo.owner.login;
+        store.store.dispatch("setActiveRepo", {
+          name: repo.name,
+          owner: repoOwner
+        });
+      }
+    });
     let { data } = await axios.get(
-      "https://api.github.com/repos/cytronn/" +
-        store.route.params.slug +
+      "https://api.github.com/repos/" +
+        repoOwner +
+        "/" +
+        store.params.slug +
         "/contents/?access_token=" +
         store.store.getters.access_token
     );
-    console.log(data);
     return { contents: data };
   },
   head() {
@@ -37,8 +50,30 @@ export default {
     this.init();
   },
   methods: {
-    init() {
-      console.log(this.$store.getters.access_token);
+    init() {},
+    githubAction() {
+      return axios
+        .put(
+          `https://api.github.com/repos/${
+            this.$store.getters.active_repo.owner
+          }/${
+            this.$store.getters.active_repo.name
+          }/contents/test/test.php?access_token=${
+            this.$store.getters.access_token
+          }`,
+          {
+            message: "accio-commit",
+            content: btoa("<h1>Salut</h1>")
+          }
+        )
+        .then(res => {
+          store.store.dispatch("setUserRepos", res.data);
+          return { repos: res.data };
+        });
+      x;
+    },
+    createFolder() {
+      this.githubAction();
     }
   }
 };

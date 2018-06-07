@@ -115,8 +115,6 @@ router.get('/github/user/:token', function (req, res, next) {
 
 router.get('/github/email/:token', function (req, res, next) {
 
-  console.log('HELLOOOOOO')
-
   var options = {
     "method": "GET",
     "hostname": "api.github.com",

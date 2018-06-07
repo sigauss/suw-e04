@@ -37,13 +37,15 @@ export default {
       init() {
         return axios.get(`/api/auth/${this.$route.query.code}`)
         .then((res) => {
-            this.access_token = JSON.parse(res.data).access_token;
-            this.$store.dispatch('setAccessToken', this.access_token);
+            this.access_token = JSON.parse(res.data).access_token
+            this.$store.dispatch('setAccessToken', this.access_token)
             return axios.get(`/api/github/user/${this.access_token}`)
             .then((res) => {
                 this.username = JSON.parse(res.data).login
                 this.avatar = JSON.parse(res.data).avatar_url
                 this.github_id = JSON.parse(res.data).id
+                // TODO add email to store
+                this.$store.dispatch('setUserInformations', JSON.parse(res.data));
                 return axios.get(`/api/github/email/${this.access_token}`)
                 .then((res) => {
                   return axios.post('/api/users', {
