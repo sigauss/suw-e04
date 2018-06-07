@@ -41,22 +41,22 @@ export default {
             this.$store.dispatch('setAccessToken', this.access_token);
             return axios.get(`/api/github/user/${this.access_token}`)
             .then((res) => {
-                // console.log(JSON.parse(res.data))
-                return axios.post('/api/users', {
-                  // data: {
-                  username: JSON.parse(res.data).login,
-                  access_token: this.access_token,
-                  avatar: JSON.parse(res.data).avatar_url,
-                  email: 'rff'
-                  // }
+                this.username = JSON.parse(res.data).login
+                this.avatar = JSON.parse(res.data).avatar_url
+                this.github_id = JSON.parse(res.data).id
+                return axios.get(`/api/github/email/${this.access_token}`)
+                .then((res) => {
+                  return axios.post('/api/users', {
+                    username: this.username,
+                    access_token: this.access_token,
+                    avatar: this.avatar,
+                    email: res.data,
+                    github_id: this.github_id
+                  });
                 })
-                
-                .then(response => { 
-                  // console.log(JSON.parse(res.data))
+                .catch((error) => {
+                  console.log(error.response)
                 })
-                .catch(error => {
-                    // console.log(error.response)
-                });
             });
         })
         .catch((e) => {

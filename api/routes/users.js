@@ -12,7 +12,6 @@ router.get('/users', function (req, res, next) {
     if (err){
         res.send(err); 
     }
-    // res.json(users); 
     console.log(users);
   });
 })
@@ -23,14 +22,13 @@ router.post('/users', function (req, res, next) {
       username: req.body.username,
       access_token: req.body.access_token,
       avatar: req.body.avatar,
-      email: 'm'
+      github_id: req.body.github_id,
+      email: req.body.email
     }
-    console.log(userData);
     User.create(userData, function (error, user) {
       if (error) {
         return next(error);
       }
-      res.json(user)
     });
 
     res.sendStatus(201)
@@ -113,6 +111,39 @@ router.get('/github/user/:token', function (req, res, next) {
     // res.json(body.toString())
   }, body);
   request.end();
+})
+
+router.get('/github/email/:token', function (req, res, next) {
+
+  console.log('HELLOOOOOO')
+
+  var options = {
+    "method": "GET",
+    "hostname": "api.github.com",
+    "port": null,
+    "path": `/user/emails?access_token=${req.params.token}`,
+    "headers": {
+      "user-agent": "Awesome-Octocat-App",
+      "accept": "application/json",
+      "cache-control": "no-cache",
+    }
+  };
+  
+  var req = http.request(options, function (response) {
+    var chunks = [];
+  
+    response.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
+  
+    response.on("end", function () {
+      let body = JSON.parse(Buffer.concat(chunks));
+      let primary_email = body.filter(email => email.primary == true)
+      res.send(primary_email[0].email);
+    });
+  });
+
+  req.end();
 })
 
 module.exports = router
