@@ -3,6 +3,10 @@
     <h1 class="title">
       List of all "{{categoryName}}"
     </h1>
+    <form ref="form" name="createComponent"  @submit.prevent="createComponent">
+      <input type="text" name="componentName" />
+      <button type="submit">Create component</button>
+    </form>
     <ul class="repos">
       <li v-for="(file, name) in components" :key="name" class="repos">
         {{ file.name }}
@@ -37,7 +41,26 @@ export default {
     this.init();
   },
   methods: {
-    init() {}
+    init() {},
+    githubAction(componentName) {
+      return axios.put(
+        `https://api.github.com/repos/${
+          this.$store.getters.active_repo.owner
+        }/${this.$store.getters.active_repo.name}/contents/${
+          this.$route.params.index
+        }/${componentName}/index.js?access_token=${
+          this.$store.getters.access_token
+        }`,
+        {
+          message: `:octopus: Accio :tophat: • ${Date.now()}`,
+          content: btoa("console.log('hello wolrd')")
+        }
+      );
+      x;
+    },
+    createComponent() {
+      this.githubAction(this.$refs.form.componentName.value);
+    }
   }
 };
 </script> 

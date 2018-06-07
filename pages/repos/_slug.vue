@@ -5,7 +5,6 @@
     </h1>
     <form ref="form" name="createCategory"  @submit.prevent="createCategory">
       <input type="text" name="categoryName" />
-      <textarea name="readmeContent" placeholder="Your readme content"></textarea>
       <button type="submit">Create category</button>
     </form>
     <ul class="repos">
@@ -56,7 +55,7 @@ export default {
   },
   methods: {
     init() {},
-    githubAction(categoryName, readmeContent) {
+    githubAction(categoryName) {
       return axios
         .put(
           `https://api.github.com/repos/${
@@ -68,7 +67,9 @@ export default {
           }`,
           {
             message: `:octopus: Accio :tophat: • ${Date.now()}`,
-            content: btoa(readmeContent)
+            content: btoa(
+              "<h1>Hello</h1>Congratulations you just created your category of component"
+            )
           }
         )
         .then(res => {
@@ -78,10 +79,7 @@ export default {
       x;
     },
     createCategory() {
-      this.githubAction(
-        this.$refs.form.categoryName.value,
-        this.$refs.form.readmeContent.value
-      );
+      this.githubAction(this.$refs.form.categoryName.value);
     }
   }
 };
