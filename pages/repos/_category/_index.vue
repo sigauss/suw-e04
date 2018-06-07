@@ -43,19 +43,42 @@ export default {
   methods: {
     init() {},
     githubAction(componentName) {
-      return axios.put(
-        `https://api.github.com/repos/${
-          this.$store.getters.active_repo.owner
-        }/${this.$store.getters.active_repo.name}/contents/${
-          this.$route.params.index
-        }/${componentName}/index.js?access_token=${
-          this.$store.getters.access_token
-        }`,
-        {
-          message: `:octopus: Accio :tophat: • ${Date.now()}`,
-          content: btoa("console.log('hello wolrd')")
-        }
-      );
+      const configJson = {
+        devTime: "days: 3, hours: 2",
+        pricing: "350",
+        difficulty: "2",
+        description: "lorem ipsum dolor sit amet",
+        tags: ["slider", "animation", "responsive"]
+      };
+      return axios
+        .put(
+          `https://api.github.com/repos/${
+            this.$store.getters.active_repo.owner
+          }/${this.$store.getters.active_repo.name}/contents/${
+            this.$route.params.index
+          }/${componentName}/index.js?access_token=${
+            this.$store.getters.access_token
+          }`,
+          {
+            message: `:octopus: Accio :tophat: • ${Date.now()}`,
+            content: btoa("console.log('hello wolrd')")
+          }
+        )
+        .then(res => {
+          axios.put(
+            `https://api.github.com/repos/${
+              this.$store.getters.active_repo.owner
+            }/${this.$store.getters.active_repo.name}/contents/${
+              this.$route.params.index
+            }/${componentName}/config.json?access_token=${
+              this.$store.getters.access_token
+            }`,
+            {
+              message: `:octopus: Accio :tophat: • ${Date.now()}`,
+              content: btoa(JSON.stringify(configJson))
+            }
+          );
+        });
       x;
     },
     createComponent() {
