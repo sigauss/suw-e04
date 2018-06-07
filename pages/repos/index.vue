@@ -21,14 +21,16 @@ import axios from "~/plugins/axios";
 
 export default {
   async asyncData(store) {
-    return axios.get(
-      "https://api.github.com/user/repos?access_token=" +
-        store.store.getters.access_token
-    ).then((res) => {
-      console.log(res.data);
-      store.store.dispatch('setUserRepos', res.data)
-      return { repos: res.data };
-    });
+    return axios
+      .get(
+        "https://api.github.com/user/repos?access_token=" +
+          store.store.getters.access_token
+      )
+      .then(res => {
+        console.log(res.data);
+        store.store.dispatch("setUserRepos", res.data);
+        return { repos: res.data };
+      });
   },
   head() {
     return {

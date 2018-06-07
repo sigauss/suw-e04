@@ -3,7 +3,10 @@
     <h1 class="title">
       SINGLE REPO PAGE
     </h1>
-    <button v-on:click="createFolder">Create category</button>
+    <form ref="form" name="createFile"  @submit.prevent="createFile">
+      <input type="text" name="fileName" />
+      <button type="submit">Create file</button>
+    </form>
     <ul class="repos">
       <li v-for="(file, name) in contents" :key="name" class="repos">
         <nuxt-link to="/">
@@ -51,19 +54,19 @@ export default {
   },
   methods: {
     init() {},
-    githubAction() {
+    githubAction(fileName) {
       return axios
         .put(
           `https://api.github.com/repos/${
             this.$store.getters.active_repo.owner
           }/${
             this.$store.getters.active_repo.name
-          }/contents/test/test.php?access_token=${
+          }/contents/${fileName}?access_token=${
             this.$store.getters.access_token
           }`,
           {
             message: "accio-commit",
-            content: btoa("<h1>Salut</h1>")
+            content: btoa("<h1>comment tu vas</h1>")
           }
         )
         .then(res => {
@@ -72,8 +75,8 @@ export default {
         });
       x;
     },
-    createFolder() {
-      this.githubAction();
+    createFile() {
+      this.githubAction(this.$refs.form.fileName.value);
     }
   }
 };
