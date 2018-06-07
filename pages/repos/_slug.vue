@@ -66,7 +66,7 @@ export default {
             this.$store.getters.access_token
           }`,
           {
-            message: "accio-commit",
+            message: `:octopus: Accio :tophat: • ${Date.now()}`,
             content: btoa(readmeContent)
           }
         )
