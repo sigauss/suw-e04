@@ -3,9 +3,10 @@
     <h1 class="title">
       SINGLE REPO PAGE
     </h1>
-    <form ref="form" name="createFile"  @submit.prevent="createFile">
-      <input type="text" name="fileName" />
-      <button type="submit">Create file</button>
+    <form ref="form" name="createCategory"  @submit.prevent="createCategory">
+      <input type="text" name="categoryName" />
+      <textarea name="readmeContent" placeholder="Your readme content"></textarea>
+      <button type="submit">Create category</button>
     </form>
     <ul class="repos">
       <li v-for="(file, name) in contents" :key="name" class="repos">
@@ -54,19 +55,19 @@ export default {
   },
   methods: {
     init() {},
-    githubAction(fileName) {
+    githubAction(categoryName, readmeContent) {
       return axios
         .put(
           `https://api.github.com/repos/${
             this.$store.getters.active_repo.owner
           }/${
             this.$store.getters.active_repo.name
-          }/contents/${fileName}?access_token=${
+          }/contents/${categoryName}/README.md?access_token=${
             this.$store.getters.access_token
           }`,
           {
             message: "accio-commit",
-            content: btoa("<h1>comment tu vas</h1>")
+            content: btoa(readmeContent)
           }
         )
         .then(res => {
@@ -75,8 +76,11 @@ export default {
         });
       x;
     },
-    createFile() {
-      this.githubAction(this.$refs.form.fileName.value);
+    createCategory() {
+      this.githubAction(
+        this.$refs.form.categoryName.value,
+        this.$refs.form.readmeContent.value
+      );
     }
   }
 };
