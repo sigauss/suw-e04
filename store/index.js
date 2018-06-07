@@ -1,4 +1,7 @@
 import Vuex from "vuex";
+import Axios from "axios";
+
+const axios = require('axios')
 
 const createStore = () => {
   return new Vuex.Store({
@@ -8,7 +11,8 @@ const createStore = () => {
         informations: null,
         repos: null
       },
-      activeRepo: null
+      activeRepo: null,
+      authUser: null
     },
     getters: {
       access_token(state) {
@@ -33,9 +37,31 @@ const createStore = () => {
       },
       SET_ACTIVEREPO(state, activeRepo) {
         state.active_repo = activeRepo;
+      },
+      SET_USER: function (state, user) {
+        state.authUser = user
       }
     },
     actions: {
+      nuxtServerInit ({ commit }, { req }) {
+        let user = {}
+        if (req.session && req.session.authUser){
+          user.username = req.session.authUser.username
+          user.access_token = req.session.authUser.access_token
+        }
+        else{
+          user.username = ''
+          user.access_token = ''
+        }
+        return axios.post('http://localhost:3000/api/login', {
+          user
+        })
+        .then((res) => {
+          if(req.session.authUser){
+            commit('SET_USER', res.data)
+          }
+        });
+      },
       setAccessToken({ commit }, access_token) {
         commit("SET_ACCESSTOKEN", access_token);
       },

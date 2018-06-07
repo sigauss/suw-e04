@@ -16,23 +16,49 @@ router.get('/users', function (req, res, next) {
   });
 })
 
+router.post('/login', function (req, res, next) {
+  User.findOne({username: req.body.user.username, access_token: req.body.user.access_token}, function(err, user){
+    if(err) {
+      console.log(err);
+    }
+    if(user) {
+      res.json(user)
+    }
+    else {
+      res.json(null)
+    }
+  })
+})
+
 router.post('/users', function (req, res, next) {
 
-    var userData = {
-      username: req.body.username,
-      access_token: req.body.access_token,
-      avatar: req.body.avatar,
-      github_id: req.body.github_id,
-      email: req.body.email
-    }
-    User.create(userData, function (error, user) {
-      if (error) {
-        return next(error);
-      }
-    });
+  var userData = {
+    username: req.body.username,
+    access_token: req.body.access_token,
+    avatar: req.body.avatar,
+    github_id: req.body.github_id,
+    email: req.body.email
+  }
 
-    res.sendStatus(201)
+  User.findOne({username: userData.username}, function(err, user){
+    if(err) {
+      console.log(err);
+    }
+    if(user) {
+      console.log('user already exists')
+      req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
+    }
+    else {
+      User.create(userData, function (error, user) {
+        if (error) {
+          return next(error);
+        }
+      req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
+      })
+    }
+    res.json(user)
   })
+})
 
 /* GET user by ID. */
 router.get('/users/:id', function (req, res, next) {
@@ -76,9 +102,7 @@ router.get('/auth/:id', function (req, res, next) {
       body = Buffer.concat(chunks);
       console.log('auth', body.toString());
       res.json(body.toString());
-      // res.sendStatus(200);
     });
-    // res.json(body.toString())
   }, body);
   request.end();
 })
@@ -106,9 +130,7 @@ router.get('/github/user/:token', function (req, res, next) {
     response.on("end", function () {
       body = Buffer.concat(chunks);
       res.json(body.toString());
-      // res.sendStatus(200);
     });
-    // res.json(body.toString())
   }, body);
   request.end();
 })

@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session')
 const mongoose = require('mongoose');
 
-
 if (typeof localStorage === "undefined" || localStorage === null) {
   var LocalStorage = require('node-localstorage').LocalStorage;
   localStorage = new LocalStorage('./scratch');
