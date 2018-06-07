@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <h1 class="title">
-      SINGLE REPO PAGE
+      CATEGORIES
     </h1>
     <form ref="form" name="createCategory"  @submit.prevent="createCategory">
       <input type="text" name="categoryName" />
@@ -10,10 +10,10 @@
     </form>
     <ul class="repos">
       <li v-for="(file, name) in contents" :key="name" class="repos">
-        <nuxt-link to="/">
+        <router-link :to="`./${$store.getters.active_repo.name}/${file.name}`">
           <span v-if="file.type === 'dir'">Folder ->  </span>
           {{ file.name }}
-        </nuxt-link>
+        </router-link>
       </li>
     </ul>
   </section>
@@ -43,6 +43,7 @@ export default {
         "/contents/?access_token=" +
         store.store.getters.access_token
     );
+    console.log("data: ", data);
     return { contents: data };
   },
   head() {
