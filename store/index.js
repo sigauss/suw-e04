@@ -59,15 +59,26 @@ const createStore = () => {
           user.username = "";
           user.access_token = "";
         }
-        return axios
-          .post("http://localhost:3000/api/login", {
-            user
-          })
-          .then(res => {
-            if (req.session.authUser) {
-              commit("SET_USER", res.data);
-            }
-          });
+        else{
+          user.username = ''
+          user.access_token = ''
+        }
+        return axios.post('http://localhost:3000/api/login', {
+          user
+        })
+        .then((res) => {
+          if(req.session.authUser){
+            commit('SET_USER', 'logged')
+            return axios.get(`http://localhost:3000/api/github/user/${req.session.authUser.access_token}`)
+            .then((res) => {
+                commit('SET_USERINFORMATIONS', res.data);
+                commit('SET_ACCESSTOKEN', req.session.authUser.access_token)
+            })
+            .catch((error) => {
+              console.log(error.response)
+            })
+          }
+        });
       },
       setAccessToken({ commit }, access_token) {
         commit("SET_ACCESSTOKEN", access_token);
