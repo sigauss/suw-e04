@@ -23,6 +23,7 @@ router.post('/login', function (req, res, next) {
     }
     if(user) {
       res.json(user)
+      // req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
     }
     else {
       res.json(null)
@@ -45,15 +46,15 @@ router.post('/users', function (req, res, next) {
       console.log(err);
     }
     if(user) {
-      console.log('user already exists')
-      req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
+      // user.access_token = req.session.access_token
+      // req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
     }
     else {
       User.create(userData, function (error, user) {
         if (error) {
           return next(error);
         }
-      req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
+      // req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
       })
     }
     res.json(user)
@@ -101,6 +102,8 @@ router.get('/auth/:id', function (req, res, next) {
     response.on("end", function () {
       body = Buffer.concat(chunks);
       console.log('auth', body.toString());
+      req.session.authUser = {access_token: JSON.parse(body).access_token }
+      req.session.save()
       res.json(body.toString());
     });
   }, body);
@@ -129,6 +132,7 @@ router.get('/github/user/:token', function (req, res, next) {
   
     response.on("end", function () {
       body = Buffer.concat(chunks);
+      console.log(body)
       res.json(body.toString());
     });
   }, body);

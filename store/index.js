@@ -58,7 +58,15 @@ const createStore = () => {
         })
         .then((res) => {
           if(req.session.authUser){
-            commit('SET_USER', res.data)
+            commit('SET_USER', 'logged')
+            return axios.get(`http://localhost:3000/api/github/user/${req.session.authUser.access_token}`)
+            .then((res) => {
+                commit('SET_USERINFORMATIONS', res.data);
+                commit('SET_ACCESSTOKEN', req.session.authUser.access_token)
+            })
+            .catch((error) => {
+              console.log(error.response)
+            })
           }
         });
       },

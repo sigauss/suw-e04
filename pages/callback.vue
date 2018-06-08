@@ -39,6 +39,7 @@ export default {
         .then((res) => {
             this.access_token = JSON.parse(res.data).access_token
             this.$store.dispatch('setAccessToken', this.access_token)
+            // req.session.authUser = {access_token: this.access_token}
             return axios.get(`/api/github/user/${this.access_token}`)
             .then((res) => {
                 this.username = JSON.parse(res.data).login
@@ -56,7 +57,7 @@ export default {
                     github_id: this.github_id
                   })
                   .then((res) => {
-                    this.$store.commit('SET_USER', res.data)
+                    this.$store.commit('SET_USER', 'logged')
                   })
                 })
                 .catch((error) => {
