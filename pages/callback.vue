@@ -54,7 +54,10 @@ export default {
                     avatar: this.avatar,
                     email: res.data,
                     github_id: this.github_id
-                  });
+                  })
+                  .then((res) => {
+                    this.$store.commit('SET_USER', res.data)
+                  })
                 })
                 .catch((error) => {
                   console.log(error.response)

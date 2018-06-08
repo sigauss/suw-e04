@@ -1,15 +1,19 @@
 <template>
   <section class="container">
     <h1 class="title">
-      SINGLE REPO PAGE
+      CATEGORIES
     </h1>
-    <button v-on:click="createFolder">Create category</button>
+    <form ref="form" name="createCategory"  @submit.prevent="createCategory">
+      <input type="text" name="categoryName" />
+      <button type="submit">Create category</button>
+    </form>
     <ul class="repos">
       <li v-for="(file, name) in contents" :key="name" class="repos">
-        <nuxt-link to="/">
-          <span v-if="file.type === 'dir'">Folder ->  </span>
+        <router-link :to="`./${$store.getters.active_repo.name}/${file.name}`">
+          <span v-if="file.type === 'dir'"><i class="fa fa-folder-o"></i></span>
+          <span v-else><i class="fa fa-file-o"></i></span>
           {{ file.name }}
-        </nuxt-link>
+        </router-link>
       </li>
     </ul>
   </section>
@@ -39,6 +43,7 @@ export default {
         "/contents/?access_token=" +
         store.store.getters.access_token
     );
+    console.log("data: ", data);
     return { contents: data };
   },
   head() {
@@ -51,19 +56,21 @@ export default {
   },
   methods: {
     init() {},
-    githubAction() {
+    githubAction(categoryName) {
       return axios
         .put(
           `https://api.github.com/repos/${
             this.$store.getters.active_repo.owner
           }/${
             this.$store.getters.active_repo.name
-          }/contents/test/test.php?access_token=${
+          }/contents/${categoryName}/README.md?access_token=${
             this.$store.getters.access_token
           }`,
           {
-            message: "accio-commit",
-            content: btoa("<h1>Salut</h1>")
+            message: `:octopus: Accio :tophat: • ${Date.now()}`,
+            content: btoa(
+              "<h1>Hello</h1>Congratulations you just created your category of component"
+            )
           }
         )
         .then(res => {
@@ -72,8 +79,8 @@ export default {
         });
       x;
     },
-    createFolder() {
-      this.githubAction();
+    createCategory() {
+      this.githubAction(this.$refs.form.categoryName.value);
     }
   }
 };
