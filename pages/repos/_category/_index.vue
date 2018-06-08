@@ -1,17 +1,17 @@
 <template>
   <section class="container">
     <h1 class="title">
-      List of all "{{categoryName}}"
+      List of all 
     </h1>
     <form ref="form" name="createComponent"  @submit.prevent="createComponent">
       <input type="text" name="componentName" />
       <button type="submit">Create component</button>
     </form>
     <ul class="repos">
-      <li v-for="(file, name) in this.components" :key="name" class="repos">
-         <span v-if="file.type === 'dir'"><i class="fa fa-folder-o"></i></span>
+      <li v-for="(component, name) in $store.getters.active_category" :key="name" class="repos">
+         <span v-if="component.type === 'dir'"><i class="fa fa-folder-o"></i></span>
          <span v-else><i class="fa fa-file-o"></i></span>
-         {{ file.name }}
+         {{ component.name }}
          <p><i class="fa fa-clock"></i>{{component.content.devTime}}</p>
          <p><i class="fa fa-tachometer-alt"></i>{{component.content.difficulty}}</p>
       </li>
@@ -26,52 +26,45 @@ export default {
   async asyncData(store) {
     let categoryName = null;
     categoryName = store.params.index;
-    let { data } = await axios.get(
-      "https://api.github.com/repos/" +
-        store.store.getters.active_repo.owner +
-        "/" +
-        store.store.getters.active_repo.name +
-        "/contents/" +
-        categoryName +
-        "?access_token=" +
-        store.store.getters.access_token
-    );
-    store.components = data;
-    return {
-      components: data,
-      categoryName
-    };
+    return axios
+      .get(
+        "https://api.github.com/repos/" +
+          store.store.getters.active_repo.owner +
+          "/" +
+          store.store.getters.active_repo.name +
+          "/contents/" +
+          categoryName +
+          "?access_token=" +
+          store.store.getters.access_token
+      )
+      .then(res => {
+        res.data.forEach(function(component) {
+          // this is to not make a query on the readme file
+          if (component.name.indexOf("README")) {
+            axios
+              .get(
+                `https://api.github.com/repos/${
+                  store.store.getters.active_repo.owner
+                }/${store.store.getters.active_repo.name}/contents/${
+                  store.params.index
+                }/${component.name}/config.json?access_token=${
+                  store.store.getters.access_token
+                }`
+              )
+              .then(response => {
+                var decodeContent = atob(response.data.content);
+                component.content = JSON.parse(decodeContent);
+              });
+          }
+        });
+        store.store.dispatch("setActiveCategory", res.data);
+      });
   },
   mounted() {
     this.init();
   },
   methods: {
-    getComponentsContent() {
-      var _this = this;
-      this.components.forEach(function(component) {
-        // this is to not make a query on the readme file
-        if (component.name.indexOf("README")) {
-          let { data } = axios
-            .get(
-              `https://api.github.com/repos/${
-                _this.$store.getters.active_repo.owner
-              }/${_this.$store.getters.active_repo.name}/contents/${
-                _this.$route.params.index
-              }/${component.name}/config.json?access_token=${
-                _this.$store.getters.access_token
-              }`
-            )
-            .then(res => {
-              var decodeContent = atob(res.data.content);
-              component.content = JSON.parse(decodeContent);
-            });
-        }
-      });
-      return this.components;
-    },
-    init() {
-      this.getComponentsContent();
-    },
+    init() {},
     githubAction(componentName) {
       const configJson = {
         devTime: "days: 3, hours: 2",
