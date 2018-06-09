@@ -7,6 +7,17 @@
   </section>
 </template>
 
+<script>
+export default {
+  fetch ({ store, redirect }) {
+    if (store.state.authUser == 'logged') {
+      // uncomment if we went to redirect directly from landing
+      // return redirect('/repos')
+    }
+  }
+}
+</script>
+
 <style scoped>
 .title {
   margin: 30px 0;

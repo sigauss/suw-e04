@@ -58,6 +58,12 @@ export default {
                   })
                   .then((res) => {
                     this.$store.commit('SET_USER', 'logged')
+                    // fetch ({ store, redirect }) {
+                    //   if (store.state.authUser == 'logged') {
+                    //     return redirect('/repos')
+                    //   }
+                    // }
+                    this.$nuxt.$router.replace({ path: '/repos' })
                   })
                 })
                 .catch((error) => {

@@ -22,6 +22,8 @@ router.post('/login', function (req, res, next) {
       console.log(err);
     }
     if(user) {
+      console.log('heho')
+      // redirect('/repos')
       res.json(user)
       // req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
     }
@@ -132,7 +134,6 @@ router.get('/github/user/:token', function (req, res, next) {
   
     response.on("end", function () {
       body = Buffer.concat(chunks);
-      console.log(body)
       res.json(body.toString());
     });
   }, body);

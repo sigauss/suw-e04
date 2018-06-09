@@ -19,6 +19,11 @@ export default {
     return {
       title: "Users"
     };
+  },
+  fetch ({ store, redirect }) {
+    if (store.state.authUser == 'logged') {
+      return redirect('/repos')
+    }
   }
 };
 </script>

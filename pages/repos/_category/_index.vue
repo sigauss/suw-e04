@@ -114,6 +114,11 @@ export default {
     createComponent() {
       this.githubAction(this.$refs.form.componentName.value);
     }
+  },
+  fetch ({ store, redirect }) {
+    if (store.state.authUser != 'logged') {
+      return redirect('/login')
+    }
   }
 };
 </script> 

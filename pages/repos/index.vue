@@ -62,6 +62,11 @@ export default {
         alert("repo created");
       });
     }
+  },
+  fetch ({ store, redirect }) {
+    if (store.state.authUser != 'logged') {
+      return redirect('/login')
+    }
   }
 };
 </script> 
