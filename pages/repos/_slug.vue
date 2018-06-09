@@ -23,28 +23,18 @@
 import axios from "~/plugins/axios";
 
 export default {
-  async asyncData(store) {
-    let repoOwner = null;
-    const repos = store.store.getters.user.repos;
-    repos.forEach(repo => {
-      if (repo.name === store.params.slug) {
-        repoOwner = repo.owner.login;
-        store.store.dispatch("setActiveRepo", {
-          name: repo.name,
-          owner: repoOwner
-        });
-      }
-    });
-    let { data } = await axios.get(
-      "https://api.github.com/repos/" +
-        repoOwner +
-        "/" +
-        store.params.slug +
-        "/contents/?access_token=" +
-        store.store.getters.access_token
-    );
-    console.log("data: ", data);
-    return { contents: data };
+  fetch ({ store, params, route }) {
+    store.dispatch('setSlug', route.params.slug)
+  },
+  data() {
+    return { 
+      contents: '',
+      slug: ''
+    }
+  },
+  async asyncData(route) {
+  let slug = route.params.slug
+  return {slug: slug}
   },
   head() {
     return {
@@ -55,7 +45,38 @@ export default {
     this.init();
   },
   methods: {
-    init() {},
+    init() {
+
+      let repoOwner;
+      axios
+      .get(
+        "https://api.github.com/user/repos?access_token=" +
+          this.$store.getters.access_token
+      )
+      .then(res => {
+        this.$store.dispatch("setUserRepos", res.data);
+        res.data.forEach(repo => {
+          if (repo.name === this.$store.getters.slug) {
+            repoOwner = repo.owner.login;
+            this.$store.dispatch("setActiveRepo", {
+              name: repo.name,
+              owner: repoOwner
+            });
+          }
+        });
+        axios.get(
+              "https://api.github.com/repos/" +
+                repoOwner +
+                "/" +
+                this.$store.getters.slug +
+                "/contents/?access_token=" +
+                this.$store.getters.access_token
+        )
+        .then(res => {
+          this.contents = res.data
+        })
+      });
+    },
     githubAction(categoryName) {
       return axios
         .put(
