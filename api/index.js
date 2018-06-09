@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require('body-parser');
 const session = require('express-session')
 const mongoose = require('mongoose');
 
@@ -25,11 +24,12 @@ db.once('open', function () {
 
 // Create express instnace
 const app = express();
-
+const organizations = require("./routes/organizations");
 const repos = require("./routes/repos");
 const auth = require("./routes/users");
 
 // Import API Routes
+app.use(organizations);
 app.use(repos);
 app.use(auth);
 
