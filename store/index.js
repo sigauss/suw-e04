@@ -1,7 +1,7 @@
 import Vuex from "vuex";
 import Axios from "axios";
 
-const axios = require('axios')
+const axios = require("axios");
 
 const createStore = () => {
   return new Vuex.Store({
@@ -11,6 +11,7 @@ const createStore = () => {
         informations: null,
         repos: null
       },
+      activeCategory: null,
       activeRepo: null,
       authUser: null
     },
@@ -23,6 +24,9 @@ const createStore = () => {
       },
       active_repo(state) {
         return state.active_repo;
+      },
+      active_category(state) {
+        return state.active_category;
       }
     },
     mutations: {
@@ -38,37 +42,45 @@ const createStore = () => {
       SET_ACTIVEREPO(state, activeRepo) {
         state.active_repo = activeRepo;
       },
-      SET_USER: function (state, user) {
-        state.authUser = user
+      SET_ACTIVECATEGORY(state, activeCategory) {
+        state.active_category = activeCategory;
+      },
+      SET_USER: function(state, user) {
+        state.authUser = user;
       }
     },
     actions: {
-      nuxtServerInit ({ commit }, { req }) {
-        let user = {}
-        if (req.session && req.session.authUser){
-          user.username = req.session.authUser.username
-          user.access_token = req.session.authUser.access_token
+      nuxtServerInit({ commit }, { req }) {
+        let user = {};
+        if (req.session && req.session.authUser) {
+          user.username = req.session.authUser.username;
+          user.access_token = req.session.authUser.access_token;
+        } else {
+          user.username = "";
+          user.access_token = "";
         }
-        else{
-          user.username = ''
-          user.access_token = ''
-        }
-        return axios.post('http://localhost:3000/api/login', {
-          user
-        })
-        .then((res) => {
-          if(req.session.authUser){
-            commit('SET_USER', 'logged')
-            return axios.get(`http://localhost:3000/api/github/user/${req.session.authUser.access_token}`)
-            .then((res) => {
-                commit('SET_USERINFORMATIONS', res.data);
-                commit('SET_ACCESSTOKEN', req.session.authUser.access_token)
-            })
-            .catch((error) => {
-              console.log(error.response)
-            })
-          }
-        });
+        return axios
+          .post("http://localhost:3000/api/login", {
+            user
+          })
+          .then(res => {
+            if (req.session.authUser) {
+              commit("SET_USER", "logged");
+              return axios
+                .get(
+                  `http://localhost:3000/api/github/user/${
+                    req.session.authUser.access_token
+                  }`
+                )
+                .then(res => {
+                  commit("SET_USERINFORMATIONS", res.data);
+                  commit("SET_ACCESSTOKEN", req.session.authUser.access_token);
+                })
+                .catch(error => {
+                  console.log(error.response);
+                });
+            }
+          });
       },
       setAccessToken({ commit }, access_token) {
         commit("SET_ACCESSTOKEN", access_token);
@@ -81,6 +93,9 @@ const createStore = () => {
       },
       setActiveRepo({ commit }, activeRepo) {
         commit("SET_ACTIVEREPO", activeRepo);
+      },
+      setActiveCategory({ commit }, activeCategory) {
+        commit("SET_ACTIVECATEGORY", activeCategory);
       }
     }
   });
