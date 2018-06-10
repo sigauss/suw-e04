@@ -14,7 +14,8 @@ const createStore = () => {
       activeCategory: null,
       activeRepo: null,
       authUser: null,
-      slug: null
+      slug: null,
+      components: [],
     },
     getters: {
       access_token(state) {
@@ -31,6 +32,9 @@ const createStore = () => {
       },
       slug(state) {
         return state.slug;
+      },
+      components(state) {
+        return state.components;
       }
     },
     mutations: {
@@ -48,6 +52,9 @@ const createStore = () => {
       },
       SET_ACTIVECATEGORY(state, activeCategory) {
         state.active_category = activeCategory;
+      },
+      SET_COMPONENTCONTENT(state, data) {
+        state.components.push(data);
       },
       SET_USER: function(state, user) {
         state.authUser = user;
@@ -106,6 +113,9 @@ const createStore = () => {
       },
       setSlug({ commit }, slug) {
         commit("SET_SLUG", slug);
+      },
+      setComponentContent({ commit }, data) {
+        commit("SET_COMPONENTCONTENT", data);
       }
     }
   });

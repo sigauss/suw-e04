@@ -8,12 +8,12 @@
       <button type="submit">Create component</button>
     </form>
     <ul class="repos">
-      <li v-for="(component, name) in $store.getters.active_category" :key="name" class="repos">
-         <span v-if="component.type === 'dir'"><i class="fa fa-folder-o"></i></span>
-         <span v-else><i class="fa fa-file-o"></i></span>
-         {{ component.name }}
+      <li v-for="(component, name) in $store.getters.components" :key="name" class="repos">
+        <template v-if="component.component.type === 'dir'">
+         <router-link :to="`/component/${component.component.name}`"><span><i class="fa fa-folder-o"></i>{{ component.component.name }}</span></router-link>
          <p><i class="fa fa-clock"></i>{{component.content.devTime}}</p>
          <p><i class="fa fa-tachometer-alt"></i>{{component.content.difficulty}}</p>
+        </template>
       </li>
     </ul>
   </section>
@@ -25,7 +25,7 @@ import axios from "~/plugins/axios";
 export default {
   async asyncData(store) {
     let categoryName = null;
-    categoryName = store.params.index;
+    store.store.dispatch("setActiveCategory", store.params.index);
     return axios
       .get(
         "https://api.github.com/repos/" +
@@ -33,7 +33,7 @@ export default {
           "/" +
           store.store.getters.active_repo.name +
           "/contents/" +
-          categoryName +
+          store.store.getters.active_category +
           "?access_token=" +
           store.store.getters.access_token
       )
@@ -41,7 +41,7 @@ export default {
         res.data.forEach(function(component) {
           // this is to not make a query on the readme file
           if (component.name.indexOf("README")) {
-            axios
+            return axios
               .get(
                 `https://api.github.com/repos/${
                   store.store.getters.active_repo.owner
@@ -53,18 +53,24 @@ export default {
               )
               .then(response => {
                 var decodeContent = atob(response.data.content);
-                component.content = JSON.parse(decodeContent);
+                let content = JSON.parse(decodeContent);
+                store.store.dispatch("setComponentContent", {component: component, content: content});
+                console.log('aloha', store.store);
               });
           }
         });
-        store.store.dispatch("setActiveCategory", res.data);
       });
   },
   mounted() {
     this.init();
   },
   methods: {
-    init() {},
+    init() {
+      console.log('hey', this.$store.getters.active_category)
+      setTimeout(() => {
+        console.log('hey', this.$store.getters.components)
+      }, 2000);
+    },
     githubAction(componentName) {
       const configJson = {
         devTime: "days: 3, hours: 2",

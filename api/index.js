@@ -26,11 +26,13 @@ db.once('open', function () {
 const app = express();
 const organizations = require("./routes/organizations");
 const repos = require("./routes/repos");
+const component = require("./routes/component");
 const auth = require("./routes/users");
 
 // Import API Routes
 app.use(organizations);
 app.use(repos);
+app.use(component);
 app.use(auth);
 
 // Export the server middleware

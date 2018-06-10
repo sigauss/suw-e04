@@ -53,7 +53,8 @@ export default {
           this.$store.getters.access_token,
         data: {
           name: "Accio-" + this.$refs.form.repoName.value,
-          private: true
+          private: true,
+          auto_init: true,
         },
         headers: {
           "Content-Type": "multipart/form-data"
