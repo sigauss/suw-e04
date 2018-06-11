@@ -23,7 +23,10 @@
 import axios from "~/plugins/axios";
 
 export default {
-  fetch ({ store, params, route }) {
+  fetch ({ store, params, route, redirect }) {
+    if (store.state.authUser != 'logged') {
+      return redirect('/login')
+    }
     store.dispatch('setSlug', route.params.slug)
   },
   data() {
