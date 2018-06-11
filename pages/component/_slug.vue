@@ -20,7 +20,9 @@
         <p>{{ configFile.content.pricing }}</p>
         <h2>Tags:</h2>
         <ul class="tags">
-          <li v-for="(tag) in configFile.content.tags" :key="tag">
+          <input id="newTag" v-if="editMode" name="newTag" placeholder="enter a tag"/>
+          <p v-on:click="addTag" v-if="editMode">Add</p>
+          <li class="tag" v-for="(tag) in configFile.content.tags" :key="tag">
             {{tag}}
           </li>
         </ul>
@@ -47,7 +49,8 @@ export default {
     return {
       configFile: null,
       files: [],
-      editMode: false
+      editMode: false,
+      configValues: []
     };
   },
   head() {
@@ -84,14 +87,27 @@ export default {
         this.editMode = false;
       }
     },
+    addTag() {
+      var newTag = document.querySelector("#newTag").value;
+      var list = document.querySelector(".tags");
+      var tag = document.createElement("li");
+
+      tag.setAttribute("class", "tag");
+      tag.appendChild(document.createTextNode(newTag));
+      list.appendChild(tag);
+
+      var tags = document.querySelectorAll(".tag");
+      tags.forEach(tag => {
+        this.configValues.push(tag.innerText);
+      });
+    },
     saveConfigFile() {
-      console.log(this);
       let configJson = {
         devTime: this.$refs.form.devTime.value,
         pricing: this.$refs.form.pricing.value,
         difficulty: this.$refs.form.difficulty.value,
         description: this.$refs.form.description.value,
-        tags: ["slider", "animation", "responsive"]
+        tags: this.configValues
       };
       axios.put(
         `https://api.github.com/repos/${
@@ -143,6 +159,14 @@ export default {
 <style scoped>
 .tags li {
   display: inline;
+}
+.tags {
+  padding: 0;
+}
+.tag {
+  background: #dedede;
+  padding: 10px;
+  margin: 5px;
 }
 ul {
   display: flex;
