@@ -21,13 +21,10 @@
       <li v-for="(file, name) in files" :key="name" class="repos">
         <span><b>{{file.name }}</b></span>
         <div v-if="file.content !== null" class="snippet-content">
-          <span>{{file.content}}</span>
+          <pre>{{file.content}}</pre>
         </div>
       </li>
     </ul>
-    <div>
-
-    </div>
   </section>
 </template>
 
@@ -102,21 +99,17 @@ export default {
 </script>
 
 <style scoped>
-.title {
-  margin: 30px 0;
-}
-.users {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.tags ul li {
+.tags li {
   display: inline;
 }
-.snippets ul li {
-  display: inline-block;
+ul {
+  display: flex;
+  justify-content: space-between;
 }
-.user {
-  margin: 10px 0;
+li {
+  list-style-type: none;
+}
+pre {
+  text-align: left;
 }
 </style>
