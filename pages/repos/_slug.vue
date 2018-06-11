@@ -46,36 +46,69 @@ export default {
   },
   methods: {
     init() {
-
       let repoOwner;
-      axios
-      .get(
-        "https://api.github.com/user/repos?access_token=" +
-          this.$store.getters.access_token
-      )
-      .then(res => {
-        this.$store.dispatch("setUserRepos", res.data);
-        res.data.forEach(repo => {
-          if (repo.name === this.$store.getters.slug) {
-            repoOwner = repo.owner.login;
-            this.$store.dispatch("setActiveRepo", {
-              name: repo.name,
-              owner: repoOwner
-            });
-          }
-        });
-        axios.get(
-              "https://api.github.com/repos/" +
-                repoOwner +
-                "/" +
-                this.$store.getters.slug +
-                "/contents/?access_token=" +
-                this.$store.getters.access_token
+      // TODO Factoriser
+      if(!this.$store.getters.user.repos){
+        axios
+        .get(
+          "https://api.github.com/user/repos?access_token=" +
+            this.$store.getters.access_token
         )
         .then(res => {
-          this.contents = res.data
-        })
-      });
+          this.$store.dispatch("setUserRepos", res.data);
+          res.data.forEach(repo => {
+            if (repo.name === this.$store.getters.slug) {
+              repoOwner = repo.owner.login;
+              this.$store.dispatch("setActiveRepo", {
+                name: repo.name,
+                owner: repoOwner
+              });
+            }
+          });
+          axios.get(
+                "https://api.github.com/repos/" +
+                  repoOwner +
+                  "/" +
+                  this.$store.getters.slug +
+                  "/contents/?access_token=" +
+                  this.$store.getters.access_token
+          )
+          .then(res => {
+            this.contents = res.data
+          })
+        });
+      }
+      else{
+        const repos = this.$store.getters.user.repos
+        axios
+        .get(
+          "https://api.github.com/user/repos?access_token=" +
+            this.$store.getters.access_token
+        )
+        .then(res => {
+          this.$store.dispatch("setUserRepos", res.data);
+          repos.forEach(repo => {
+            if (repo.name === this.$store.getters.slug) {
+              repoOwner = repo.owner.login;
+              this.$store.dispatch("setActiveRepo", {
+                name: repo.name,
+                owner: repoOwner
+              });
+            }
+          });
+          axios.get(
+                "https://api.github.com/repos/" +
+                  repoOwner +
+                  "/" +
+                  this.$store.getters.slug +
+                  "/contents/?access_token=" +
+                  this.$store.getters.access_token
+          )
+          .then(res => {
+            this.contents = res.data
+          })
+        });
+      }
     },
     githubAction(categoryName) {
       return axios
