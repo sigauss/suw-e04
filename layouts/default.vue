@@ -1,16 +1,25 @@
 <template>
-  <div>
+  <div class="container">
+    <sidebar v-if="$route.path.includes('repos/')"/>
     <nuxt/>
-    <my-footer/>
+    <!-- <my-footer/> -->
   </div>
 </template>
 
 <script>
-import MyFooter from '~/components/Footer.vue'
+import Sidebar from '~/components/sidebar/Sidebar.vue'
 
 export default {
   components: {
-    MyFooter
+    Sidebar
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      console.log(this.$route)
+    }
   }
 }
 </script>
@@ -18,10 +27,12 @@ export default {
 <style>
 .container
 {
+  display: flex;
+  flex-direction: row;
   margin: 0;
   width: 100%;
-  padding: 100px 0;
-  text-align: center;
+  /* padding: 100px 0; */
+  /* text-align: center; */
 }
 
 .button, .button:visited

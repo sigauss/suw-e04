@@ -4,8 +4,7 @@
     <h1 class="title">
       Login success
     </h1>
-    <h2>wesh c'est le callback ici!!!!!!</h2>
-   <nuxt-link to="/repos">repos</nuxt-link>
+    <h2>Veuillez patienter le temps de l'authentification</h2>
   </section>
 </template>
 

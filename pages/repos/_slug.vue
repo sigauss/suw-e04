@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     init() {
-      let repoOwner;
+      let repoOwner;      
       // TODO Factoriser
       if(!this.$store.getters.user.repos){
         axios
@@ -78,6 +78,7 @@ export default {
                   this.$store.getters.access_token
           )
           .then(res => {
+            this.$store.dispatch('setActiveRepoCategories', res.data);
             this.contents = res.data
           })
           .catch(e => {
@@ -115,6 +116,7 @@ export default {
                   this.$store.getters.access_token
           )
           .then(res => {
+            this.$store.dispatch('setActiveRepoCategories', res.data);
             this.contents = res.data
           })
           .catch(e => {

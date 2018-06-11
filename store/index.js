@@ -12,6 +12,7 @@ const createStore = () => {
         repos: null
       },
       activeCategory: null,
+      activeRepoCategories: null,
       activeRepo: null,
       authUser: null,
       slug: null,
@@ -28,13 +29,16 @@ const createStore = () => {
         return state.active_repo;
       },
       active_category(state) {
-        return state.active_category;
+        return state.activeCategory;
       },
       slug(state) {
         return state.slug;
       },
       components(state) {
         return state.components;
+      },
+      active_repo_categories(state) {
+        return state.active_repo_categories;
       }
     },
     mutations: {
@@ -50,8 +54,11 @@ const createStore = () => {
       SET_ACTIVEREPO(state, activeRepo) {
         state.active_repo = activeRepo;
       },
-      SET_ACTIVECATEGORY(state, activeCategory) {
-        state.active_category = activeCategory;
+      SET_ACTIVECATEGORY(state, cat) {
+        state.activeCategory = cat;
+      },
+      DELETE_COMPONENTS(state) {
+        state.components.length = 0;
       },
       SET_COMPONENTCONTENT(state, data) {
         state.components.push(data);
@@ -61,6 +68,9 @@ const createStore = () => {
       },
       SET_SLUG: function(state, slug) {
         state.slug = slug;
+      },
+      SET_ACTIVEREPOCATEGORIES: function(state, data) {
+        state.active_repo_categories = data;
       }
     },
     actions: {
@@ -108,8 +118,8 @@ const createStore = () => {
       setActiveRepo({ commit }, activeRepo) {
         commit("SET_ACTIVEREPO", activeRepo);
       },
-      setActiveCategory({ commit }, activeCategory) {
-        commit("SET_ACTIVECATEGORY", activeCategory);
+      setActiveCategory({ commit }, cat) {
+        commit("SET_ACTIVECATEGORY", cat);
       },
       setSlug({ commit }, slug) {
         commit("SET_SLUG", slug);
@@ -119,6 +129,12 @@ const createStore = () => {
       },
       setUserAuth({ commit }, data) {
         commit("SET_USER", data);
+      },
+      deleteComponents({commit}) {
+        commit("DELETE_COMPONENTS");
+      },
+      setActiveRepoCategories({ commit }, data) {
+        commit("SET_ACTIVEREPOCATEGORIES", data);
       }
     }
   });

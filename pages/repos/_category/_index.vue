@@ -1,21 +1,26 @@
 <template>
-  <section class="container">
-    <h1 class="title">
-      List of all 
-    </h1>
+  <section class="components">
+    <h1 class="components__categorytitle">{{ $store.getters.active_category }}</h1>
+    <div class="components__componentsCount">{{ $store.getters.components.length }} {{$store.getters.components.length > 1 ? 'components' : 'component'}} </div>
     <form ref="form" name="createComponent"  @submit.prevent="createComponent">
       <input type="text" name="componentName" />
       <button type="submit">Create component</button>
     </form>
-    <ul class="repos">
-      <li v-for="(component, name) in $store.getters.components" :key="name" class="repos">
+    <div class="components__componentsContainer">
+      <div v-for="(component, name) in $store.getters.components" :key="name" class="components__componentCard">
         <template v-if="component.component.type === 'dir'">
-         <router-link :to="`/component/${component.component.name}`"><span><i class="fa fa-folder-o"></i>{{ component.component.name }}</span></router-link>
-         <p><i class="fa fa-clock"></i>{{component.content.devTime}}</p>
-         <p><i class="fa fa-tachometer-alt"></i>{{component.content.difficulty}}</p>
+          <router-link class="components__componentLink" :to="`/component/${component.component.name}`">
+            <span><i class="fa fa-folder-o"></i>{{ component.component.name }}</span>
+            <p><i class="fa fa-clock"></i>{{ component.content.pricing }}€</p>
+            <p v-if="component.content.difficulty === '1'"><i class="fa fa-tachometer-alt"></i>Low</p>
+            <p v-if="component.content.difficulty === '2'"><i class="fa fa-tachometer-alt"></i>Easy</p>
+            <p v-if="component.content.difficulty === '3'"><i class="fa fa-tachometer-alt"></i>Medium</p>
+            <p v-if="component.content.difficulty === '4'"><i class="fa fa-tachometer-alt"></i>Hard</p>
+            <p v-if="component.content.difficulty === '5'"><i class="fa fa-tachometer-alt"></i>Insane</p>
+          </router-link>
         </template>
-      </li>
-    </ul>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -26,8 +31,12 @@ import logoutMixin from '~/mixins/logoutMixin'
 export default {
   mixins: [logoutMixin],
   async asyncData(store) {
+    if (store.store.getters.components.length > 0){
+      store.store.dispatch('deleteComponents');
+    }
     let categoryName = null;
-    store.store.dispatch("setActiveCategory", store.params.index);
+    // store.store.dispatch("setActiveCategory", store.params.index);
+    // console.log(store.store.getters.active_category);
     return axios
       .get(
         "https://api.github.com/repos/" +
@@ -57,7 +66,6 @@ export default {
                 var decodeContent = atob(response.data.content);
                 let content = JSON.parse(decodeContent);
                 store.store.dispatch("setComponentContent", {component: component, content: content});
-                console.log('aloha', store.store);
               })
               .catch(e => {
                 this.logoutMixin()
@@ -131,4 +139,36 @@ export default {
     }
   }
 };
-</script> 
+</script>
+
+<style scoped>
+  .components {
+    display: flex;
+    width: 75%;
+    padding: 0px 30px;
+    box-sizing: border-box;
+    flex-direction: column;
+  }
+  .components__componentsContainer{
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .components__componentCard{
+    width: 232px;
+    padding: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    background-color: #F5F6FA;
+  }
+  .components__componentCard:hover{
+    transition: all 0.2s ease-in;
+    -webkit-box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.36);
+    -moz-box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.36);
+    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.36);
+  }
+  .components__componentLink{
+    text-decoration: none;
+  }
+</style>
