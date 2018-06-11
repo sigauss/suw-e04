@@ -1,10 +1,33 @@
 <template>
   <section class="container">
-    <img src="~assets/img/logo.png" alt="Nuxt.js Logo" class="logo" />
     <h1 class="title">
-      Login
+      My component
     </h1>
-    <h2>coucou</h2>
+    <div v-if="configFile !== null" class="meta__informations">
+      <h2>Description</h2>
+      <p>{{ configFile.content.description }}</p>
+      <h2>Dev time:</h2>
+      <p>{{ configFile.content.devTime }}</p>
+      <h2>Price</h2>
+      <p>{{ configFile.content.pricing }}</p>
+      <h2>Tags:</h2>
+      <ul class="tags">
+        <li v-for="(tag) in configFile.content.tags" :key="tag">
+          {{tag}}
+          </li>
+        </ul>
+    </div>
+    <ul class="snippets">
+      <li v-for="(file, name) in files" :key="name" class="repos">
+        <span><b>{{file.name }}</b></span>
+        <div v-if="file.content !== null" class="snippet-content">
+          <span>{{file.content}}</span>
+        </div>
+      </li>
+    </ul>
+    <div>
+
+    </div>
   </section>
 </template>
 
@@ -12,42 +35,67 @@
 import axios from "~/plugins/axios";
 
 export default {
-  async asyncData () {
-  },
-  data () {
-      return {
-          files: null,
-      }
-  },
-  head () {
+  async asyncData() {},
+  data() {
     return {
-      title: "Users"
+      configFile: null,
+      files: []
     };
   },
-  mounted () {
-      this.init();
+  head() {
+    return {
+      title: "Component"
+    };
+  },
+  mounted() {
+    this.init();
   },
   methods: {
     init() {
-        console.log(this.$store)
-        this.getComponentInformations()
+      this.files = [];
+      this.getComponentInformations();
     },
     getComponentInformations() {
-        return axios.get(`/api/github/${this.$store.getters.active_repo.owner}/${this.$store.getters.active_repo.name}/${this.$store.getters.active_category}/${this.$route.params.slug}/component/${this.$store.getters.access_token}`)
-        .then(res => {            
-            this.files = JSON.parse(res.data);
-            console.log(this.files)
-            this.getComponentFilesContent();
+      return axios
+        .get(
+          `/api/github/${this.$store.getters.active_repo.owner}/${
+            this.$store.getters.active_repo.name
+          }/${this.$store.getters.active_category}/${
+            this.$route.params.slug
+          }/component/${this.$store.getters.access_token}`
+        )
+        .then(res => {
+          this.files = JSON.parse(res.data);
+          this.getComponentFilesContent();
         });
     },
     getComponentFilesContent() {
-        for (let file in this.files) {
-            console.log(this.files, file);
-            axios.get(`/api/github/${this.$store.getters.active_repo.owner}/${this.$store.getters.active_repo.name}/${this.$store.getters.active_category}/${this.$route.params.slug}+${this.files[file].name}/component/${this.$store.getters.access_token}`)
-            .then(res => {
-                console.log(atob(JSON.parse(res.data).content));
-            });
-        }
+      for (let file in this.files) {
+        axios
+          .get(
+            `/api/github/${this.$store.getters.active_repo.owner}/${
+              this.$store.getters.active_repo.name
+            }/${this.$store.getters.active_category}/${
+              this.$route.params.slug
+            }+${this.files[file].name}/component/${
+              this.$store.getters.access_token
+            }`
+          )
+          .then(res => {
+            if (JSON.parse(res.data).name === "config.json") {
+              this.configFile = JSON.parse(res.data);
+              this.configFile.content = JSON.parse(
+                atob(this.configFile.content)
+              );
+            } else {
+              this.files.forEach(file => {
+                if (file.name === JSON.parse(res.data).name) {
+                  file.content = atob(JSON.parse(res.data).content);
+                }
+              });
+            }
+          });
+      }
     }
   }
 };
@@ -61,6 +109,12 @@ export default {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+.tags ul li {
+  display: inline;
+}
+.snippets ul li {
+  display: inline-block;
 }
 .user {
   margin: 10px 0;
