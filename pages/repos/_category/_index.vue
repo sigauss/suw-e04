@@ -20,9 +20,11 @@
 </template>
 
 <script>
-import axios from "~/plugins/axios";
+import axios from "~/plugins/axios"
+import logoutMixin from '~/mixins/logoutMixin'
 
 export default {
+  mixins: [logoutMixin],
   async asyncData(store) {
     let categoryName = null;
     store.store.dispatch("setActiveCategory", store.params.index);
@@ -56,10 +58,16 @@ export default {
                 let content = JSON.parse(decodeContent);
                 store.store.dispatch("setComponentContent", {component: component, content: content});
                 console.log('aloha', store.store);
-              });
+              })
+              .catch(e => {
+                this.logoutMixin()
+              })
           }
         });
-      });
+      })
+      .catch(e => {
+        this.logoutMixin()
+      })
   },
   mounted() {
     this.init();
@@ -107,8 +115,11 @@ export default {
               content: btoa(JSON.stringify(configJson))
             }
           );
-        });
-      x;
+        })
+        .catch(e => {
+          this.logoutMixin()
+        })
+      ;
     },
     createComponent() {
       this.githubAction(this.$refs.form.componentName.value);

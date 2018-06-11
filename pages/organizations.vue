@@ -10,6 +10,7 @@
 
 <script>
 import axios from "~/plugins/axios";
+import logoutMixin from '~/mixins/logoutMixin'
 
 export default {
   async asyncData () {
@@ -30,6 +31,7 @@ export default {
       })
       .catch((error) => {
         console.log(error.response)
+        this.logoutMixin()
       })
     }
   }

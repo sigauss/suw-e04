@@ -21,6 +21,7 @@
 
 <script>
 import axios from "~/plugins/axios";
+import logoutMixin from '~/mixins/logoutMixin'
 
 export default {
   fetch ({ store, params, route, redirect }) {
@@ -79,7 +80,13 @@ export default {
           .then(res => {
             this.contents = res.data
           })
-        });
+          .catch(e => {
+            this.logoutMixin()
+          })
+        })
+        .catch( e => {
+          this.logoutMixin()
+        })
       }
       else{
         const repos = this.$store.getters.user.repos
@@ -110,7 +117,13 @@ export default {
           .then(res => {
             this.contents = res.data
           })
-        });
+          .catch(e => {
+            this.logoutMixin()
+          })
+        })
+        .catch(e => {
+          this.logoutMixin()
+        })
       }
     },
     githubAction(categoryName) {
@@ -133,8 +146,11 @@ export default {
         .then(res => {
           store.store.dispatch("setUserRepos", res.data);
           return { repos: res.data };
+        })
+        .catch(e => {
+          this.logoutMixin()
         });
-      x;
+      ;
     },
     createCategory() {
       this.githubAction(this.$refs.form.categoryName.value);

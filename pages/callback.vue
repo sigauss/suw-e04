@@ -11,18 +11,10 @@
 
 <script>
 import axios from "~/plugins/axios";
+import logoutMixin from '~/mixins/logoutMixin'
 
 export default {
-//     asyncData ({ params, error }) {
-//     console.log(params);
-//     return axios.get('/api/fetch_auth_token/' + this.$route.query.code)
-//       .then((res) => {
-//         return { user: res.data }
-//       })
-//       .catch((e) => {
-//         // error({ statusCode: 404, message: 'User not found' })
-//       })
-//   },
+    mixins: [logoutMixin],
     data() {
       return { 
         access_token: '',
@@ -39,7 +31,6 @@ export default {
         .then((res) => {
             this.access_token = JSON.parse(res.data).access_token
             this.$store.dispatch('setAccessToken', this.access_token)
-            // req.session.authUser = {access_token: this.access_token}
             return axios.get(`/api/github/user/${this.access_token}`)
             .then((res) => {
                 this.username = JSON.parse(res.data).login
@@ -58,11 +49,6 @@ export default {
                   })
                   .then((res) => {
                     this.$store.commit('SET_USER', 'logged')
-                    // fetch ({ store, redirect }) {
-                    //   if (store.state.authUser == 'logged') {
-                    //     return redirect('/repos')
-                    //   }
-                    // }
                     this.$nuxt.$router.replace({ path: '/repos' })
                   })
                 })
@@ -72,10 +58,10 @@ export default {
             });
         })
         .catch((e) => {
-            // error({ statusCode: 404, message: 'User not found' })
+          this.logoutMixin()
         })
         .catch(e => {
-          // error({ statusCode: 404, message: 'User not found' })
+          this.logoutMixin()
         });
     }
     

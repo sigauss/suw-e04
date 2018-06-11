@@ -22,10 +22,7 @@ router.post('/login', function (req, res, next) {
       console.log(err);
     }
     if(user) {
-      console.log('heho')
-      // redirect('/repos')
       res.json(user)
-      // req.session.authUser = {username: user.username, access_token: user.access_token, id: user._id}
     }
     else {
       res.json(null)
@@ -33,8 +30,12 @@ router.post('/login', function (req, res, next) {
   })
 })
 
-router.post('/users', function (req, res, next) {
+router.get('/logout', function (req, res) {
+  req.session.authUser = null
+  res.json('')
+})
 
+router.post('/users', function (req, res, next) {
   var userData = {
     username: req.body.username,
     access_token: req.body.access_token,

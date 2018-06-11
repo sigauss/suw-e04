@@ -116,6 +116,9 @@ const createStore = () => {
       },
       setComponentContent({ commit }, data) {
         commit("SET_COMPONENTCONTENT", data);
+      },
+      setUserAuth({ commit }, data) {
+        commit("SET_USER", data);
       }
     }
   });

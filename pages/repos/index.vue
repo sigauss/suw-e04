@@ -4,6 +4,7 @@
       REPOS LIST
     </h1>
     <h2>{{ $store.getters.access_token }}</h2>
+    <button @click="logout">Logout</button>
     <form ref="form" name="createRepo"  @submit.prevent="submitRepo">
       <input type="text" name="repoName" />
       <button type="submit">Create</button>
@@ -18,19 +19,13 @@
 
 <script>
 import axios from "~/plugins/axios";
+import logoutMixin from '~/mixins/logoutMixin'
 
 export default {
-  async asyncData(store) {
-    return axios
-      .get(
-        "https://api.github.com/user/repos?access_token=" +
-          store.store.getters.access_token
-      )
-      .then(res => {
-        console.log(res.data);
-        store.store.dispatch("setUserRepos", res.data);
-        return { repos: res.data };
-      });
+  data() {
+    return { 
+      repos: '',
+    }
   },
   head() {
     return {
@@ -40,10 +35,30 @@ export default {
   mounted() {
     this.init();
   },
+  mixins: [logoutMixin],
   methods: {
     init() {
-      // console.log(this.$store.getters.access_token);
-      console.log(this.$store.getters.user);
+      axios
+        .get(
+          "https://api.github.com/user/repos?access_token=" +
+            this.$store.getters.access_token
+        )
+        .then(res => {
+          this.$store.dispatch("setUserRepos", res.data);
+          this.repos = res.data
+        })
+        .catch(e => {
+          this.logoutMixin()
+        })
+    },
+    async logout() {
+      axios.get('/api/logout')
+      .then(res => {
+        this.logoutMixin()
+      })
+      .catch(e => {
+        console.log(e)
+      })
     },
     submitRepo() {
       return axios({
@@ -61,7 +76,10 @@ export default {
         }
       }).then(res => {
         alert("repo created");
-      });
+      })
+      .catch(e =>{
+        
+      })
     }
   },
   fetch ({ store, redirect }) {
