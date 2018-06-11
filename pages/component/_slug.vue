@@ -4,18 +4,28 @@
       My component
     </h1>
     <div v-if="configFile !== null" class="meta__informations">
-      <h2>Description</h2>
-      <p>{{ configFile.content.description }}</p>
-      <h2>Dev time:</h2>
-      <p>{{ configFile.content.devTime }}</p>
-      <h2>Price</h2>
-      <p>{{ configFile.content.pricing }}</p>
-      <h2>Tags:</h2>
-      <ul class="tags">
-        <li v-for="(tag) in configFile.content.tags" :key="tag">
-          {{tag}}
+      <form ref="form" name="saveConfigFile"  @submit.prevent="saveConfigFile">
+        <button @click.prevent="displayInputs">Edit</button>
+        <h2>Description</h2>
+        <input v-if="editMode" name="description" v-model="configFile.content.description"/>
+        <p>{{ configFile.content.description }}</p>
+        <h2>Difficulty:</h2>
+        <input v-if="editMode" name="difficulty" v-model="configFile.content.difficulty"/>
+        <p>{{ configFile.content.difficulty }}</p>
+        <h2>Devtime:</h2>
+        <input v-if="editMode" name="devTime" v-model="configFile.content.devTime"/>
+        <p>{{ configFile.content.devTime }}</p>
+        <h2>Price</h2>
+        <input v-if="editMode" name="pricing" v-model="configFile.content.pricing"/>
+        <p>{{ configFile.content.pricing }}</p>
+        <h2>Tags:</h2>
+        <ul class="tags">
+          <li v-for="(tag) in configFile.content.tags" :key="tag">
+            {{tag}}
           </li>
         </ul>
+        <button v-if="editMode" type="submit"> Save</button>
+      </form>
     </div>
     <ul class="snippets">
       <li v-for="(file, name) in files" :key="name" class="repos">
@@ -36,7 +46,8 @@ export default {
   data() {
     return {
       configFile: null,
-      files: []
+      files: [],
+      editMode: false
     };
   },
   head() {
@@ -65,6 +76,37 @@ export default {
           this.files = JSON.parse(res.data);
           this.getComponentFilesContent();
         });
+    },
+    displayInputs() {
+      if (!this.editMode) {
+        this.editMode = true;
+      } else {
+        this.editMode = false;
+      }
+    },
+    saveConfigFile() {
+      console.log(this);
+      let configJson = {
+        devTime: this.$refs.form.devTime.value,
+        pricing: this.$refs.form.pricing.value,
+        difficulty: this.$refs.form.difficulty.value,
+        description: this.$refs.form.description.value,
+        tags: ["slider", "animation", "responsive"]
+      };
+      axios.put(
+        `https://api.github.com/repos/${
+          this.$store.getters.active_repo.owner
+        }/${this.$store.getters.active_repo.name}/contents/${
+          this.$store.getters.active_category
+        }/${this.$route.params.slug}/config.json?access_token=${
+          this.$store.getters.access_token
+        }`,
+        {
+          message: `:octopus: Accio :tophat: • ${Date.now()}`,
+          content: btoa(JSON.stringify(configJson)),
+          sha: this.configFile.sha
+        }
+      );
     },
     getComponentFilesContent() {
       for (let file in this.files) {
