@@ -4,6 +4,10 @@ const { Router } = require('express')
 const User = require("../models/User")
 const router = Router()
 
+const client_id = process.env.CLIENT_ID
+const client_secret = process.env.CLIENT_SECRET
+
+console.log(client_id)
 /* GET users listing. */
 router.get('/users', function (req, res, next) {
   console.log('hey');
@@ -87,7 +91,7 @@ router.get('/auth/:id', function (req, res, next) {
     "method": "POST",
     "hostname": "github.com",
     "port": null,
-    "path": "/login/oauth/access_token?client_id=6512280b0626a7722d81&client_secret=71182dca741cb055c14ef5b3705a1f14627e294c&code=" + req.params.id,
+    "path": `/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=` + req.params.id,
     "headers": {
       "accept": "application/json",
       "cache-control": "no-cache",

@@ -8,7 +8,7 @@
     "node": "10.2.1"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch",
+    "dev": "cross-env NODE_ENV=development CLIENT_ID=6512280b0626a7722d81 CLIENT_SECRET=71182dca741cb055c14ef5b3705a1f14627e294c nodemon server/index.js --watch",
     "build": "nuxt build",
     "start": "node server/index.js nuxt build && nuxt start",
     "precommit": "npm run lint",
