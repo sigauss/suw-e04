@@ -16,6 +16,7 @@ router.get('/users', function (req, res, next) {
 })
 
 router.post('/login', function (req, res, next) {
+  console.log(req.body)
   User.findOne({username: req.body.user.username, access_token: req.body.user.access_token}, function(err, user){
     if(err) {
       console.log(err);
