@@ -21,6 +21,7 @@
 
 <script>
 import axios from "~/plugins/axios";
+import logoutMixin from '~/mixins/logOutMixin';
 
 export default {
   mixins: [logoutMixin],
