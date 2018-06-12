@@ -6,7 +6,7 @@ const axios = require("axios");
 const port = process.env.PORT || 3000
 const host = process.env.HOST || '127.0.0.1'
 const protocole = process.env.PROTOCOLE || 'http://'
-const baseUrl = `${protocole}${host}:${port}`
+const baseUrl = `${host}:${port}`
 
 console.log('baseUrl')
 console.log(baseUrl)
