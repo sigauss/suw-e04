@@ -5,7 +5,8 @@ const axios = require("axios");
 
 const port = process.env.PORT || 3000
 const host = process.env.HOST || '127.0.0.1'
-const baseUrl = `${host}:${port}`
+const protocole = process.env.PROTOCOLE || 'http://'
+const baseUrl = `${protocole}${host}:${port}`
 
 console.log('baseUrl')
 console.log(baseUrl)
@@ -99,7 +100,7 @@ const createStore = () => {
           commit("SET_ACTIVECATEGORY", req.session.active_category);
         }
         return axios
-          .post(`http://${baseUrl}/api/login`, {
+          .post(`${baseUrl}/api/login`, {
             user
           })
           .then(res => {
@@ -107,7 +108,7 @@ const createStore = () => {
               commit("SET_USER", "logged");
               return axios
                 .get(
-                  `http://${baseUrl}/api/github/user/${
+                  `${baseUrl}/api/github/user/${
                     req.session.authUser.access_token
                   }`
                 )
