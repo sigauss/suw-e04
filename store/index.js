@@ -3,6 +3,13 @@ import Axios from "axios";
 
 const axios = require("axios");
 
+const port = process.env.PORT || 3000
+const host = process.env.HOST || '127.0.0.1'
+const baseUrl = `${host}:${port}`
+
+console.log('baseUrl')
+console.log(baseUrl)
+
 const createStore = () => {
   return new Vuex.Store({
     state: {
@@ -75,8 +82,8 @@ const createStore = () => {
     },
     actions: {
       nuxtServerInit({ commit }, { req }) {
-        console.log('process env host')
-        console.log(process.env.HOST)
+        console.log('NUXT SERVER INIT')
+        console.log(port)
         let user = {};
         if (req.session && req.session.authUser) {
           user.username = req.session.authUser.username;
@@ -92,7 +99,7 @@ const createStore = () => {
           commit("SET_ACTIVECATEGORY", req.session.active_category);
         }
         return axios
-          .post(process.env.PORT || 3000 + process.env.HOST || '127.0.0.1'+"/api/login", {
+          .post(`http://${baseUrl}/api/login`, {
             user
           })
           .then(res => {
@@ -100,7 +107,7 @@ const createStore = () => {
               commit("SET_USER", "logged");
               return axios
                 .get(
-                  `${process.env.PORT || 3000+process.env.HOST || '127.0.0.1'}/api/github/user/${
+                  `http://${baseUrl}/api/github/user/${
                     req.session.authUser.access_token
                   }`
                 )

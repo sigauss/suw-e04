@@ -4,9 +4,10 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
-const host = process.env.HOST || '127.0.0.1'
-const port = process.env.PORT || 3000
-const baseUrl = process.env.BASE_URL
+// const baseUrl = process.env.BASE_URL
+
+let port = process.env.PORT || 3000
+let host = process.env.HOST || '127.0.0.1'
 
 app.use(session({
   secret: 'super-secret-key',
@@ -23,6 +24,7 @@ app.set('port', port)
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 
+
 async function start() {
   
   // Init Nuxt.js
@@ -38,7 +40,7 @@ async function start() {
   app.use(nuxt.render)
 
   // Listen the server
-  app.listen( process.env.PORT || 3000, process.env.HOST || '127.0.0.1')
+  app.listen( port, host)
   console.log('Server listening on http://' + host + ':' + port) // eslint-disable-line no-console
 }
 start()
