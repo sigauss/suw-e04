@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development BASE_URL=http://localhost:3000 nodemon server/index.js --watch",
     "build": "nuxt build",
-    "start": "nuxt build && nuxt start node server/index.js",
+    "start": "nuxt build && nuxt start node && server/index.js",
     "precommit": "npm run lint",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "heroku-postbuild": "npm run build"
