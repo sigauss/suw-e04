@@ -4,9 +4,6 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
-// const baseUrl = process.env.BASE_URL
-
-console.log('HELLO')
 
 let port = process.env.PORT || 3000
 let host = process.env.HOST || '127.0.0.1'

@@ -3,12 +3,6 @@ import Axios from "axios";
 
 const axios = require("axios");
 
-// const host = process.env.HOST
-// const port = process.env.PORT
-
-
-console.log('HOST PORT')
-console.log([process.env.port, process.env.host])
 const createStore = () => {
   return new Vuex.Store({
     state: {
