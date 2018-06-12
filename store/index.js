@@ -75,6 +75,8 @@ const createStore = () => {
     },
     actions: {
       nuxtServerInit({ commit }, { req }) {
+        console.log('process env host')
+        console.log(process.env.HOST)
         let user = {};
         if (req.session && req.session.authUser) {
           user.username = req.session.authUser.username;
@@ -90,7 +92,7 @@ const createStore = () => {
           commit("SET_ACTIVECATEGORY", req.session.active_category);
         }
         return axios
-          .post(process.env.PORT || 3000+process.env.HOST || '127.0.0.1'+"/api/login", {
+          .post(process.env.PORT || 3000 + process.env.HOST || '127.0.0.1'+"/api/login", {
             user
           })
           .then(res => {
