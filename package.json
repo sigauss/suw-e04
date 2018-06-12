@@ -8,7 +8,7 @@
     "node": "10.2.1"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development BASE_URL=http://localhost:3000 nodemon server/index.js --watch",
+    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch",
     "build": "nuxt build",
     "start": "node server/index.js nuxt build && nuxt start",
     "precommit": "npm run lint",
