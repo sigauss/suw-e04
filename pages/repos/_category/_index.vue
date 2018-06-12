@@ -25,28 +25,37 @@
 </template>
 
 <script>
-import axios from "~/plugins/axios"
-import logoutMixin from '~/mixins/logoutMixin'
+import axios from "~/plugins/axios";
+import logoutMixin from '~/mixins/logoutMixin';
 
 export default {
+  data() {
+    return {
+        components: null,
+    }
+  },
   mixins: [logoutMixin],
-  async asyncData(store) {
-    if (store.store.getters.components.length > 0){
-      store.store.dispatch('deleteComponents');
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+
+    if (this.$store.getters.components.length > 0){
+      this.$store.dispatch('deleteComponents');
     }
     let categoryName = null;
-    // store.store.dispatch("setActiveCategory", store.params.index);
-    // console.log(store.store.getters.active_category);
+
     return axios
       .get(
         "https://api.github.com/repos/" +
-          store.store.getters.active_repo.owner +
+          this.$store.getters.active_repo.owner +
           "/" +
-          store.store.getters.active_repo.name +
+          this.$store.getters.active_repo.name +
           "/contents/" +
-          store.store.getters.active_category +
+          this.$store.getters.active_category +
           "?access_token=" +
-          store.store.getters.access_token
+          this.$store.getters.access_token
       )
       .then(res => {
         res.data.forEach(function(component) {
@@ -55,37 +64,28 @@ export default {
             return axios
               .get(
                 `https://api.github.com/repos/${
-                  store.store.getters.active_repo.owner
-                }/${store.store.getters.active_repo.name}/contents/${
-                  store.params.index
+                this.$store.getters.active_repo.owner
+                }/${this.$store.getters.active_repo.name}/contents/${
+                  this.$store.getters.active_category
                 }/${component.name}/config.json?access_token=${
-                  store.store.getters.access_token
+                  this.$store.getters.access_token
                 }`
               )
               .then(response => {
                 var decodeContent = atob(response.data.content);
                 let content = JSON.parse(decodeContent);
-                store.store.dispatch("setComponentContent", {component: component, content: content});
+                this.components += {component: component, content: content};
+                this.$store.dispatch("setComponentContent", {component: component, content: content});
               })
               .catch(e => {
-                this.logoutMixin()
-              })
+                console.log(e)
+              });
           }
-        });
+        }, this);
       })
       .catch(e => {
-        this.logoutMixin()
+        // this.logoutMixin()
       })
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init() {
-      console.log('hey', this.$store.getters.active_category)
-      setTimeout(() => {
-        console.log('hey', this.$store.getters.components)
-      }, 2000);
     },
     githubAction(componentName) {
       const configJson = {
@@ -125,7 +125,7 @@ export default {
           );
         })
         .catch(e => {
-          this.logoutMixin()
+          // this.logoutMixin()
         })
       ;
     },
@@ -133,7 +133,7 @@ export default {
       this.githubAction(this.$refs.form.componentName.value);
     }
   },
-  fetch ({ store, redirect }) {
+  fetch ({ store, redirect, params }) {
     if (store.state.authUser != 'logged') {
       return redirect('/login')
     }

@@ -172,4 +172,14 @@ router.get('/github/email/:token', function (req, res, next) {
   req.end();
 })
 
+router.post('/update-session-active-repo', function (req, res, next) {
+  req.session.activeRepo = req.body
+  res.json('');
+})
+
+router.post('/update-session-active-category', function (req, res, next) {
+  req.session.activeCategory = req.body.cat
+  console.log(req.session)
+})
+
 module.exports = router

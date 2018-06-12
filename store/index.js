@@ -83,6 +83,12 @@ const createStore = () => {
           user.username = "";
           user.access_token = "";
         }
+        if (req.session && req.session.activeRepo){
+          commit("SET_ACTIVEREPO", req.session.activeRepo);
+        }
+        if (req.session && req.session.activeCategory){
+          commit("SET_ACTIVECATEGORY", req.session.active_category);
+        }
         return axios
           .post("http://localhost:3000/api/login", {
             user
