@@ -4,6 +4,9 @@
   "description": "Nuxt.js project",
   "author": "cytronn <arnaud.villani@gmail.com>",
   "private": true,
+  "engines": {
+    "node": "10.2.1"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development BASE_URL=http://localhost:3000 nodemon server/index.js --watch",
     "build": "nuxt build",
@@ -19,7 +22,6 @@
     "body-parser": "^1.18.3",
     "cookieparser": "^0.1.0",
     "cross-env": "^5.0.1",
-    "dotenv": "^6.0.0",
     "eslint-plugin-vue": "^4.5.0",
     "express": "^4.15.3",
     "express-session": "^1.15.6",
