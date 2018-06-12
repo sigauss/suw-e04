@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     init() {
+    console.log(this.$store.getters.active_category)
 
     if (this.$store.getters.components.length > 0){
       this.$store.dispatch('deleteComponents');
@@ -59,6 +60,7 @@ export default {
       )
       .then(res => {
         res.data.forEach(function(component) {
+          // console.log(this.$store.getters.active_category)
           // this is to not make a query on the readme file
           if (component.name.indexOf("README")) {
             return axios
@@ -74,7 +76,7 @@ export default {
               .then(response => {
                 var decodeContent = atob(response.data.content);
                 let content = JSON.parse(decodeContent);
-                this.components += {component: component, content: content};
+                // this.components += {component: component, content: content};
                 this.$store.dispatch("setComponentContent", {component: component, content: content});
               })
               .catch(e => {
@@ -84,6 +86,7 @@ export default {
         }, this);
       })
       .catch(e => {
+        console.log(e)
         // this.logoutMixin()
       })
     },

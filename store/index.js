@@ -3,14 +3,12 @@ import Axios from "axios";
 
 const axios = require("axios");
 
-const port = process.env.PORT || 3000
-const host = process.env.HOST || '127.0.0.1'
-const protocole = process.env.PROTOCOLE || 'http://'
-const baseUrl = `${host}:${port}`
+// const host = process.env.HOST
+// const port = process.env.PORT
 
-console.log('baseUrl')
-console.log(baseUrl)
 
+console.log('HOST PORT')
+console.log([process.env.port, process.env.host])
 const createStore = () => {
   return new Vuex.Store({
     state: {
@@ -82,46 +80,47 @@ const createStore = () => {
       }
     },
     actions: {
-      // nuxtServerInit({ commit }, { req }) {
-      //   console.log('NUXT SERVER INIT')
-      //   console.log(port)
-      //   let user = {};
-      //   if (req.session && req.session.authUser) {
-      //     user.username = req.session.authUser.username;
-      //     user.access_token = req.session.authUser.access_token;
-      //   } else {
-      //     user.username = "";
-      //     user.access_token = "";
-      //   }
-      //   if (req.session && req.session.activeRepo){
-      //     commit("SET_ACTIVEREPO", req.session.activeRepo);
-      //   }
-      //   if (req.session && req.session.activeCategory){
-      //     commit("SET_ACTIVECATEGORY", req.session.active_category);
-      //   }
-      //   return axios
-      //     .post(`${baseUrl}/api/login`, {
-      //       user
-      //     })
-      //     .then(res => {
-      //       if (req.session.authUser) {
-      //         commit("SET_USER", "logged");
-      //         return axios
-      //           .get(
-      //             `${baseUrl}/api/github/user/${
-      //               req.session.authUser.access_token
-      //             }`
-      //           )
-      //           .then(res => {
-      //             commit("SET_USERINFORMATIONS", res.data);
-      //             commit("SET_ACCESSTOKEN", req.session.authUser.access_token);
-      //           })
-      //           .catch(error => {
-      //             console.log(error.response);
-      //           });
-      //       }
-      //     });
-      // },
+      nuxtServerInit({ commit }, { req }) {
+
+        console.log(req.session)
+
+        let user = {};
+        if (req.session && req.session.authUser) {
+          user.username = req.session.authUser.username;
+          user.access_token = req.session.authUser.access_token;
+        } else {
+          user.username = "";
+          user.access_token = "";
+        }
+        if (req.session && req.session.activeRepo){
+          commit("SET_ACTIVEREPO", req.session.activeRepo);
+        }
+        if (req.session && req.session.activeCategory){
+          commit("SET_ACTIVECATEGORY", req.session.activeCategory);
+        }
+        return axios
+          .post(`${process.env.host}:${process.env.port}/api/login`, {
+            user
+          })
+          .then(res => {
+            if (req.session.authUser) {
+              commit("SET_USER", "logged");
+              return axios
+                .get(
+                  `${process.env.host}:${process.env.port}/api/github/user/${
+                    req.session.authUser.access_token
+                  }`
+                )
+                .then(res => {
+                  commit("SET_USERINFORMATIONS", res.data);
+                  commit("SET_ACCESSTOKEN", req.session.authUser.access_token);
+                })
+                .catch(error => {
+                  console.log(error.response);
+                });
+            }
+          });
+      },
       setAccessToken({ commit }, access_token) {
         commit("SET_ACCESSTOKEN", access_token);
       },

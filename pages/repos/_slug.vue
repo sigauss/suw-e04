@@ -83,10 +83,12 @@ export default {
             this.contents = res.data
           })
           .catch(e => {
+            console.log(e)
             this.logoutMixin()
           })
         })
         .catch( e => {
+          console.log(e)
           this.logoutMixin()
         })
       }

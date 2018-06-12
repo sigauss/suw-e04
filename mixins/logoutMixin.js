@@ -3,7 +3,6 @@ import axios from "~/plugins/axios";
 const logoutMixin = {
   methods: {
     logoutMixin: function () {
-      console.log('hello from mixin!')
       axios.get('/api/logout')
       .then (res => {
         this.$store.dispatch("setAccessToken", null)

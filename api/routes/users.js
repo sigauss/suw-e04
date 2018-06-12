@@ -13,7 +13,7 @@ router.get('/users', function (req, res, next) {
   console.log('hey');
   User.find(function(err, users){
     if (err){
-        res.send(err); 
+      res.send(err); 
     }
     console.log(users);
   });
@@ -176,14 +176,15 @@ router.get('/github/email/:token', function (req, res, next) {
   req.end();
 })
 
-router.post('/update-session-active-repo', function (req, res, next) {
+router.post('/update-session-active-repo', function (req, res) {
   req.session.activeRepo = req.body
-  res.json('');
+  res.json(null);
 })
 
-router.post('/update-session-active-category', function (req, res, next) {
-  req.session.activeCategory = req.body.cat
-  console.log(req.session)
+router.post('/update-session-active-category', function (req, res) {
+  console.log('UPDATE SESSION OLE')
+  req.session.activeCategory = req.body.activeCategory
+  res.json(null);
 })
 
 module.exports = router

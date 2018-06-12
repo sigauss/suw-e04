@@ -57,12 +57,13 @@ export default {
         },
         toggleActiveCategory(cat) {
             this.$store.dispatch('setActiveCategory', cat);
-            console.log(cat)
-            console.log(this.$store.getters.active_category)
-            axios.post('/api/update-session-active-category',{
+            return axios.post('/api/update-session-active-category',{
                 activeCategory: cat,
-            });            
-            this.$nuxt.$router.replace({path: `/repos/${this.$store.getters.active_repo.name}/${cat}`})
+            })
+            .then(res => {
+              // console.log(res.data)
+              this.$nuxt.$router.replace({path: `/repos/${this.$store.getters.active_repo.name}/${cat}`})
+            })           
         }
     }
 }
