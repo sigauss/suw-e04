@@ -97,7 +97,7 @@ const createStore = () => {
     actions: {
       nuxtServerInit({ commit }, { req }) {
 
-        console.log(req.session)
+        console.log(`${process.env.host}:${process.env.port}/api/login`)
 
         let user = {};
         if (req.session && req.session.authUser) {
