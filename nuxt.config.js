@@ -1,7 +1,7 @@
 module.exports = {
   env: {
     port: process.env.PORT || 3000,
-    host: process.env.POST || 'http://127.0.0.1'
+    host: process.env.HOST || 'http://127.0.0.1'
   },
   /*
   ** Headers of the page
