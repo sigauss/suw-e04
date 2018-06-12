@@ -24,6 +24,8 @@
 <script>
 import NewCategory from '~/components/sidebar/NewCategory';
 import SidebarChapter from '~/components/sidebar/SidebarChapter';
+import axios from "~/plugins/axios";
+
 export default {
     components: {
         SidebarChapter
@@ -55,8 +57,12 @@ export default {
         },
         toggleActiveCategory(cat) {
             this.$store.dispatch('setActiveCategory', cat);
+            console.log(cat)
+            console.log(this.$store.getters.active_category)
+            axios.post('/api/update-session-active-category',{
+                activeCategory: cat,
+            });            
             this.$nuxt.$router.replace({path: `/repos/${this.$store.getters.active_repo.name}/${cat}`})
-            console.log(this.$store.getters.activeCategory)
         }
     }
 }

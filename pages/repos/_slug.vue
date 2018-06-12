@@ -24,6 +24,7 @@ import axios from "~/plugins/axios";
 import logoutMixin from '~/mixins/logoutMixin'
 
 export default {
+  mixins: [logoutMixin],
   fetch ({ store, params, route, redirect }) {
     if (store.state.authUser != 'logged') {
       return redirect('/login')
@@ -105,6 +106,16 @@ export default {
                 name: repo.name,
                 owner: repoOwner
               });
+              return axios.post('/api/update-session-active-repo',{
+                  name: repo.name,
+                  owner: repoOwner
+              })
+              .then(res => {
+                console.log(res.data)
+              })
+              .catch(e =>{
+                console.log(e)
+              })
             }
           });
           axios.get(
