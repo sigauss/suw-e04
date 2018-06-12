@@ -12,11 +12,14 @@ const createStore = () => {
         repos: null
       },
       activeCategory: null,
-      activeRepoCategories: null,
-      activeRepo: null,
+      active_repo_categories: null,
+      active_repo: null,
       authUser: null,
       slug: null,
       components: [],
+      all_components: [],
+      category_modal_state: false,
+      component_modal_state: false,
     },
     getters: {
       access_token(state) {
@@ -39,6 +42,15 @@ const createStore = () => {
       },
       active_repo_categories(state) {
         return state.active_repo_categories;
+      },
+      category_modal_state(state) {
+        return state.category_modal_state;
+      },
+      component_modal_state(state) {
+        return state.component_modal_state;
+      },
+      all_components(state) {
+        return state.all_components;
       }
     },
     mutations: {
@@ -63,6 +75,9 @@ const createStore = () => {
       SET_COMPONENTCONTENT(state, data) {
         state.components.push(data);
       },
+      SET_ALLCOMPONENTS(state, data) {
+        state.all_components = data;
+      },
       SET_USER: function(state, user) {
         state.authUser = user;
       },
@@ -71,6 +86,12 @@ const createStore = () => {
       },
       SET_ACTIVEREPOCATEGORIES: function(state, data) {
         state.active_repo_categories = data;
+      },
+      SET_CATEGORYMODALSTATE: function(state, data){
+        state.category_modal_state = data;
+      },
+      SET_COMPONENTMODALSTATE: function(state, data){
+        state.category_modal_state = data;
       }
     },
     actions: {
@@ -142,8 +163,17 @@ const createStore = () => {
       deleteComponents({commit}) {
         commit("DELETE_COMPONENTS");
       },
+      setAllComponents({commit}, data) {
+        commit("SET_ALLCOMPONENTS", data);
+      },
       setActiveRepoCategories({ commit }, data) {
         commit("SET_ACTIVEREPOCATEGORIES", data);
+      },
+      setCategoryModalState({ commit }, data) {
+        commit("SET_CATEGORYMODALSTATE", data);
+      },
+      setComponentModalState({ commit }, data) {
+        commit("SET_COMPONENTMODALSTATE", data);
       }
     }
   });

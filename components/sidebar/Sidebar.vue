@@ -9,16 +9,15 @@
         <div v-if="categories !== null" class="sidebar__count">Categories folders <span class="sidebar__categoriesCount">{{ categories.length }}</span></div>
         <div class="sidebar__categoriesContainer">
             <div v-if="categories !== null" v-for="(category, name) in categories" :key="name">
-                <div class="sidebar__categoryButton" v-bind:class="{'sidebar__categoryButton--active': category.name == $store.getters.active_category}" @click="toggleActiveCategory(category.name)">
-                    <span><i v-bind:class="{'fa-folder': category.name !== $store.getters.active_category,'fa-folder-open': category.name === $store.getters.active_category}" class="fa fa-inverse"></i></span>
-                    <!-- <i v-if="category.name == $store.getters.active_category" class="fa fa-folder-open-o"></i> -->
-                    <span class="sidebar__categoryName">{{ category.name }}</span>
-                </div>
-                <!-- <sidebar-chapter :chapter="category"/> -->
-                <!-- </router-link> -->
+                <template v-if="category.name !== 'README.md'">
+                    <div class="sidebar__categoryButton" v-bind:class="{'sidebar__categoryButton--active': category.name == $store.getters.active_category}" @click="toggleActiveCategory(category.name)">
+                        <span><i v-bind:class="{'fa-folder': category.name !== $store.getters.active_category,'fa-folder-open': category.name === $store.getters.active_category}" class="fa fa-inverse"></i></span>                        
+                        <span class="sidebar__categoryName">{{ category.name }}</span>
+                    </div>
+                </template>
             </div>
         </div>
-        <!-- <new-category></new-category> -->
+        <div @click="openCategoryModal" class="sidebar__newCategory"><span>+</span><span class="sidebar__newCategoryText">New category</span></div>
     </div>
 </template>
 <script>
@@ -33,7 +32,7 @@ export default {
     data() {
         return {
             repo: null,
-            categories: null,
+            categories: [],
         }
     },
     created() {
@@ -52,10 +51,9 @@ export default {
         this.init();
     }, 
     methods: {
-        init() {
-            // console.log(this.$store.getters.active_repo.name);
+        init() {            
         },
-        toggleActiveCategory(cat) {
+        toggleActiveCategory(cat){
             this.$store.dispatch('setActiveCategory', cat);
             return axios.post('/api/update-session-active-category',{
                 activeCategory: cat,
@@ -64,14 +62,16 @@ export default {
               // console.log(res.data)
               this.$nuxt.$router.replace({path: `/repos/${this.$store.getters.active_repo.name}/${cat}`})
             })           
+        },
+        openCategoryModal(){
+            this.$store.dispatch('setCategoryModalState', !this.$store.getters.category_modal_state);
         }
     }
 }
 </script>
 <style scoped>
 .sidebar{
-    width: 25%;
-    max-width: 336px;
+    min-width: 301px;
     height: 100vh;
     background-color: #F5F6FA;
 }
@@ -109,13 +109,13 @@ export default {
 }
 .sidebar__categoriesContainer{
     margin-top: 25px;
-    height: 70vh;
+    height: 60vh;
     width: 100%;
     overflow: scroll;
 }
 .sidebar__categoryButton{
     cursor: pointer;
-    padding: 20px 0px 20px 30px;
+    padding: 20px 0px 20px 32px;
     /* display: flex;
     justify-content: space-between; */
 }
@@ -127,8 +127,34 @@ export default {
     margin-left: 40px;
     font-size: 14px;
 }
-
+.sidebar__newCategory{
+    width: 80%;
+    height: 50px;
+    margin-top: 30px;
+    margin-left: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 17px 47px;
+    box-sizing: border-box;
+    color: #574BEB;
+    cursor: pointer;
+    background-color: #FFFFFF;
+}
+.sidebar__newCategoryText{
+    display: inline-block;
+    margin-left: 10px;
+}
 .fa{
     color: black;
+}
+
+::-webkit-scrollbar{
+  -webkit-appearance: none;
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: #E3E7EE;
 }
 </style>

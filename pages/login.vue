@@ -45,9 +45,9 @@ export default {
   flex-direction: row;
 }
 .login__sideContainer {
-  width: 33%;
+  /* width: 33%; */
   background-color:white;
-  max-width: 464px;
+  min-width: 464px;
   height: 100vh;
 }
 .login__sideContent{

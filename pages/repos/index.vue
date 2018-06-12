@@ -108,6 +108,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
   padding-bottom: 80px;
 }
 .repos__logoContainer{
@@ -120,6 +121,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
+  z-index: 10;
   transform: translate3d(-50%, -50%, 0);
 }
 .repos__logoCircle{

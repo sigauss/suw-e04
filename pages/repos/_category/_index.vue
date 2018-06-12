@@ -4,7 +4,6 @@
     <div class="components__componentsCount">{{ $store.getters.components.length }} {{$store.getters.components.length > 1 ? 'components' : 'component'}} </div>
     <form ref="form" name="createComponent"  @submit.prevent="createComponent">
       <input type="text" name="componentName" />
-      <button type="submit">Create component</button>
     </form>
     <div class="components__componentsContainer">
       <div v-for="(component, name) in $store.getters.components" :key="name" class="components__componentCard">

@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <h1 class="title">
+    <!-- <h1 class="title">
       CATEGORIES
     </h1>
     <form ref="form" name="createCategory"  @submit.prevent="createCategory">
@@ -15,13 +15,12 @@
           {{ file.name }}
         </router-link>
       </li>
-    </ul>
+    </ul> -->
   </section>
 </template>
 
 <script>
 import axios from "~/plugins/axios";
-import logoutMixin from '~/mixins/logoutMixin'
 
 export default {
   mixins: [logoutMixin],
@@ -64,6 +63,7 @@ export default {
           res.data.forEach(repo => {
             if (repo.name === this.$store.getters.slug) {
               repoOwner = repo.owner.login;
+              console.log(repo.name, repoOwner)
               this.$store.dispatch("setActiveRepo", {
                 name: repo.name,
                 owner: repoOwner
@@ -104,6 +104,7 @@ export default {
           repos.forEach(repo => {
             if (repo.name === this.$store.getters.slug) {
               repoOwner = repo.owner.login;
+              console.log(repo.name, repoOwner)
               this.$store.dispatch("setActiveRepo", {
                 name: repo.name,
                 owner: repoOwner
@@ -161,11 +162,8 @@ export default {
         .then(res => {
           store.store.dispatch("setUserRepos", res.data);
           return { repos: res.data };
-        })
-        .catch(e => {
-          this.logoutMixin()
         });
-      ;
+      x;
     },
     createCategory() {
       this.githubAction(this.$refs.form.categoryName.value);

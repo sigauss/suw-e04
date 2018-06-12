@@ -1,24 +1,39 @@
 <template>
   <div class="container">
-    <sidebar v-if="$route.path.includes('repos/')"/>
+    <sidebar v-if="$route.path.includes('repos/') || $route.path.includes('component/')"/>
     <nuxt/>
+    <category-modal :visible="categoryModalOpen"/>
     <!-- <my-footer/> -->
   </div>
 </template>
 
 <script>
-import Sidebar from '~/components/sidebar/Sidebar.vue'
+import Sidebar from '~/components/sidebar/Sidebar.vue';
+import CategoryModal from '~/components/CategoryModal.vue';
 
 export default {
   components: {
-    Sidebar
+    Sidebar,
+    CategoryModal,
+  },
+  data() {
+    return {
+      categoryModalOpen: false,
+    }
+  },
+  created() {
+    let categoryModal = this.$store.subscribe((mutation, state) => {
+        if (mutation.type === 'SET_CATEGORYMODALSTATE') {
+          this.categoryModalOpen = this.$store.getters.category_modal_state;
+        }
+    });
   },
   mounted() {
     this.init();
   },
   methods: {
     init() {
-      console.log(this.$route)
+
     }
   }
 }
