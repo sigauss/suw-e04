@@ -90,7 +90,7 @@ const createStore = () => {
           commit("SET_ACTIVECATEGORY", req.session.active_category);
         }
         return axios
-          .post("http://localhost:3000/api/login", {
+          .post(process.env.BASE_URL+"/api/login", {
             user
           })
           .then(res => {
@@ -98,7 +98,7 @@ const createStore = () => {
               commit("SET_USER", "logged");
               return axios
                 .get(
-                  `http://localhost:3000/api/github/user/${
+                  `${process.env.BASE_URL}/api/github/user/${
                     req.session.authUser.access_token
                   }`
                 )

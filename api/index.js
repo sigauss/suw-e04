@@ -29,6 +29,8 @@ const repos = require("./routes/repos");
 const component = require("./routes/component");
 const auth = require("./routes/users");
 
+// const baseUrl = process.env.NODE_ENV || 'http://localhost:3000'
+
 // Import API Routes
 app.use(organizations);
 app.use(repos);

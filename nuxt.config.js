@@ -2,6 +2,9 @@ module.exports = {
   /*
   ** Headers of the page
   */
+  env: {
+    baseUrl: process.env.BASE_URL,
+  },
   head: {
     title: "Accio",
     meta: [

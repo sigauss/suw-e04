@@ -5,12 +5,12 @@
   "author": "cytronn <arnaud.villani@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "dev": "cross-env NODE_ENV=development BASE_URL=http://localhost:3000 nodemon server/index.js --watch",
     "build": "nuxt build",
     "start": "nuxt build && nuxt start",
     "precommit": "npm run lint",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build NODE_ENV=production BASE_URL=https://accio-suw.herokuapp.com"
   },
   "dependencies": {
     "@nuxtjs/font-awesome": "^1.0.3",
@@ -19,6 +19,7 @@
     "body-parser": "^1.18.3",
     "cookieparser": "^0.1.0",
     "cross-env": "^5.0.1",
+    "dotenv": "^6.0.0",
     "eslint-plugin-vue": "^4.5.0",
     "express": "^4.15.3",
     "express-session": "^1.15.6",
@@ -40,6 +41,7 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "node-env-run": "^3.0.2",
     "nodemon": "^1.11.0"
   }
 }

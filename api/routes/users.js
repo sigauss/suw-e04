@@ -4,6 +4,8 @@ const { Router } = require('express')
 const User = require("../models/User")
 const router = Router()
 
+console.log(process.env.NODE_ENV)
+console.log('merde')
 
 /* GET users listing. */
 router.get('/users', function (req, res, next) {
