@@ -38,7 +38,7 @@ async function start() {
   app.use(nuxt.render)
 
   // Listen the server
-  app.listen(port, host)
+  app.listen( process.env.PORT || 3000, process.env.HOST || '127.0.0.1')
   console.log('Server listening on http://' + host + ':' + port) // eslint-disable-line no-console
 }
 start()
