@@ -18,6 +18,10 @@
         <h2>Price</h2>
         <input v-if="editMode" name="pricing" v-model="configFile.content.pricing"/>
         <p>{{ configFile.content.pricing }}</p>
+        <h2>Preview:</h2>
+        <div class="meta__informations_preview">
+          <img class="preview" :src="previewUrl" />
+        </div>
         <h2>Tags:</h2>
         <ul class="tags">
           <input id="newTag" v-if="editMode" name="newTag" placeholder="enter a tag"/>
@@ -50,7 +54,12 @@ export default {
       configFile: null,
       files: [],
       editMode: false,
-      configValues: []
+      configValues: [],
+      previewUrl: `https://github.com/${
+        this.$store.getters.active_repo.owner
+      }/${this.$store.getters.active_repo.name}//blob/master/${
+        this.$store.getters.active_category
+      }/${this.$route.params.slug}/preview.png?raw=true`
     };
   },
   head() {
@@ -65,6 +74,7 @@ export default {
     init() {
       this.files = [];
       this.getComponentInformations();
+      console.log(this.previewUrl);
     },
     getComponentInformations() {
       return axios
@@ -164,6 +174,9 @@ export default {
 <style scoped>
 .tags li {
   display: inline;
+}
+.preview {
+  width: 100%;
 }
 .tags {
   padding: 0;
