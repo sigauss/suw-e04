@@ -109,20 +109,25 @@ export default {
         description: this.$refs.form.description.value,
         tags: this.configValues
       };
-      axios.put(
-        `https://api.github.com/repos/${
-          this.$store.getters.active_repo.owner
-        }/${this.$store.getters.active_repo.name}/contents/${
-          this.$store.getters.active_category
-        }/${this.$route.params.slug}/config.json?access_token=${
-          this.$store.getters.access_token
-        }`,
-        {
-          message: `:octopus: Accio :tophat: • ${Date.now()}`,
-          content: btoa(JSON.stringify(configJson)),
-          sha: this.configFile.sha
-        }
-      );
+      axios
+        .put(
+          `https://api.github.com/repos/${
+            this.$store.getters.active_repo.owner
+          }/${this.$store.getters.active_repo.name}/contents/${
+            this.$store.getters.active_category
+          }/${this.$route.params.slug}/config.json?access_token=${
+            this.$store.getters.access_token
+          }`,
+          {
+            message: `:octopus: Accio :tophat: • ${Date.now()}`,
+            content: btoa(JSON.stringify(configJson)),
+            sha: this.configFile.sha
+          }
+        )
+        .then(res => {
+          this.editMode = false;
+          alert("Updated !!");
+        });
     },
     getComponentFilesContent() {
       for (let file in this.files) {
