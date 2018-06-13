@@ -124,6 +124,7 @@ export default {
   },
   methods: {
     setActiveComponent(componentName) {
+      console.log(componentName);
       this.$store.dispatch("setActiveComponent", componentName);
       this.$nuxt.$router.replace({ path: `/component/${componentName}` });
     },

@@ -4,7 +4,7 @@
       <div class="component-title">
         <div>
           <h1>
-            {{$store.getters.active_component}}
+            {{$route.params.slug}}
           </h1>
         </div>
       </div>
@@ -148,6 +148,7 @@ export default {
   },
   methods: {
     init() {
+        console.log(this.$route)
       this.files = [];
       this.getComponentInformations();
     },

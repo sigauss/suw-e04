@@ -7,16 +7,16 @@
     </div>
     <h1 class="repos__title">Hi ! Welcome to Accio</h1>
     <h2 class="repos__subtitle">To join, please select one of your accio workspaces.</h2>
-    <form ref="form" name="createRepo"  @submit.prevent="submitRepo">
-      <input type="text" name="repoName" />
-      <button type="submit">Create</button>
+    <form ref="form" class="create__repoContainer" name="createRepo"  @submit.prevent="submitRepo">
+      <input class="create__repoInput" type="text" name="repoName" />
+      <button class="create__repoSubmit" type="submit">create</button>
     </form>
     <div class="repos__reposList">
       <div v-for="(repo, name) in repos" :key="name" class="repos__repoCard">
         <router-link :to="`/repos/${repo.name}`">
           <div class="repos__repoContent">
             <div class="repos__repoTextContainer">
-              <div class="repos__repoName">{{ repo.name.substring(0, 10) + '...' }}</div>
+              <div class="repos__repoName">{{ repo.name.substring(0, 50) }}</div>
               <div class="repos__repoPrivate">{{ repo.private === true ? "Private" : "Public" }}</div>
             </div>
             <div class="repos__repoPicContainer">
@@ -57,7 +57,7 @@ export default {
         )
         .then(res => {
           this.$store.dispatch("setUserRepos", res.data);
-          this.repos = res.data
+          this.repos = res.data.filter(repo => repo.name.includes('Accio'));
         })
         .catch(e => {
           this.logoutMixin()
@@ -87,10 +87,21 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       }).then(res => {
-        alert("repo created");
+        axios
+        .get(
+          "https://api.github.com/user/repos?access_token=" +
+            this.$store.getters.access_token
+        )
+        .then(res => {
+          this.$store.dispatch("setUserRepos", res.data);
+          this.repos = res.data.filter(repo => repo.name.includes('Accio'));
+        })
+        .catch(e => {
+          this.logoutMixin()
+        })
       })
       .catch(e =>{
-        
+        this.logoutMixin();
       })
     }
   },
@@ -160,6 +171,35 @@ export default {
   animation-delay: 0.6s;
 }
 
+.create__repoContainer{
+  display: flex;
+  flex-direction: column;
+}
+
+.create__repoSubmit{
+  margin-top: 20px;
+  width: 200px;
+  font-size: 16px;
+  background-color:transparent;
+  box-sizing: border-box;
+  padding: 15px 20px;
+  border-radius: 2px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+  background-color: #574BEB;
+  color: white;
+}
+
+.create__repoInput{
+  height: 40px;
+  padding-left: 10px;
+  line-height: 20px;
+  font-size: 16px;
+  width: 400px;
+  border-radius: 3px;
+  border: 1px solid #dddbfb;
+}
 .repos__title{
   margin-top: 70px;
   width: 280px;
@@ -180,9 +220,10 @@ export default {
   justify-content: space-between;
 }
 .repos__repoCard{
-  width: 256px;
+  width: 80%;
   padding: 23px 21px 32px 19px;
   margin-top: 20px;
+  margin-left: 10%;
   box-sizing: border-box;
   background-color: white;
 }
@@ -203,7 +244,7 @@ export default {
 }
 .repos__repoName{
   font-size: 21px;
-  width: 70%;
+  width: 100%;
 }
 .repos__repoPrivate{
   font-size: 11px;

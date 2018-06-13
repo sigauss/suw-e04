@@ -64,7 +64,6 @@
                             )
                             .then(res => {
                                 this.$store.dispatch('setActiveRepoCategories', res.data);
-                                console.log(this.$store.getters.active_repo_categories);
                                 this.closeModal();
                             })
                             .catch(e => {
