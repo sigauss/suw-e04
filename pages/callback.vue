@@ -26,6 +26,9 @@ export default {
         .then(res => {
           this.access_token = JSON.parse(res.data).access_token;
           this.$store.dispatch("setAccessToken", this.access_token);
+          axios.post('/api/update-session-access-token',{
+            access_token: this.access_token,
+          })
           return axios
             .get(`/api/github/user/${this.access_token}`)
             .then(res => {
@@ -34,6 +37,9 @@ export default {
               this.github_id = JSON.parse(res.data).id;
               // TODO add email to store
               this.$store.dispatch("setUserInformations", JSON.parse(res.data));
+              axios.post('/api/update-session-user-infos',{
+                  userInfos: JSON.parse(res.data),
+              })
               return axios
                 .get(`/api/github/email/${this.access_token}`)
                 .then(res => {
@@ -47,6 +53,8 @@ export default {
                     })
                     .then(res => {
                       this.$store.commit("SET_USER", "logged");
+                      axios
+                        .post('/api/update-session-logged', {})
                       this.$nuxt.$router.replace({ path: "/repos" });
                     });
                 })

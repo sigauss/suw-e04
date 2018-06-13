@@ -1,4 +1,7 @@
 module.exports = {
+  router: {
+    middleware: ['fillStore']
+  },
   env: {
     port: process.env.PORT || 3000,
     host: process.env.HOST || 'http://127.0.0.1'

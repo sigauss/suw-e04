@@ -182,9 +182,26 @@ router.post('/update-session-active-repo', function (req, res) {
 })
 
 router.post('/update-session-active-category', function (req, res) {
-  console.log('UPDATE SESSION OLE')
   req.session.activeCategory = req.body.activeCategory
   res.json(null);
+})
+
+router.post('/update-session-logged', function(req, res){
+  req.session.logged = 'logged'
+  console.log(req.session)
+  res.json(null)
+})
+
+router.post('/update-session-user-infos', function(req, res){
+  req.session.userInfos = req.body.userInfos
+  console.log(req.session)
+  res.json(null)
+})
+
+router.post('/update-session-access-token', function(req, res){
+  req.session.access_token = req.body.access_token
+  console.log(req.session)
+  res.json(null)
 })
 
 module.exports = router

@@ -20,6 +20,7 @@ const createStore = () => {
       all_components: [],
       category_modal_state: false,
       component_modal_state: false,
+      logged: null
     },
     getters: {
       access_token(state) {
@@ -51,12 +52,18 @@ const createStore = () => {
       },
       all_components(state) {
         return state.all_components;
+      },
+      logged(state) {
+        return state.logged;
       }
     },
     mutations: {
       SET_ACCESSTOKEN(state, access_token) {
         state.access_token = access_token;
       },
+      // SET_IF_LOGGED(state, logged) {
+      //   state.logged = logged;
+      // },
       SET_USERINFORMATIONS(state, informations) {
         state.user.informations = informations;
       },
@@ -96,9 +103,6 @@ const createStore = () => {
     },
     actions: {
       nuxtServerInit({ commit }, { req }) {
-
-        console.log(`${process.env.host}:${process.env.port}/api/login`)
-
         let user = {};
         if (req.session && req.session.authUser) {
           user.username = req.session.authUser.username;
@@ -113,28 +117,15 @@ const createStore = () => {
         if (req.session && req.session.activeCategory){
           commit("SET_ACTIVECATEGORY", req.session.activeCategory);
         }
-        return axios
-          .post(`${process.env.host}:${process.env.port}/api/login`, {
-            user
-          })
-          .then(res => {
-            if (req.session.authUser) {
-              commit("SET_USER", "logged");
-              return axios
-                .get(
-                  `${process.env.host}:${process.env.port}/api/github/user/${
-                    req.session.authUser.access_token
-                  }`
-                )
-                .then(res => {
-                  commit("SET_USERINFORMATIONS", res.data);
-                  commit("SET_ACCESSTOKEN", req.session.authUser.access_token);
-                })
-                .catch(error => {
-                  console.log(error.response);
-                });
-            }
-          });
+        if(req.session && req.session.logged){
+          commit("SET_USER", req.session.logged)
+        }
+        if(req.session && req.session.userInfos){
+          commit("SET_USERINFORMATIONS", req.session.userInfos)
+        }
+        if(req.session && req.session.access_token){
+          commit("SET_ACCESSTOKEN", req.session.access_token)
+        }
       },
       setAccessToken({ commit }, access_token) {
         commit("SET_ACCESSTOKEN", access_token);

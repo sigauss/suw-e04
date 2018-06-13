@@ -8,7 +8,13 @@
 </template>
 
 <script>
+
 export default {
+  asyncData({ fillStore }) {
+    return {
+      fillStore
+    }
+  },
   fetch ({ store, redirect }) {
     if (store.state.authUser == 'logged') {
       // uncomment if we went to redirect directly from landing
