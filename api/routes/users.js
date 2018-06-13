@@ -4,11 +4,6 @@ const { Router } = require('express')
 const User = require("../models/User")
 const router = Router()
 
-const client_id = process.env.CLIENT_ID || '6512280b0626a7722d81'
-const client_secret = process.env.CLIENT_SECRET || '71182dca741cb055c14ef5b3705a1f14627e294c'
-
-console.log('HEHO HEHO')
-
 console.log(client_id)
 /* GET users listing. */
 router.get('/users', function (req, res, next) {
@@ -88,6 +83,10 @@ router.get('/users/:id', function (req, res, next) {
 })
 
 router.get('/auth/:id', function (req, res, next) {
+
+  const client_id = process.env.CLIENT_ID || '6512280b0626a7722d81'
+  const client_secret = process.env.CLIENT_SECRET || '71182dca741cb055c14ef5b3705a1f14627e294c'
+
   let body;
   var options = {
     "method": "POST",
