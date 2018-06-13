@@ -1,19 +1,14 @@
 <template>
   <section class="component">
     <div class="row">
-      <div class="component-title flex align-center">
+      <div class="component-title">
         <div>
           <h1>
             {{$store.getters.active_component}}
           </h1>
         </div>
-        <div class="createdAt">
-          <span>
-            Crée le 27 juin 2018
-          </span>
-        </div>
       </div>
-      <a class="editInfos" href="#"><i class="fa fa-caret-left"></i> Back to components</a>
+      <nuxt-link class="editInfos" :to="`/repos/${$store.getters.active_repo.name}/${$store.getters.active_category}`"><i class="fa fa-caret-left"></i> Back to {{$store.getters.active_category}}</nuxt-link>
       <button v-if="!editMode" class="editBtn" @click.prevent="displayInputs">Modify</button>
       <button v-if="editMode" class="editBtn" @click.prevent="toggleEditMode">Cancel</button>
     </div>
@@ -24,7 +19,7 @@
             <div class="flex">
               <div class="info componentInfo">
                 <span>{{ configFile.content.devTime }}</span>
-                <input v-if="editMode" name="devTime" v-model="configFile.content.devTime"/>
+                <input class="view-left" v-if="editMode" name="devTime" v-model="configFile.content.devTime"/>
                 <label>Development time</label>
               </div>
               <div class="info componentInfo">
@@ -33,7 +28,7 @@
               </div>
               <div class="info componentInfo">
                 <span>{{ configFile.content.pricing }}€</span>
-                <input v-if="editMode" type="number" name="pricing" v-model="configFile.content.pricing"/>
+                <input class="view-left" v-if="editMode" type="number" name="pricing" v-model="configFile.content.pricing"/>
                 <label>Pricing</label>
               </div>
               <div class="info componentInfo">
@@ -57,14 +52,14 @@
                   <p class="label view-left" v-if="isCopied">Copied !</p>
                   <i v-on:click="copyToClipBoard" class="fa fa-clone"></i>
                 </div>
-                <div v-for="(file, index) in files" :key="index" >
+                <div class="view-left" v-for="(file, index) in files" :key="index" >
                   <div v-bind:id="file.name" v-if="file.content !== null" v-bind:class="{active: index === 0}" class="tabcontent">
                     <pre>{{file.content}}</pre>
                   </div>
                 </div>
               </div>
               <h2>Description</h2>
-              <input v-if="editMode" name="description" v-model="configFile.content.description"/>
+              <textarea class="view-left" v-if="editMode" name="description" v-model="configFile.content.description"></textarea>
               <p>{{ configFile.content.description }}</p>
             </div>
           </div>
@@ -99,7 +94,7 @@
                 <p>Tags</p>
                 <p class="addTagLink" v-on:click="addTag" v-if="editMode">Add</p>
               </div>
-              <input v-if="editMode" id="newTag" name="newTag" placeholder="Enter a tag"/>
+              <input class="view-left" v-if="editMode" id="newTag" name="newTag" placeholder="Enter a tag"/>
               <ul class="tags">
                 <li class="tag view-left" v-for="(tag) in configFile.content.tags" :key="tag">
                   {{tag}} <i v-if="editMode" v-on:click="deleteTag(tag)" class="fa fa-times deleteTag"></i>
@@ -335,10 +330,6 @@ form {
 .align-center {
   align-items: center;
 }
-.createdAt {
-  margin-left: 40px;
-  color: #909090;
-}
 .editInfos {
   color: #2978ee;
   text-decoration: none;
@@ -407,8 +398,20 @@ form {
   display: block;
   margin-top: 18px;
 }
+textarea {
+  width: 100%;
+  resize: none;
+  border: 1px solid #dedede;
+  padding: 10px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-size: 14px;
+  outline: none;
+  height: 300px;
+}
 .difficulty {
   padding: 20px;
+  height: 168px;
   align-items: flex-start;
   justify-content: flex-start;
 }
@@ -503,6 +506,16 @@ form {
   cursor: pointer;
   color: #574beb;
 }
+.tags-wrapper {
+  background: white;
+  border: 1px solid #dddbfb;
+  margin-top: 75px;
+  padding: 25px 15px;
+}
+.tags-wrapper p {
+  margin: 0;
+  color: #574beb;
+}
 .tags-wrapper input {
   width: 100%;
   padding: 10px;
@@ -510,6 +523,7 @@ form {
   border-radius: 3px;
   background: white;
   box-sizing: border-box;
+  margin-top: 25px;
 }
 .tag {
   background: #574beb;
