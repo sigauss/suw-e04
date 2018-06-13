@@ -36,12 +36,11 @@ export default {
 
     }
   }
-}
+};
 </script>
 
 <style>
-.container
-{
+.container {
   display: flex;
   flex-direction: row;
   margin: 0;
@@ -50,8 +49,8 @@ export default {
   /* text-align: center; */
 }
 
-.button, .button:visited
-{
+.button,
+.button:visited {
   display: inline-block;
   color: black;
   letter-spacing: 1px;
@@ -62,14 +61,13 @@ export default {
   padding: 15px 45px;
 }
 
-.button:hover, .button:focus
-{
+.button:hover,
+.button:focus {
   color: #fff;
   background-color: #000;
 }
 
-.title
-{
+.title {
   color: #000;
   font-weight: 300;
   font-size: 2.5em;

@@ -1,46 +1,118 @@
 <template>
-  <section class="container">
-    <h1 class="title">
-      My component
-    </h1>
-    <div v-if="configFile !== null" class="meta__informations">
-      <form ref="form" name="saveConfigFile"  @submit.prevent="saveConfigFile">
-        <button @click.prevent="displayInputs">Edit</button>
-        <h2>Description</h2>
-        <input v-if="editMode" name="description" v-model="configFile.content.description"/>
-        <p>{{ configFile.content.description }}</p>
-        <h2>Difficulty:</h2>
-        <input v-if="editMode" name="difficulty" v-model="configFile.content.difficulty"/>
-        <p>{{ configFile.content.difficulty }}</p>
-        <h2>Devtime:</h2>
-        <input v-if="editMode" name="devTime" v-model="configFile.content.devTime"/>
-        <p>{{ configFile.content.devTime }}</p>
-        <h2>Price</h2>
-        <input v-if="editMode" name="pricing" v-model="configFile.content.pricing"/>
-        <p>{{ configFile.content.pricing }}</p>
-        <h2>Preview:</h2>
-        <div class="meta__informations_preview">
-          <img class="preview" :src="previewUrl" />
+  <section class="component">
+    <div class="row">
+      <div class="component-title flex align-center">
+        <div>
+          <h1>
+            {{$store.getters.active_component}}
+          </h1>
         </div>
-        <h2>Tags:</h2>
-        <ul class="tags">
-          <input id="newTag" v-if="editMode" name="newTag" placeholder="enter a tag"/>
-          <p v-on:click="addTag" v-if="editMode">Add</p>
-          <li class="tag" v-for="(tag) in configFile.content.tags" :key="tag">
-            {{tag}}
-          </li>
-        </ul>
-        <button v-if="editMode" type="submit"> Save</button>
-      </form>
+        <div class="createdAt">
+          <span>
+            Crée le 27 juin 2018
+          </span>
+        </div>
+      </div>
+      <a class="editInfos" href="#"><i class="fa fa-caret-left"></i> Back to components</a>
+      <button v-if="!editMode" class="editBtn" @click.prevent="displayInputs">Modify</button>
+      <button v-if="editMode" class="editBtn" @click.prevent="toggleEditMode">Cancel</button>
     </div>
-    <ul class="snippets">
-      <li v-for="(file, name) in files" :key="name" class="repos">
-        <span><b>{{file.name }}</b></span>
-        <div v-if="file.content !== null" class="snippet-content">
-          <pre>{{file.content}}</pre>
+    <div class="row infos-sections">
+      <div v-if="configFile !== null" class="component-datas">
+        <form class="flex" ref="form" name="saveConfigFile"  @submit.prevent="saveConfigFile">
+          <div class="infos-wrapper left-col">
+            <div class="flex">
+              <div class="info componentInfo">
+                <span>{{ configFile.content.devTime }}</span>
+                <input v-if="editMode" name="devTime" v-model="configFile.content.devTime"/>
+                <label>Development time</label>
+              </div>
+              <div class="info componentInfo">
+                <span>1.0</span>
+                <label>Version</label>
+              </div>
+              <div class="info componentInfo">
+                <span>{{ configFile.content.pricing }}€</span>
+                <input v-if="editMode" type="number" name="pricing" v-model="configFile.content.pricing"/>
+                <label>Pricing</label>
+              </div>
+              <div class="info componentInfo">
+                <span>6</span>
+                <label>Contributors</label>
+                <button>View all</button>
+              </div>
+            </div>
+            <h2>Preview</h2>
+            <div class="preview-tag-wrapper">
+              <div class="meta__informations_preview">
+                <img class="preview" :src="previewUrl" />
+              </div>
+              <div class="tab">
+                <a class="tablinks" v-on:click="openContent(index)" v-for="(file, index) in files" :key="index" v-bind:class="{active: index === 0}">
+                  {{file.name }}
+                </a>
+              </div>
+              <div class="code-wrapper">
+                <div class="copy">
+                  <p class="label view-left" v-if="isCopied">Copied !</p>
+                  <i v-on:click="copyToClipBoard" class="fa fa-clone"></i>
+                </div>
+                <div v-for="(file, index) in files" :key="index" >
+                  <div v-bind:id="file.name" v-if="file.content !== null" v-bind:class="{active: index === 0}" class="tabcontent">
+                    <pre>{{file.content}}</pre>
+                  </div>
+                </div>
+              </div>
+              <h2>Description</h2>
+              <input v-if="editMode" name="description" v-model="configFile.content.description"/>
+              <p>{{ configFile.content.description }}</p>
+            </div>
+          </div>
+          <div class="right-col">
+            <div class="info difficulty">
+              <span>Difficulty</span>
+              <div class="flex listDifficulty">
+                <div>
+                  <input :disabled="!editMode" type="radio" id="veryEasy" name="difficulty" :checked="{true: configFile.content.difficulty === 1}" value="1" v-model="configFile.content.difficulty">
+                  <label v-if="configFile.content.difficulty === '1'">Very easy</label>
+                </div>
+                <div>
+                  <input :disabled="!editMode" type="radio" id="easy" name="difficulty" :checked="{true: configFile.content.difficulty === 2}" value="2" v-model="configFile.content.difficulty">
+                  <label v-if="configFile.content.difficulty === '2'">Easy</label>
+                </div>
+                <div>
+                  <input :disabled="!editMode" type="radio" id="medium" name="difficulty" :checked="{true: configFile.content.difficulty === 3}" value="3" v-model="configFile.content.difficulty">
+                  <label v-if="configFile.content.difficulty === '3'">Medium</label>
+                </div>
+                <div>
+                  <input :disabled="!editMode" type="radio" id="hard" name="difficulty" :checked="{true: configFile.content.difficulty === 4}" value="4" v-model="configFile.content.difficulty">
+                  <label v-if="configFile.content.difficulty === '4'">Hard</label>
+                </div>
+                <div>
+                  <input :disabled="!editMode" type="radio" id="insane" name="difficulty" :checked="{true: configFile.content.difficulty === 5}" value="5" v-model="configFile.content.difficulty">      
+                  <label v-if="configFile.content.difficulty === '5'">Insane</label>
+                </div>
+              </div>
+            </div>
+            <div class="tags-wrapper">
+              <div class="flex justify-between">
+                <p>Tags</p>
+                <p class="addTagLink" v-on:click="addTag" v-if="editMode">Add</p>
+              </div>
+              <input v-if="editMode" id="newTag" name="newTag" placeholder="Enter a tag"/>
+              <ul class="tags">
+                <li class="tag view-left" v-for="(tag) in configFile.content.tags" :key="tag">
+                  {{tag}}
+                </li>
+              </ul>
+            </div>
+            <button class="saveBtn" v-if="editMode" type="submit">Save component</button>
+          </div>
+        <div>
         </div>
-      </li>
-    </ul>
+        </form>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -59,6 +131,7 @@ export default {
       configFile: null,
       files: [],
       editMode: false,
+      isCopied: false,
       configValues: [],
       previewUrl: `https://github.com/${
         this.$store.getters.active_repo.owner
@@ -79,7 +152,33 @@ export default {
     init() {
       this.files = [];
       this.getComponentInformations();
-      console.log(this.previewUrl);
+    },
+    toggleEditMode() {
+      this.editMode = !this.editMode;
+    },
+    openContent(index) {
+      this.isCopied = false;
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+      tabcontent[index].classList.add("active");
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+      }
+      tablinks[index].classList.add("active");
+    },
+    copyToClipBoard() {
+      var code = document.querySelector(".tabcontent.active pre").textContent;
+      var textArea = document.createElement("textarea");
+      textArea.textContent = code;
+      document.body.append(textArea);
+      textArea.style.opacity = "0";
+      textArea.select();
+      document.execCommand("copy");
+      this.isCopied = true;
     },
     getComponentInformations() {
       return axios
@@ -92,6 +191,7 @@ export default {
         )
         .then(res => {
           this.files = JSON.parse(res.data);
+          console.log(this.files);
           this.getComponentFilesContent();
         });
     },
@@ -103,26 +203,23 @@ export default {
       }
     },
     addTag() {
-      var newTag = document.querySelector("#newTag").value;
-      var list = document.querySelector(".tags");
-      var tag = document.createElement("li");
-
-      tag.setAttribute("class", "tag");
-      tag.appendChild(document.createTextNode(newTag));
-      list.appendChild(tag);
-
-      var tags = document.querySelectorAll(".tag");
-      tags.forEach(tag => {
-        this.configValues.push(tag.innerText);
-      });
+      var newTagInput = document.querySelector("#newTag");
+      var newTag = newTagInput.value;
+      if (this.configFile.content.tags.indexOf(newTag) > -1) {
+        alert("This tag already exist !");
+      } else {
+        newTagInput.value = "";
+        this.configFile.content.tags.push(newTag);
+      }
     },
     saveConfigFile() {
+      console.log(this.$refs.form);
       let configJson = {
         devTime: this.$refs.form.devTime.value,
         pricing: this.$refs.form.pricing.value,
         difficulty: this.$refs.form.difficulty.value,
         description: this.$refs.form.description.value,
-        tags: this.configValues
+        tags: this.configFile.content.tags
       };
       axios
         .put(
@@ -163,6 +260,11 @@ export default {
                 atob(this.configFile.content)
               );
             } else {
+              this.files = this.files.filter(function(file) {
+                return (
+                  file.name !== "config.json" && file.name !== "preview.png"
+                );
+              });
               this.files.forEach(file => {
                 if (file.name === JSON.parse(res.data).name) {
                   file.content = atob(JSON.parse(res.data).content);
@@ -177,8 +279,211 @@ export default {
 </script>
 
 <style scoped>
-.tags li {
-  display: inline;
+@keyframes view-left {
+  0% {
+    opacity: 0;
+    transform: translate(100px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+.view-left {
+  animation: view-left 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  animation-fill-mode: forwards;
+}
+.component {
+  padding-top: 100px;
+  padding-left: 30px;
+  padding-right: 30px;
+  background-color: #fbfbfd;
+  padding-bottom: 100px;
+}
+.row {
+  display: block;
+  width: 100%;
+}
+form {
+  justify-content: space-between;
+}
+.left-col {
+  width: 70%;
+}
+.right-col {
+  margin-left: 2rem;
+  width: 30%;
+  margin-top: 22px;
+}
+.flex {
+  display: flex;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-center {
+  justify-content: center;
+}
+.align-center {
+  align-items: center;
+}
+.createdAt {
+  margin-left: 40px;
+  color: #909090;
+}
+.editInfos {
+  color: #2978ee;
+  text-decoration: none;
+}
+.infos-section {
+  margin-top: 40px;
+}
+.infos-wrapper {
+  margin-top: 22px;
+  align-items: center;
+}
+.editBtn {
+  float: right;
+  border: none;
+  background: none;
+  color: #2978ee;
+  font-size: 14px;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  height: 128px;
+  text-align: center;
+  background: white;
+  border: 1px solid #dddbfb;
+  padding: 42px 25px;
+}
+.info:nth-child(even) {
+  border-right: 0;
+  border-left: 0;
+}
+.info:nth-child(4) {
+  border-right: 1px solid #dddbfb;
+}
+.info button {
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  background: #574beb;
+  padding: 10px;
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 3px;
+}
+.info input {
+  display: block;
+}
+.componentInfo input {
+  height: 34px;
+  padding-left: 10px;
+  border-radius: 3px;
+  border: 1px solid #dedede;
+}
+.info input:focus {
+  outline: none;
+}
+.info span {
+  color: #574beb;
+  font-size: 21px;
+}
+.info label {
+  color: #808080;
+  display: block;
+  margin-top: 18px;
+}
+.difficulty {
+  padding: 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.difficulty .listDifficulty {
+  margin-top: 30px;
+  width: 100%;
+}
+.listDifficulty div {
+  position: relative;
+}
+.difficulty .listDifficulty label {
+  color: black;
+  top: 10px;
+  font-size: 12px;
+  position: absolute;
+  left: 50%;
+  width: max-content;
+  transform: translateX(-50%);
+}
+.difficulty input {
+  height: 10px;
+  width: 42px;
+  background: #dfe3e8;
+  -webkit-appearance: none;
+  transition: all 0.2s ease;
+  cursor: not-allowed;
+}
+.difficulty input:not(:disabled) {
+  cursor: pointer;
+}
+.difficulty input:focus {
+  outline: none;
+}
+.difficulty input:checked:before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 0;
+  height: 0;
+  border-left: solid 5px transparent;
+  border-right: solid 5px transparent;
+}
+.difficulty #veryEasy:checked {
+  background-color: #66e27e;
+}
+.difficulty #veryEasy:checked:before {
+  border-top: solid 5px #66e27e;
+}
+.difficulty #easy:checked {
+  background-color: #1eb663;
+}
+.difficulty #easy:checked:before {
+  border-top: solid 5px #1eb663;
+}
+.difficulty #medium:checked {
+  background-color: #f47922;
+}
+.difficulty #medium:checked:before {
+  border-top: solid 5px #f47922;
+}
+.difficulty #hard:checked {
+  background-color: #f43922;
+}
+.difficulty #hard:checked:before {
+  border-top: solid 5px #f43922;
+}
+.difficulty #insane:checked {
+  background-color: #6d0c00;
+}
+.difficulty #insane:checked:before {
+  border-top: solid 5px #6d0c00;
+}
+.copy .label {
+  display: inline-block;
+  position: relative;
+  left: -10px;
+  margin: 0;
+}
+.tags {
+  display: block;
 }
 .preview {
   width: 100%;
@@ -186,10 +491,42 @@ export default {
 .tags {
   padding: 0;
 }
+.addTagLink {
+  cursor: pointer;
+  color: #574beb;
+}
+.tags-wrapper input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dedede;
+  border-radius: 3px;
+  background: white;
+  box-sizing: border-box;
+}
 .tag {
-  background: #dedede;
+  background: #574beb;
+  color: white;
+  border-radius: 3px;
+  width: auto;
+  display: inline-block;
   padding: 10px;
   margin: 5px;
+}
+.saveBtn {
+  background: white;
+  border: 1px solid #574beb;
+  color: #574beb;
+  margin-top: 50px;
+  border-radius: 3px;
+  padding: 10px;
+  width: 100%;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.saveBtn:hover {
+  background-color: #574beb;
+  color: white;
 }
 ul {
   display: flex;
@@ -200,5 +537,53 @@ li {
 }
 pre {
   text-align: left;
+}
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #e3e7eb;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tablinks {
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  color: #574beb;
+  border: 1px solid #574beb;
+}
+.code-wrapper {
+  position: relative;
+}
+.copy {
+  color: #574beb;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+/* Change background color of buttons on hover */
+.tablinks:hover {
+  color: white;
+  background-color: #574beb;
+}
+
+/* Create an active/current tablink class */
+.tablinks.active {
+  color: white;
+  background-color: #574beb;
+}
+
+/* Style the tab content */
+.tabcontent {
+  padding: 6px 12px;
+  border: 1px solid #e3e7eb;
+  border-top: none;
+}
+.tabcontent:not(.active) {
+  display: none;
 }
 </style>

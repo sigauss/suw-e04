@@ -8,7 +8,7 @@
     <div class="components__componentsContainer">
       <div v-for="(component, name) in $store.getters.components" :key="name" class="components__componentCard">
         <template v-if="component.component.type === 'dir'">
-          <router-link class="components__componentLink" :to="`/component/${component.component.name}`">
+          <div class="components__componentLink" @click="setActiveComponent(component.component.name)">
             <span><i class="fa fa-folder-o"></i>{{ component.component.name }}</span>
             <p><i class="fa fa-clock"></i>{{ component.content.pricing }}€</p>
             <p v-if="component.content.difficulty === '1'"><i class="fa fa-tachometer-alt"></i>Low</p>
@@ -16,7 +16,7 @@
             <p v-if="component.content.difficulty === '3'"><i class="fa fa-tachometer-alt"></i>Medium</p>
             <p v-if="component.content.difficulty === '4'"><i class="fa fa-tachometer-alt"></i>Hard</p>
             <p v-if="component.content.difficulty === '5'"><i class="fa fa-tachometer-alt"></i>Insane</p>
-          </router-link>
+          </div>
         </template>
       </div>
     </div>
@@ -25,19 +25,23 @@
 
 <script>
 import axios from "~/plugins/axios";
-import logoutMixin from '~/mixins/logoutMixin';
+import logoutMixin from "~/mixins/logoutMixin";
 
 export default {
   data() {
     return {
-        components: null,
-    }
+      components: null
+    };
   },
   mixins: [logoutMixin],
   mounted() {
     this.init();
   },
   methods: {
+    setActiveComponent(componentName) {
+      this.$store.dispatch("setActiveComponent", componentName);
+      this.$nuxt.$router.replace({ path: `/component/${componentName}` });
+    },
     init() {
     console.log(this.$store.getters.active_category)
 
@@ -128,49 +132,48 @@ export default {
         })
         .catch(e => {
           // this.logoutMixin()
-        })
-      ;
+        });
     },
     createComponent() {
       this.githubAction(this.$refs.form.componentName.value);
     }
   },
-  fetch ({ store, redirect, params }) {
-    if (store.state.authUser != 'logged') {
-      return redirect('/login')
+  fetch({ store, redirect, params }) {
+    if (store.state.authUser != "logged") {
+      return redirect("/login");
     }
   }
 };
 </script>
 
 <style scoped>
-  .components {
-    display: flex;
-    width: 75%;
-    padding: 0px 30px;
-    box-sizing: border-box;
-    flex-direction: column;
-  }
-  .components__componentsContainer{
-    margin-top: 50px;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .components__componentCard{
-    width: 232px;
-    padding: 20px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    box-sizing: border-box;
-    background-color: #F5F6FA;
-  }
-  .components__componentCard:hover{
-    transition: all 0.2s ease-in;
-    -webkit-box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.36);
-    -moz-box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.36);
-    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.36);
-  }
-  .components__componentLink{
-    text-decoration: none;
-  }
+.components {
+  display: flex;
+  width: 75%;
+  padding: 0px 30px;
+  box-sizing: border-box;
+  flex-direction: column;
+}
+.components__componentsContainer {
+  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.components__componentCard {
+  width: 232px;
+  padding: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  background-color: #f5f6fa;
+}
+.components__componentCard:hover {
+  transition: all 0.2s ease-in;
+  -webkit-box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
+  -moz-box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
+  box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
+}
+.components__componentLink {
+  text-decoration: none;
+}
 </style>

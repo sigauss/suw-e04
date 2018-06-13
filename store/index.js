@@ -35,6 +35,9 @@ const createStore = () => {
       active_category(state) {
         return state.activeCategory;
       },
+      active_component(state) {
+        return state.activeComponent;
+      },
       slug(state) {
         return state.slug;
       },
@@ -73,6 +76,9 @@ const createStore = () => {
       SET_ACTIVECATEGORY(state, cat) {
         state.activeCategory = cat;
       },
+      SET_ACTIVECOMPONENT(state, component) {
+        state.activeComponent = component;
+      },
       DELETE_COMPONENTS(state) {
         state.components.length = 0;
       },
@@ -108,7 +114,7 @@ const createStore = () => {
           user.username = "";
           user.access_token = "";
         }
-        if (req.session && req.session.activeRepo){
+        if (req.session && req.session.activeRepo) {
           commit("SET_ACTIVEREPO", req.session.activeRepo);
         }
         if (req.session && req.session.activeCategory){
@@ -139,6 +145,9 @@ const createStore = () => {
       setActiveCategory({ commit }, cat) {
         commit("SET_ACTIVECATEGORY", cat);
       },
+      setActiveComponent({ commit }, component) {
+        commit("SET_ACTIVECOMPONENT", component);
+      },
       setSlug({ commit }, slug) {
         commit("SET_SLUG", slug);
       },
@@ -148,7 +157,7 @@ const createStore = () => {
       setUserAuth({ commit }, data) {
         commit("SET_USER", data);
       },
-      deleteComponents({commit}) {
+      deleteComponents({ commit }) {
         commit("DELETE_COMPONENTS");
       },
       setAllComponents({commit}, data) {
