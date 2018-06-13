@@ -61,9 +61,6 @@ const createStore = () => {
       SET_ACCESSTOKEN(state, access_token) {
         state.access_token = access_token;
       },
-      // SET_IF_LOGGED(state, logged) {
-      //   state.logged = logged;
-      // },
       SET_USERINFORMATIONS(state, informations) {
         state.user.informations = informations;
       },

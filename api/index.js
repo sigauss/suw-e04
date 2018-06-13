@@ -22,7 +22,7 @@ db.once('open', function () {
   console.log('connected')
 });
 
-// Create express instnace
+// Create express instance 
 const app = express();
 const organizations = require("./routes/organizations");
 const repos = require("./routes/repos");

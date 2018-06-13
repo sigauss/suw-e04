@@ -7,6 +7,8 @@ const router = Router()
 const client_id = process.env.CLIENT_ID
 const client_secret = process.env.CLIENT_SECRET
 
+console.log('HEHO HEHO')
+
 console.log(client_id)
 /* GET users listing. */
 router.get('/users', function (req, res, next) {
@@ -91,11 +93,10 @@ router.get('/auth/:id', function (req, res, next) {
     "method": "POST",
     "hostname": "github.com",
     "port": null,
-    "path": `/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=` + req.params.id,
+    "path": `/login/oauth/access_token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=` + req.params.id,
     "headers": {
       "accept": "application/json",
       "cache-control": "no-cache",
-      "postman-token": "5fc07892-11ff-ea7a-8ab1-d7ef33dabb10"
     }
   };
   
