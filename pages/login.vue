@@ -8,7 +8,7 @@
           <p class="login__secondHeadline">Accio is the first collaborative development component tool for companies.</p>
         </div>
         <div class="login__githubContainer">
-          <a class="login__link" href="https://github.com/login/oauth/authorize?scope=user,repo,repo:invite,&client_id=6512280b0626a7722d81">
+          <a class="login__link" :href="'https://github.com/login/oauth/authorize?scope=user,repo,repo:invite,&client_id='+client_id">
             <div class="login__githubSquare"><img src="~assets/img/github_logo.png" alt="" width="36"></div>
             <button class="login__logButton">Register with GitHub</button>
           </a>
@@ -24,6 +24,11 @@
 import axios from "~/plugins/axios";
 
 export default {
+  data(){
+    return {
+      client_id: process.env.client_id
+    };
+  },
   async asyncData () {
   },
   head () {
