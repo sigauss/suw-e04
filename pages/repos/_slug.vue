@@ -164,7 +164,7 @@ export default {
           store.store.dispatch("setUserRepos", res.data);
           return { repos: res.data };
         });
-      x;
+      ;
     },
     createCategory() {
       this.githubAction(this.$refs.form.categoryName.value);

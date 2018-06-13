@@ -87,7 +87,102 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       }).then(res => {
-        alert("repo created");
+        const repOwner = res.data.owner.login
+        const repoName = res.data.name
+
+        return axios
+          .put(
+            `https://api.github.com/repos/${
+              repOwner
+            }/${
+              repoName
+            }/contents/Buttons/README.md?access_token=${
+              this.$store.getters.access_token
+            }`,
+            {
+              message: `:octopus: Accio :tophat: • ${Date.now()}`,
+              content: btoa(
+                "<h1>Hello</h1>Congratulations you just created your category of component"
+              )
+            }
+          )
+          .then(res => {
+            return axios
+              .put(
+                `https://api.github.com/repos/${
+                  repOwner
+                }/${
+                  repoName
+                }/contents/Buttons/Pulsing-Button/config.json?access_token=${
+                  this.$store.getters.access_token
+                }`,
+                {
+                  message: 'create sample component',
+                  content: "ewogICJkZXZUaW1lIjogImRheXM6IDAsIGhvdXJzOiAwLjUiLAogICJwcmljaW5nIjogIk5DIiwKICAiZGlmZmljdWx0eSI6ICIxIiwKICAiZGVzY3JpcHRpb24iOiAiQSBuaWNlIHB1bHNpbmcgYnV0dG9uIGluIHB1cmUgY3NzIiwKICAidGFncyI6IFsKICBdCiAgfQ=="
+                }
+              )
+              .then(res => {
+              return axios
+                .put(
+                  `https://api.github.com/repos/${
+                    repOwner
+                  }/${
+                    repoName
+                  }/contents/Buttons/Pulsing-Button/index.html?access_token=${
+                    this.$store.getters.access_token
+                  }`,
+                  {
+                    message: 'index html',
+                    content: "PCFET0NUWVBFIGh0bWw+CjxodG1sPgo8aGVhZD4KPHRpdGxlPjwvdGl0bGU+CjxsaW5rIHJlbD0ic3R5bGVzaGVldCIgdHlwZT0idGV4dC9jc3MiIGhyZWY9InN0eWxlLmNzcyI+Cgo8L2hlYWQ+Cgo8Ym9keT4KICA8IS0tIENyZWRpdHMgdG8gVHlsZXIgQ2VjY2hpIG9uIGh0dHBzOi8vY29kZXBlbi5pby90aGNlY2NoaS9wZW4vcGdxd3piIC0tPgogIDxkaXYgY2xhc3M9ImNvbnRhaW5lciI+CiAgICA8YnV0dG9uIGlkPSJjb250YWluZXIiPgogICAgICA8ZGl2IGlkPSJjci1wdWxzZSI+CiAgICAgICAgPGEgaHJlZj0iIyI+KzwvYT4KICAgICAgPC9kaXY+CiAgICA8L2J1dHRvbj4KICA8L2Rpdj4KPC9ib2R5PgoKPC9odG1sPgo="
+                  }
+                )
+                  .then(res => {
+                  return axios
+                    .put(
+                      `https://api.github.com/repos/${
+                        repOwner
+                      }/${
+                        repoName
+                      }/contents/Buttons/Pulsing-Button/style.css?access_token=${
+                        this.$store.getters.access_token
+                      }`,
+                      {
+                        message: 'style',
+                        content: "LmNvbnRhaW5lciB7CiAgd2lkdGg6IDEwMCU7CiAgZGlzcGxheTogYmxvY2s7CiAgbWFyZ2luLWxlZnQ6IDUwJTsKICBtYXJnaW4tdG9wOiA1JTsKfQoKI2NyLXB1bHNlIHsKICB6LWluZGV4OiAxOwogIGJvcmRlci1yYWRpdXM6IDEwMHB4OwogIGhlaWdodDogOThweDsKICB3aWR0aDogOThweDsKICBiYWNrZ3JvdW5kOiAjRjg5NDA2OwogIGJveC1zaGFkb3c6IDAgMXB4IDNweCByZ2JhKDAsMCwwLDAuMTIpLCAwIDFweCAycHggcmdiYSgwLDAsMCwwLjI0KTsKfQoKI2NvbnRhaW5lciB7CiAgcG9zaXRpb246IGFic29sdXRlOwogIGJvcmRlcjogMDsKICBiYWNrZ3JvdW5kOiBub25lOwogIG91dGxpbmU6IG5vbmU7CiAgCn0KIAoKI2NyLXB1bHNlOjphZnRlciB7CiAgei1pbmRleDogLTE7CiAgY29udGVudDogJyc7CiAgZGlzcGxheTogYmxvY2s7CiAgYm9yZGVyLXJhZGl1czogMTAwcHg7CiAgaGVpZ2h0OiAxMDBweDsKICB3aWR0aDogMTAwcHg7CiAgdG9wOiAwOwogIGJhY2tncm91bmQ6ICNFQjk1MzI7CiAgcG9zaXRpb246IGFic29sdXRlOwogIGFuaW1hdGlvbjogcHVsc2U7CiAgYW5pbWF0aW9uLWR1cmF0aW9uOiAyczsKICBhbmltYXRpb24taXRlcmF0aW9uLWNvdW50OiBpbmZpbml0ZTsKICBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBlYXNlLW91dDsKfQoKYSB7CiAgdGV4dC1kZWNvcmF0aW9uOiBub25lOwogIGRpc3BsYXk6IGJsb2NrOwogIGZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJzsKICBmb250LXNpemU6IDQ4cHg7CiAgZm9udC13ZWlnaHQ6IDEwMDsKICBjb2xvcjogI2YxZjFmMTsKICBtYXJnaW4tbGVmdDogYXV0bzsKICBtYXJnaW4tcmlnaHQ6IGF1dG87CiAgcG9zaXRpb246IHJlbGF0aXZlOwogIHRvcDogNTAlOwogIHRyYW5zZm9ybTogdHJhbnNsYXRlWSgtNTAlKTsKfQoKQGtleWZyYW1lcyBwdWxzZSB7CiAgMCV7dHJhbnNmb3JtOiBzY2FsZSgxKTsKICBvcGFjaXR5OiAxO30KICAxMDAle3RyYW5zZm9ybTogc2NhbGUoMS41KTsKICBvcGFjaXR5OiAwO30KfQ=="
+                      }
+                    )
+                    .then(res => {
+                      console.log('POST PREVIEW')
+                      return axios
+                        .put(
+                          `https://api.github.com/repos/${
+                            repOwner
+                          }/${
+                            repoName
+                          }/contents/Buttons/Pulsing-Button/preview.png?access_token=${
+                            this.$store.getters.access_token
+                          }`,
+                          {
+                            message: 'preview',
+                            content: process.env.img64
+                          }
+                        )
+                        .then(res =>{
+                          alert("repo created");
+                        })
+                        .catch(e =>{
+                          console.log(e)
+                        })
+                    })
+                    .catch(e =>{
+                      console.log(e)
+                    })
+                })
+              })
+          })
+          .catch(e => {
+            console.log(e)
+          })
       })
       .catch(e =>{
         
