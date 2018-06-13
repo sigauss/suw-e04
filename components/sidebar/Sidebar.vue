@@ -51,7 +51,50 @@ export default {
         this.init();
     }, 
     methods: {
-        init() {            
+        init() {
+            console.log(this.$store.getters)
+            if (!this.$store.getters.active_repo_categories) {
+                if (this.$store.state.authUser != 'logged') {
+                return redirect('/login')
+                }
+                console.log(this.$route)
+                if(this.$route.name === 'repos-category'){
+                    this.$store.dispatch('setSlug', this.$route.params.category)
+                }
+                // if(this.$route.name === 'component-slug'){
+                //     this.$store.dispatch('setSlug', this.$route.params.category)
+                // }
+                let repoOwner;
+                axios
+                .get(
+                "https://api.github.com/user/repos?access_token=" +
+                    this.$store.getters.access_token
+                )
+                .then(res => {
+                    this.$store.dispatch("setUserRepos", res.data);
+                    res.data.forEach(repo => {
+                        if (repo.name === this.$store.getters.slug) {
+                            repoOwner = repo.owner.login;
+                            console.log(repo.name, repoOwner)
+                            this.$store.dispatch("setActiveRepo", {
+                                name: repo.name,
+                                owner: repoOwner
+                            });
+                        }
+                    });
+                    axios.get(
+                            "https://api.github.com/repos/" +
+                            this.$store.getters.active_repo.owner +
+                            "/" +
+                            this.$store.getters.active_repo.name +
+                            "/contents/?access_token=" +
+                            this.$store.getters.access_token
+                    )
+                    .then(res => {
+                        this.$store.dispatch('setActiveRepoCategories', res.data);
+                    });
+                });
+            }
         },
         toggleActiveCategory(cat){
             this.$store.dispatch('setActiveCategory', cat);

@@ -80,7 +80,7 @@ export default {
           this.$store.getters.access_token,
         data: {
           name: "Accio-" + this.$refs.form.repoName.value,
-          private: true,
+          private: false,
           auto_init: true,
         },
         headers: {
