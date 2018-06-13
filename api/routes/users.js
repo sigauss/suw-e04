@@ -82,15 +82,13 @@ router.get('/users/:id', function (req, res, next) {
 })
 
 router.get('/auth/:id', function (req, res, next) {
-  
-  console.log('HEHEHEHEHEHEHEH')
-  console.log('CLEINT ID : '+ client_id)
+
   let body;
   var options = {
     "method": "POST",
     "hostname": "github.com",
     "port": null,
-    "path": `/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=` + req.params.id,
+    "path": `/login/oauth/access_token?client_id=${process.env.client_id}&client_secret=${process.env.client_secret}&code=` + req.params.id,
     "headers": {
       "accept": "application/json",
       "cache-control": "no-cache",
