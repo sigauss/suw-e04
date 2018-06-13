@@ -102,7 +102,7 @@
               <input v-if="editMode" id="newTag" name="newTag" placeholder="Enter a tag"/>
               <ul class="tags">
                 <li class="tag view-left" v-for="(tag) in configFile.content.tags" :key="tag">
-                  {{tag}}
+                  {{tag}} <i v-if="editMode" v-on:click="deleteTag(tag)" class="fa fa-times deleteTag"></i>
                 </li>
               </ul>
             </div>
@@ -120,11 +120,11 @@
 import axios from "~/plugins/axios";
 
 export default {
-  fetch ({ store, params, route, redirect }) {
-    if (store.state.authUser != 'logged') {
-      return redirect('/login')
+  fetch({ store, params, route, redirect }) {
+    if (store.state.authUser != "logged") {
+      return redirect("/login");
     }
-    store.dispatch('setSlug', route.params.slug)
+    store.dispatch("setSlug", route.params.slug);
   },
   data() {
     return {
@@ -191,7 +191,6 @@ export default {
         )
         .then(res => {
           this.files = JSON.parse(res.data);
-          console.log(this.files);
           this.getComponentFilesContent();
         });
     },
@@ -212,8 +211,14 @@ export default {
         this.configFile.content.tags.push(newTag);
       }
     },
+    deleteTag(tag) {
+      var tags = this.configFile.content.tags;
+      var index = tags.indexOf(tag);
+      if (index > -1) {
+        tags.splice(index, 1);
+      }
+    },
     saveConfigFile() {
-      console.log(this.$refs.form);
       let configJson = {
         devTime: this.$refs.form.devTime.value,
         pricing: this.$refs.form.pricing.value,
@@ -238,6 +243,7 @@ export default {
         )
         .then(res => {
           this.editMode = false;
+          this.configFile.sha = res.data.content.sha;
           alert("Updated !!");
         });
     },
