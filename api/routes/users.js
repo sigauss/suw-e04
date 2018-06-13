@@ -82,10 +82,9 @@ router.get('/users/:id', function (req, res, next) {
 })
 
 router.get('/auth/:id', function (req, res, next) {
-
-  let client_id = process.env.CLIENT_ID || '6512280b0626a7722d81';
-  let client_secret = process.env.CLIENT_SECRET || '71182dca741cb055c14ef5b3705a1f14627e294c';
-
+  
+  console.log('HEHEHEHEHEHEHEH')
+  console.log('CLEINT ID : '+ client_id)
   let body;
   var options = {
     "method": "POST",
