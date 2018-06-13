@@ -5,8 +5,8 @@ module.exports = {
   env: {
     port: process.env.PORT || 3000,
     host: process.env.HOST || 'http://127.0.0.1',
-    client_id: process.env.CLIENT_ID,
-    client_secret: process.env.CLIENT_SECRET
+    client_id: process.env.CLIENT_ID || '6512280b0626a7722d81',
+    client_secret: process.env.CLIENT_SECRET || '71182dca741cb055c14ef5b3705a1f14627e294c'
   },
   /*
   ** Headers of the page

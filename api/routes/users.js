@@ -4,12 +4,6 @@ const { Router } = require('express')
 const User = require("../models/User")
 const router = Router()
 
-const client_id = process.env.CLIENT_ID
-const client_secret = process.env.CLIENT_SECRET
-
-console.log('HEHO HEHO')
-
-console.log(client_id)
 /* GET users listing. */
 router.get('/users', function (req, res, next) {
   console.log('hey');
@@ -88,6 +82,7 @@ router.get('/users/:id', function (req, res, next) {
 })
 
 router.get('/auth/:id', function (req, res, next) {
+
   let body;
   var options = {
     "method": "POST",
