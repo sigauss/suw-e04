@@ -281,15 +281,19 @@ export default {
             }`
           )
           .then(res => {
+            console.log(JSON.parse(res.data))
             if (JSON.parse(res.data).name === "config.json") {
               this.configFile = JSON.parse(res.data);
               this.configFile.content = JSON.parse(
                 atob(this.configFile.content)
               );
+            } else if (JSON.parse(res.data).name.includes('preview')) {
+              this.preview = JSON.parse(res.data);
+              this.previewUrl = `https://github.com/${this.$store.getters.active_repo.owner}/${this.$store.getters.active_repo.name}//blob/master/${this.$store.getters.active_category}/${this.$route.params.slug}/${this.preview.name}?raw=true`
             } else {
               this.files = this.files.filter(function(file) {
                 return (
-                  file.name !== "config.json" && file.name !== "preview.png"
+                  file.name !== "config.json" && !file.name.includes('preview')
                 );
               });
               this.files.forEach(file => {
