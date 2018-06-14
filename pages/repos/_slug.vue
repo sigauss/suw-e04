@@ -1,13 +1,21 @@
 <template>
   <section class="container">
     <div class="welcome-text">
-      <h1>Hello 🖐🏼 🐙</h1>
-      <p>You can find the repo of your components at this url: <br /> <br /> <a :href="repoUrl">{{repoUrl}}</a> </p>
-      <p>
-        Invite your collaborators via github and start creating your categories and components.<br /><br />
-        Dont forget to add a config.json if you commit a new component in order to have it listed in your category !
-      </p>
-      <img src="../../assets/img/illu.png"/>
+      <div class="flex align-center justify-center">
+        <div class="left">
+          <h1>Hello 🖐🏼 🐙</h1>
+          <p>
+            Invite your collaborators via github and start creating your categories and components.<br />
+            Dont forget to add a config.json if you commit a new component in order to have it listed in your category !
+          </p>
+        </div>
+        <div class="right">
+          <img src="../../assets/img/illu.png"/>
+        </div>
+      </div>
+      <div class="center-link">
+        <p>You can find the repo of your components at this url: <br /> <a :href="repoUrl">{{repoUrl}}</a> </p>
+      </div>
     </div>
     <div v-bind:class="{'repos__logoContainer--hidden':!$store.getters.isLoading}" class="repos__logoContainer">
       <img class="repos__logo" src="~assets/img/accio_logo_fat.gif">
@@ -189,15 +197,35 @@ export default {
 }
 .welcome-text {
   padding-left: 30px;
+  padding-right: 30px;
+  width: 80%;
+  margin: auto;
 }
 .welcome-text h1 {
-  font-size: 30px;
+  font-size: 32px;
+  color: #574beb;
 }
 .welcome-text p {
-  color: #6e6e6e;
+  color: #9e9e9e;
+  line-height: 22px;
+}
+.justify-center {
+  justify-content: center;
 }
 .welcome-text img {
   width: 400px;
+}
+.welcome-text .right img {
+  width: 80%;
+}
+.welcome-text .center-link {
+  width: 100%;
+  text-align: center;
+  margin-top: 100px;
+}
+.welcome-text .center-link a {
+  color: #6183ff;
+  font-size: 14px;
 }
 .repos__logoContainer {
   position: absolute;
@@ -207,7 +235,9 @@ export default {
   width: 130px;
   height: 130px;
 }
-
+.right {
+  text-align: right;
+}
 .repos__logoContainer--hidden {
   display: none;
 }
