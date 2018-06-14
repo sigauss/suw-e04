@@ -64,6 +64,7 @@ export default {
         })
         .catch(e => {
           this.logoutMixin();
+          console.log(e)
         });
     },
     async logout() {
@@ -190,10 +191,12 @@ export default {
             })
             .catch(e => {
               this.logoutMixin();
+              console.log(e)
             });
         })
         .catch(e => {
           this.logoutMixin();
+          console.log(e)
         });
     }
   },
@@ -280,8 +283,8 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  &@media screen and (max-width: 890px) {
-  }
+  /* @media screen and (max-width: 890px) {
+  } */
 }
 .repos__repoCard {
   width: 80%;

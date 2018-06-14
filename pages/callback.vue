@@ -68,9 +68,11 @@ export default {
         })
         .catch(e => {
           this.logoutMixin();
+          console.log(e)
         })
         .catch(e => {
           this.logoutMixin();
+          console.log(e)
         });
     }
   }

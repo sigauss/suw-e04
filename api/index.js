@@ -1,26 +1,20 @@
 const express = require("express");
 const session = require('express-session')
-const mongoose = require('mongoose');
-
-if (typeof localStorage === "undefined" || localStorage === null) {
-  var LocalStorage = require('node-localstorage').LocalStorage;
-  localStorage = new LocalStorage('./scratch');
-}
+// const mongoose = require('mongoose');
  
-localStorage.setItem('myFirstKey', 'myFirstValue');
-console.log(localStorage.getItem('myFirstKey'));
+// //connect to MongoDB
+// mongoose.connect('mongodb://ds147450.mlab.com:47450/suw-accio', {user: 'arnaud', pass: 'suwe04'});
+// const db = mongoose.connection;
 
-// const MongoStore = require('connect-mongo')(session);
+// app.use(session({
+//   store: new MongoStore({ mongooseConnection: mongoose.connection })
+// }));
 
-//connect to MongoDB
-mongoose.connect('mongodb://ds147450.mlab.com:47450/suw-accio', {user: 'arnaud', pass: 'suwe04'});
-const db = mongoose.connection;
-
-//handle mongo error
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  console.log('connected')
-});
+// //handle mongo error
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function () {
+//   console.log('connected')
+// });
 
 // Create express instance 
 const app = express();

@@ -323,7 +323,7 @@ export default {
             });
         })
         .catch(e => {
-          // this.logoutMixin()
+          this.logoutMixin()
         });
     },
     createComponent() {

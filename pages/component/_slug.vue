@@ -144,10 +144,10 @@ export default {
   methods: {
     init() {
       this.files = [];
-      this.$store.dispatch("setActiveRepo", {
-        name: this.$store.getters.active_repo.name,
-        owner: this.$store.getters.active_repo.owner
-      });
+      // this.$store.dispatch("setActiveRepo", {
+      //   name: this.$store.getters.active_repo.name,
+      //   owner: this.$store.getters.active_repo.owner
+      // });
       this.getComponentInformations();
     },
     toggleEditMode() {
