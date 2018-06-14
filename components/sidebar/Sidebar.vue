@@ -2,7 +2,7 @@
     <div class="sidebar">
         <div class="sidebar__header">
           <div class="sidebar__logoContainer">
-            <img class="sidebar__logo" src="~assets/img/accio_logo_mini.png" alt="">
+            <img class="sidebar__logo" src="~assets/img/accio_logo.png" alt="">
           </div>
         </div>
         <div class="sidebar__repoNameContainer">
@@ -130,7 +130,7 @@ export default {
 }
 .sidebar__logo{
   margin-top: 40px;
-  width: 70px;
+  width: 130px;
 }
 
 .sidebar__repoNameContainer{
