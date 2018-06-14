@@ -31,9 +31,9 @@ import logoutMixin from "~/mixins/logoutMixin";
 export default {
   mixins: [logoutMixin],
   fetch({ store, params, route, redirect }) {
-    if (store.state.authUser != "logged") {
-      return redirect("/login");
-    }
+  //   if (store.state.authUser != "logged") {
+  //     return redirect("/login");
+  //   }
     store.dispatch("setSlug", route.params.slug);
   },
   data() {
@@ -98,12 +98,12 @@ export default {
               })
               .catch(e => {
                 console.log(e);
-                this.logoutMixin();
+                // this.logoutMixin();
               });
           })
           .catch(e => {
             console.log(e);
-            this.logoutMixin();
+            // this.logoutMixin();
           });
       } else {
         const repos = this.$store.getters.user.repos;
@@ -151,11 +151,13 @@ export default {
                 this.contents = res.data;
               })
               .catch(e => {
-                this.logoutMixin();
+                // this.logoutMixin();
+                console.log(e)
               });
           })
           .catch(e => {
-            this.logoutMixin();
+            // this.logoutMixin();
+            console.log(e)
           });
       }
     },

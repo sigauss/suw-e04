@@ -118,9 +118,9 @@ import axios from "~/plugins/axios";
 
 export default {
   fetch({ store, params, route, redirect }) {
-    if (store.state.authUser != "logged") {
-      return redirect("/login");
-    }
+    // if (store.state.authUser != "logged") {
+    //   return redirect("/login");
+    // }
     store.dispatch("setSlug", route.params.slug);
   },
   data() {
@@ -144,10 +144,10 @@ export default {
   methods: {
     init() {
       this.files = [];
-      this.$store.dispatch("setActiveRepo", {
-        name: this.$store.getters.active_repo.name,
-        owner: this.$store.getters.active_repo.owner
-      });
+      // this.$store.dispatch("setActiveRepo", {
+      //   name: this.$store.getters.active_repo.name,
+      //   owner: this.$store.getters.active_repo.owner
+      // });
       this.getComponentInformations();
     },
     toggleEditMode() {
