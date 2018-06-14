@@ -609,6 +609,7 @@ export default {
   margin-bottom: 20px;
   box-sizing: border-box;
   background-color: #f5f6fa;
+  cursor: pointer;
 }
 .components__componentCard:hover {
   transition: all 0.2s ease-in;

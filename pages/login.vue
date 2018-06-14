@@ -111,7 +111,7 @@ export default {
   text-align: left;
 }
 .login__explanation{
-  align-self: center;
+  /* align-self: center; */
   margin-top: 22px;
 }
 .login__backgroundImg{

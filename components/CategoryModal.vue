@@ -3,7 +3,7 @@
         <div class="category__modal">
             <h3 class="category__modalTitle">Create a new category</h3>
             <div class="category__modalLabelContainer">
-                <label class="category__modalLabel" for="">Component name</label>
+                <label class="category__modalLabel" for="">Category name</label>
                 <input type="text" class="category__modalInput" v-on:keyup.stop="updateField($event.target.value)">
             </div>
             <div class="category__modalButtonContainer">

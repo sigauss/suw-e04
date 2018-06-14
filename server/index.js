@@ -10,7 +10,7 @@ let host = process.env.HOST || '127.0.0.1'
 
 app.use(session({
   secret: 'super-secret-key',
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   cookie: { maxAge: 60000 }
 }))
