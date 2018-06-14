@@ -1,21 +1,14 @@
 <template>
   <section class="container">
-    <!-- <h1 class="title">
-      CATEGORIES
-    </h1>
-    <form ref="form" name="createCategory"  @submit.prevent="createCategory">
-      <input type="text" name="categoryName" />
-      <button type="submit">Create category</button>
-    </form>
-    <ul class="repos">
-      <li v-for="(file, name) in contents" :key="name" class="repos">
-        <router-link :to="`./${$store.getters.active_repo.name}/${file.name}`">
-          <span v-if="file.type === 'dir'"><i class="fa fa-folder-o"></i></span>
-          <span v-else><i class="fa fa-file-o"></i></span>
-          {{ file.name }}
-        </router-link>
-      </li>
-    </ul> -->
+    <div class="welcome-text">
+      <h1>Hello 🖐🏼 🐙</h1>
+      <p>You can find the repo of your components at this url: <br /> <br /> <a :href="repoUrl">{{repoUrl}}</a> </p>
+      <p>
+        Invite your collaborators via github and start creating your categories and components.<br /><br />
+        Dont forget to add a config.json if you commit a new component in order to have it listed in your category !
+      </p>
+      <img src="../../assets/img/illu.png"/>
+    </div>
     <div v-bind:class="{'repos__logoContainer--hidden':!$store.getters.isLoading}" class="repos__logoContainer">
       <img class="repos__logo" src="~assets/img/accio_logo_fat.gif">
       <div class="repos__logoCircle"></div>
@@ -25,25 +18,28 @@
 
 <script>
 import axios from "~/plugins/axios";
-import logoutMixin from '~/mixins/logoutMixin';
+import logoutMixin from "~/mixins/logoutMixin";
 
 export default {
   mixins: [logoutMixin],
-  fetch ({ store, params, route, redirect }) {
-    if (store.state.authUser != 'logged') {
-      return redirect('/login')
+  fetch({ store, params, route, redirect }) {
+    if (store.state.authUser != "logged") {
+      return redirect("/login");
     }
-    store.dispatch('setSlug', route.params.slug)
+    store.dispatch("setSlug", route.params.slug);
   },
   data() {
-    return { 
-      contents: '',
-      slug: ''
-    }
+    return {
+      contents: "",
+      slug: "",
+      repoUrl: null
+    };
   },
   async asyncData(route) {
-  let slug = route.params.slug
-  return {slug: slug}
+    let slug = route.params.slug;
+    return {
+      slug: slug
+    };
   },
   head() {
     return {
@@ -55,96 +51,103 @@ export default {
   },
   methods: {
     init() {
-      let repoOwner;      
+      let repoOwner;
       // TODO Factoriser
-      if(!this.$store.getters.user.repos){
+      if (!this.$store.getters.user.repos) {
         axios
-        .get(
-          "https://api.github.com/user/repos?access_token=" +
-            this.$store.getters.access_token
-        )
-        .then(res => {
-          this.$store.dispatch("setUserRepos", res.data);
-          res.data.forEach(repo => {
-            if (repo.name === this.$store.getters.slug) {
-              repoOwner = repo.owner.login;
-              console.log(repo.name, repoOwner)
-              this.$store.dispatch("setActiveRepo", {
-                name: repo.name,
-                owner: repoOwner
-              });
-            }
-          });
-          axios.get(
-                "https://api.github.com/repos/" +
-                  repoOwner +
-                  "/" +
-                  this.$store.getters.slug +
-                  "/contents/?access_token=" +
-                  this.$store.getters.access_token
+          .get(
+            "https://api.github.com/user/repos?access_token=" +
+              this.$store.getters.access_token
           )
           .then(res => {
-            this.$store.dispatch('setActiveRepoCategories', res.data);
-            this.contents = res.data
-          })
-          .catch(e => {
-            console.log(e)
-            this.logoutMixin()
-          })
-        })
-        .catch( e => {
-          console.log(e)
-          this.logoutMixin()
-        })
-      }
-      else{
-        const repos = this.$store.getters.user.repos
-        axios
-        .get(
-          "https://api.github.com/user/repos?access_token=" +
-            this.$store.getters.access_token
-        )
-        .then(res => {
-          this.$store.dispatch("setUserRepos", res.data);
-          repos.forEach(repo => {
-            if (repo.name === this.$store.getters.slug) {
-              repoOwner = repo.owner.login;
-              console.log(repo.name, repoOwner)
-              this.$store.dispatch("setActiveRepo", {
-                name: repo.name,
-                owner: repoOwner
-              });
-              return axios.post('/api/update-session-active-repo',{
+            this.$store.dispatch("setUserRepos", res.data);
+            res.data.forEach(repo => {
+              if (repo.name === this.$store.getters.slug) {
+                repoOwner = repo.owner.login;
+                console.log(repo.name, repoOwner);
+                this.$store.dispatch("setActiveRepo", {
                   name: repo.name,
                   owner: repoOwner
-              })
-              .then(res => {
-                console.log(res.data)
-              })
-              .catch(e =>{
-                console.log(e)
-              })
-            }
-          });
-          axios.get(
+                });
+              }
+            });
+            axios
+              .get(
                 "https://api.github.com/repos/" +
                   repoOwner +
                   "/" +
                   this.$store.getters.slug +
                   "/contents/?access_token=" +
                   this.$store.getters.access_token
-          )
-          .then(res => {
-            this.$store.dispatch('setActiveRepoCategories', res.data);
-            this.contents = res.data
+              )
+              .then(res => {
+                this.$store.dispatch("setActiveRepoCategories", res.data);
+                this.repoUrl = `https://github.com/${repoOwner}/${
+                  this.$store.getters.slug
+                }`;
+                this.contents = res.data;
+              })
+              .catch(e => {
+                console.log(e);
+                this.logoutMixin();
+              });
           })
           .catch(e => {
-            this.logoutMixin()
+            console.log(e);
+            this.logoutMixin();
+          });
+      } else {
+        const repos = this.$store.getters.user.repos;
+        axios
+          .get(
+            "https://api.github.com/user/repos?access_token=" +
+              this.$store.getters.access_token
+          )
+          .then(res => {
+            this.$store.dispatch("setUserRepos", res.data);
+            repos.forEach(repo => {
+              if (repo.name === this.$store.getters.slug) {
+                repoOwner = repo.owner.login;
+                this.$store.dispatch("setActiveRepo", {
+                  name: repo.name,
+                  owner: repoOwner
+                });
+                return axios
+                  .post("/api/update-session-active-repo", {
+                    name: repo.name,
+                    owner: repoOwner
+                  })
+                  .then(res => {
+                    console.log(res.data);
+                  })
+                  .catch(e => {
+                    console.log(e);
+                  });
+              }
+            });
+            axios
+              .get(
+                "https://api.github.com/repos/" +
+                  repoOwner +
+                  "/" +
+                  this.$store.getters.slug +
+                  "/contents/?access_token=" +
+                  this.$store.getters.access_token
+              )
+              .then(res => {
+                this.$store.dispatch("setActiveRepoCategories", res.data);
+                this.repoUrl = `https://github.com/${repoOwner}/${
+                  this.$store.getters.slug
+                }`;
+                this.contents = res.data;
+              })
+              .catch(e => {
+                this.logoutMixin();
+              });
           })
-        })
-        .catch(e => {
-          this.logoutMixin()
-        })
+          .catch(e => {
+            this.logoutMixin();
+          });
       }
     },
     githubAction(categoryName) {
@@ -168,7 +171,6 @@ export default {
           store.store.dispatch("setUserRepos", res.data);
           return { repos: res.data };
         });
-      ;
     },
     createCategory() {
       this.githubAction(this.$refs.form.categoryName.value);
@@ -178,12 +180,24 @@ export default {
 </script> 
 
 <style scoped>
-.container{
+.container {
   width: calc(100% - 301px);
   min-height: 100vh;
   margin-left: 301px;
 }
-.repos__logoContainer{
+.welcome-text {
+  padding-left: 30px;
+}
+.welcome-text h1 {
+  font-size: 30px;
+}
+.welcome-text p {
+  color: #6e6e6e;
+}
+.welcome-text img {
+  width: 400px;
+}
+.repos__logoContainer {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -192,10 +206,10 @@ export default {
   height: 130px;
 }
 
-.repos__logoContainer--hidden{
+.repos__logoContainer--hidden {
   display: none;
 }
-.repos__logo{
+.repos__logo {
   width: 130px;
   position: absolute;
   top: 50%;
@@ -203,7 +217,7 @@ export default {
   z-index: 10;
   transform: translate3d(-50%, -50%, 0);
 }
-.repos__logoCircle{
+.repos__logoCircle {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -211,13 +225,14 @@ export default {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 1px solid #C6D2D6;
+  border: 1px solid #c6d2d6;
   animation-name: circleFade;
   animation-duration: 3s;
   animation-iteration-count: infinite;
 }
-.repos__logoCircle:before, .repos__logoCircle:after{
-  content: '';
+.repos__logoCircle:before,
+.repos__logoCircle:after {
+  content: "";
   position: absolute;
   left: 50%;
   top: 50%;
@@ -225,17 +240,17 @@ export default {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 1px solid #C6D2D6;
+  border: 1px solid #c6d2d6;
   animation-name: circleFade;
   animation-duration: 3s;
   animation-iteration-count: infinite;
 }
 
-.repos__logoCircle:before{
+.repos__logoCircle:before {
   animation-delay: 0.3s;
 }
 
-.repos__logoCircle:after{
+.repos__logoCircle:after {
   animation-delay: 0.6s;
 }
 

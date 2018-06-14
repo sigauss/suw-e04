@@ -8,13 +8,13 @@
 </template>
 
 <script>
-import Sidebar from '~/components/sidebar/Sidebar.vue';
-import CategoryModal from '~/components/CategoryModal.vue';
+import Sidebar from "~/components/sidebar/Sidebar.vue";
+import CategoryModal from "~/components/CategoryModal.vue";
 
 export default {
   components: {
     Sidebar,
-    CategoryModal,
+    CategoryModal
   },
   data() {
     return {
@@ -69,6 +69,32 @@ export default {
 </script>
 
 <style>
+@keyframes view-top {
+  0% {
+    opacity: 0;
+    transform: translate(0, 100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.view-top {
+  animation: view-top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  animation-fill-mode: forwards;
+}
+.fade-in {
+  animation: fade-in 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  animation-fill-mode: forwards;
+}
 .container {
   display: flex;
   position: relative;
