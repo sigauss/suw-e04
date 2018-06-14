@@ -16,11 +16,11 @@
           </div>
         </div>
         <div class="user flex align-center">
-          <div class="user-avatar">
+          <div v-if="$store.getters.user" class="user-avatar">
             <img :src="$store.getters.user.informations.avatar_url"/>
           </div>
           <div class="user-infos">
-            <span class="name">{{$store.getters.user.informations.name}}</span>
+            <span class="name">{{$store.getters.user.informations.login}}</span>
           </div>
           <div class="user-actions">
             <a v-on:click="logoutMixin()" class="logout"><i class="fa fa-sign-out"></i></a>
