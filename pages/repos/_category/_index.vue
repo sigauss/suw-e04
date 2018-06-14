@@ -124,6 +124,7 @@ export default {
   },
   methods: {
     setActiveComponent(componentName) {
+      console.log(componentName);
       this.$store.dispatch("setActiveComponent", componentName);
       this.$nuxt.$router.replace({ path: `/component/${componentName}` });
     },
@@ -249,11 +250,10 @@ export default {
     },
     githubAction(componentName) {
       const configJson = {
-        devTime:
-          this.$refs.form.devTimeDays.value +
-          " days, " +
-          this.$refs.form.devTimeHours.value +
-          " hours",
+        devTime: {
+          days: this.$refs.form.devTimeDays.value,
+          hours: this.$refs.form.devTimeHours.value
+        },
         pricing: this.$refs.form.pricing.value,
         difficulty: this.$refs.form.difficulty.value,
         description: this.$refs.form.description.value,
@@ -297,7 +297,7 @@ export default {
               setTimeout(() => {
                 this.creatingComponent = false;
                 this.reloadComponentsList();
-              }, 4000);
+              }, 6000);
             });
         })
         .catch(e => {

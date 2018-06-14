@@ -4,7 +4,7 @@
       <div class="component-title">
         <div>
           <h1>
-            {{$store.getters.active_component}}
+            {{$route.params.slug}}
           </h1>
         </div>
       </div>
@@ -18,8 +18,11 @@
           <div class="infos-wrapper left-col">
             <div class="flex">
               <div class="info componentInfo">
-                <span>{{ configFile.content.devTime }}</span>
-                <input class="view-left" v-if="editMode" name="devTime" v-model="configFile.content.devTime"/>
+                <span v-if="!editMode">{{ configFile.content.devTime.days }} days / {{ configFile.content.devTime.hours }} hours </span>
+                <div class="flex inline-input">
+                  <input class="view-left" placeholder="Days" v-if="editMode" type="number" name="devTimeDays"  v-model="configFile.content.devTime.days"/>
+                  <input class="view-left" placeholder="Hours" v-if="editMode" type="number"  name="devTimeHours" v-model="configFile.content.devTime.hours"/>
+                </div>
                 <label>Development time</label>
               </div>
               <div class="info componentInfo">
@@ -27,8 +30,8 @@
                 <label>Version</label>
               </div>
               <div class="info componentInfo">
-                <span>{{ configFile.content.pricing }}€</span>
-                <input class="view-left" v-if="editMode" type="number" name="pricing" v-model="configFile.content.pricing"/>
+                <span v-if="!editMode">{{ configFile.content.pricing }}€</span>
+                <input placeholder="€" class="view-left" v-if="editMode" type="number" name="pricing" v-model="configFile.content.pricing"/>
                 <label>Pricing</label>
               </div>
               <div class="info componentInfo">
@@ -142,6 +145,7 @@ export default {
   },
   methods: {
     init() {
+        console.log(this.$route)
       this.files = [];
       this.getComponentInformations();
     },
@@ -213,7 +217,10 @@ export default {
     },
     saveConfigFile() {
       let configJson = {
-        devTime: this.$refs.form.devTime.value,
+        devTime: {
+          days: this.$refs.form.devTimeDays.value,
+          hours: this.$refs.form.devTimeHours.value
+        },
         pricing: this.$refs.form.pricing.value,
         difficulty: this.$refs.form.difficulty.value,
         description: this.$refs.form.description.value,
@@ -235,6 +242,7 @@ export default {
           }
         )
         .then(res => {
+          this.configFile.content = configJson;
           this.editMode = false;
           this.configFile.sha = res.data.content.sha;
           alert("Updated !!");
@@ -347,6 +355,7 @@ form {
   background: none;
   color: #2978ee;
   font-size: 14px;
+  outline: none;
 }
 .info {
   display: flex;
@@ -358,6 +367,12 @@ form {
   background: white;
   border: 1px solid #dddbfb;
   padding: 42px 25px;
+}
+.inline-input input {
+  max-width: 43px;
+}
+.inline-input input:last-child {
+  margin-left: 5px;
 }
 .info:nth-child(even) {
   border-right: 0;

@@ -102,6 +102,7 @@ export default {
   background-color: #574BEB;
   color: white;  
   border: none;
+  outline: none;
 }
 .login__secondHeadline{
   width: 80%;
