@@ -1,17 +1,13 @@
 <template>
   <section class="container">
       <!-- <button @click="logout">Logout</button> -->
-    <div class="repos__logoContainer">
-      <img class="repos__logo" src="~assets/img/accio_logo_fat.png">
-      <div class="repos__logoCircle"></div>
-    </div>
     <h1 class="repos__title">Hi ! Welcome to Accio</h1>
-    <h2 class="repos__subtitle">To join, please select one of your accio workspaces.</h2>
-    <form ref="form" class="create__repoContainer" name="createRepo"  @submit.prevent="submitRepo">
+    <h2 class="repos__subtitle">To start, please select one of your accio workspaces, or create a new one.</h2>
+    <form v-if="!$store.getters.isLoading" ref="form" class="create__repoContainer" name="createRepo"  @submit.prevent="submitRepo">
       <input class="create__repoInput" type="text" name="repoName" />
       <button class="create__repoSubmit" type="submit">create</button>
     </form>
-    <div class="repos__reposList">
+    <div v-if="!$store.getters.isLoading" class="repos__reposList">
       <div v-for="(repo, name) in repos" :key="name" class="repos__repoCard">
         <router-link :to="`/repos/${repo.name}`">
           <div class="repos__repoContent">
@@ -25,6 +21,10 @@
           </div>
         </router-link>
       </div>
+    </div>
+    <div v-bind:class="{'repos__logoContainer--hidden':!$store.getters.isLoading}" class="repos__logoContainer">
+      <img class="repos__logo" src="~assets/img/accio_logo_fat.gif">
+      <div class="repos__logoCircle"></div>
     </div>
   </section>
 </template>
@@ -50,6 +50,7 @@ export default {
   mixins: [logoutMixin],
   methods: {
     init() {
+      console.log(this.$store.getters.isLoading);
       axios
         .get(
           "https://api.github.com/user/repos?access_token=" +
@@ -58,6 +59,7 @@ export default {
         .then(res => {
           this.$store.dispatch("setUserRepos", res.data);
           this.repos = res.data.filter(repo => repo.name.includes('Accio'));
+          this.$store.dispatch('setLoaderState', false);
         })
         .catch(e => {
           this.logoutMixin()
@@ -73,6 +75,7 @@ export default {
       })
     },
     submitRepo() {
+      this.$store.dispatch('setLoaderState', true);
       return axios({
         method: "post",
         url:
@@ -219,14 +222,122 @@ export default {
   min-height: 100vh;
   padding-bottom: 80px;
 }
+
+.create__repoContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.create__repoSubmit{
+  margin-top: 20px;
+  width: 200px;
+  font-size: 16px;
+  background-color:transparent;
+  box-sizing: border-box;
+  padding: 15px 20px;
+  border-radius: 2px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+  color: #574BEB;
+  border: 1px solid rgba(87,75,235,0.3);
+  transition: all 0.2s ease-in;
+  cursor: pointer;
+}
+
+.create__repoSubmit:hover{
+  transition: all 0.2s ease-in;
+  background-color: #574BEB;
+  color: white;
+}
+
+.create__repoInput{
+  height: 40px;
+  padding-left: 10px;
+  line-height: 20px;
+  font-size: 16px;
+  width: 400px;
+  border-radius: 3px;
+  border: 1px solid #dddbfb;
+  outline: none;
+}
+.repos__title{
+  margin-top: 70px;
+  width: 280px;
+  font-size: 31px;
+  line-height: 39px;
+  text-align: center;
+}
+.repos__subtitle{
+  margin-top: 24px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.repos__reposList{
+  display: flex;
+  margin-top: 60px;
+  width: 700px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.repos__repoCard{
+  width: 80%;
+  /* padding: 23px 21px 32px 19px; */
+  margin-top: 20px;
+  margin-left: 10%;
+  /* box-sizing: border-box; */
+  background-color: white;
+}
+
+.repos__repoCard a {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  padding: 23px 21px 32px 19px;
+  box-sizing: border-box;
+}
+.repos__repoPicContainer{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.repos__repoPic{
+  width: 100%;
+}
+
+.repos__repoContent{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.repos__repoName{
+  font-size: 21px;
+  width: 100%;
+}
+.repos__repoPrivate{
+  font-size: 11px;
+  margin-top: 11px;
+}
+
 .repos__logoContainer{
-  margin-top: 160px;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
   width: 130px;
   height: 130px;
 }
+
+.repos__logoContainer--hidden{
+  display: none;
+}
 .repos__logo{
   position: absolute;
+  width: 130px;
   top: 50%;
   left: 50%;
   z-index: 10;
@@ -268,85 +379,6 @@ export default {
   animation-delay: 0.6s;
 }
 
-.create__repoContainer{
-  display: flex;
-  flex-direction: column;
-}
-
-.create__repoSubmit{
-  margin-top: 20px;
-  width: 200px;
-  font-size: 16px;
-  background-color:transparent;
-  box-sizing: border-box;
-  padding: 15px 20px;
-  border-radius: 2px;
-  border: none;
-  font-size: 14px;
-  outline: none;
-  background-color: #574BEB;
-  color: white;
-}
-
-.create__repoInput{
-  height: 40px;
-  padding-left: 10px;
-  line-height: 20px;
-  font-size: 16px;
-  width: 400px;
-  border-radius: 3px;
-  border: 1px solid #dddbfb;
-}
-.repos__title{
-  margin-top: 70px;
-  width: 280px;
-  font-size: 31px;
-  line-height: 39px;
-  text-align: center;
-}
-.repos__subtitle{
-  margin-top: 24px;
-  font-size: 14px;
-  line-height: 1.5;
-}
-.repos__reposList{
-  display: flex;
-  width: 700px;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.repos__repoCard{
-  width: 80%;
-  padding: 23px 21px 32px 19px;
-  margin-top: 20px;
-  margin-left: 10%;
-  box-sizing: border-box;
-  background-color: white;
-}
-.repos__repoPicContainer{
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  overflow: hidden;
-}
-.repos__repoPic{
-  width: 100%;
-}
-
-.repos__repoContent{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.repos__repoName{
-  font-size: 21px;
-  width: 100%;
-}
-.repos__repoPrivate{
-  font-size: 11px;
-  margin-top: 11px;
-}
 @keyframes circleFade {
   0% {
     width: 10px;

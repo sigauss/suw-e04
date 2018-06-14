@@ -1,6 +1,9 @@
 <template>
   <section class="container">
-    <h2>Veuillez patienter le temps de l'authentification</h2>
+    <div class="repos__logoContainer">
+      <img class="repos__logo" src="~assets/img/accio_logo_fat.gif">
+      <div class="repos__logoCircle"></div>
+    </div>
   </section>
 </template>
 
@@ -75,15 +78,83 @@ export default {
 </script>
 
 <style scoped>
-.title {
-  margin: 30px 0;
+.container{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.users {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.repos__logoContainer{
+  margin-top: 160px;
+  position: relative;
+  width: 130px;
+  height: 130px;
 }
-.user {
-  margin: 10px 0;
+.repos__logo{
+  position: absolute;
+  width: 130px;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  transform: translate3d(-50%, -50%, 0);
+}
+.repos__logoCircle{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3D(-50%, -50%, 0);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1px solid #C6D2D6;
+  animation-name: circleFade;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+.repos__logoCircle:before, .repos__logoCircle:after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3D(-50%, -50%, 0);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1px solid #C6D2D6;
+  animation-name: circleFade;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.repos__logoCircle:before{
+  animation-delay: 0.3s;
+}
+
+.repos__logoCircle:after{
+  animation-delay: 0.6s;
+}
+
+@keyframes circleFade {
+  0% {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+  }
+  70% {
+    width: 224px;
+    height: 224px;
+    opacity: 0.7;
+  }
+  80% {
+    width: 224px;
+    height: 224px;
+    opacity: 0;
+  }
+  100% {
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+  }
 }
 </style>

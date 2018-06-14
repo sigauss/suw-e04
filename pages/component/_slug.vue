@@ -40,10 +40,10 @@
                 <button>View all</button>
               </div>
             </div>
-            <h2>Preview</h2>
+            <h2 v-if="previewUrl">Preview</h2>
             <div class="preview-tag-wrapper">
               <div class="meta__informations_preview">
-                <img class="preview" :src="previewUrl" />
+                <img  v-if="previewUrl" class="preview" :src="previewUrl" />
               </div>
               <div class="tab">
                 <a class="tablinks" v-on:click="openContent(index)" v-for="(file, index) in files" :key="index" v-bind:class="{active: index === 0}">
@@ -305,6 +305,9 @@ export default {
   animation-fill-mode: forwards;
 }
 .component {
+  width: calc(100% - 301px);
+  min-height: 100vh;
+  margin-left: 301px;
   padding-top: 100px;
   padding-left: 30px;
   padding-right: 30px;

@@ -1,12 +1,14 @@
 <template>
   <section class="components">
+    <div v-bind:class="{'repos__logoContainer--hidden':!$store.getters.isLoading}" class="repos__logoContainer">
+      <img class="repos__logo" src="~assets/img/accio_logo_fat.gif">
+      <div class="repos__logoCircle"></div>
+    </div>
     <div class="flex align-center">
       <h1 class="components__categorytitle">{{ $store.getters.active_category }}</h1>
       <div class="components__componentsCount">{{ $store.getters.components.length }}</div>
       <button class="newComponent" @click.prevent="displayForm">New component</button>
     </div>
-    <h1 v-if="!creatingComponent">Create a new component</h1>
-    <h1 v-if="creatingComponent">Creating your component...</h1>
     <form v-if="createMode" class="view-top" ref="form" name="createComponent"  @submit.prevent="createComponent">
       <div v-if="createMode" class="flex">
         <div class="newComponentDetails">
@@ -78,7 +80,7 @@
         <button class="createBtn" type="submit">Create</button>
       </div>
     </form>
-    <div v-if="!createMode" class="components__componentsContainer">
+    <div v-if="!createMode && !$store.getters.isLoading" class="components__componentsContainer">
       <div v-for="(component, name) in $store.getters.components" :key="name" class="components__componentCard">
         <template v-if="component.component.type === 'dir'">
           <div class="components__componentLink" @click="setActiveComponent(component.component.name)">
@@ -124,7 +126,6 @@ export default {
   },
   methods: {
     setActiveComponent(componentName) {
-      console.log(componentName);
       this.$store.dispatch("setActiveComponent", componentName);
       this.$nuxt.$router.replace({ path: `/component/${componentName}` });
     },
@@ -203,7 +204,7 @@ export default {
         this.$store.dispatch("deleteComponents");
       }
       let categoryName = null;
-
+      this.$store.dispatch('setLoaderState', true);
       return axios
         .get(
           "https://api.github.com/repos/" +
@@ -243,12 +244,15 @@ export default {
                 });
             }
           }, this);
+          this.$store.dispatch('setLoaderState', false);
         })
         .catch(e => {
           console.log(e);
         });
     },
     githubAction(componentName) {
+      this.createMode = false;
+      this.$store.dispatch('setLoaderState', true);
       const configJson = {
         devTime: {
           days: this.$refs.form.devTimeDays.value,
@@ -290,7 +294,7 @@ export default {
             )
             .then(res => {
               this.creatingComponent = true;
-              this.createMode = false;
+              this.$store.dispatch('setLoaderState', false);
               document.querySelector(".newComponent").innerHTML =
                 "New component";
               this.$store.dispatch("deleteComponents");
@@ -328,6 +332,7 @@ export default {
   }
 }
 .view-top {
+  margin-top: 100px;
   animation: view-top 0.3s cubic-bezier(0.19, 1, 0.22, 1);
   animation-fill-mode: forwards;
 }
@@ -344,12 +349,15 @@ export default {
   align-items: center;
 }
 .components {
+  position: relative;
   display: flex;
+  width: calc(100% - 301px);
+  margin-left: 301px;
+  min-height: 100vh;
   background-color: #fbfbfd;
   padding: 50px 30px;
   box-sizing: border-box;
   flex-direction: column;
-  width: 100%;
 }
 .newComponent {
   margin-left: 2rem;
@@ -567,7 +575,7 @@ export default {
   margin-left: 1rem;
 }
 .components__componentsContainer {
-  margin-top: 50px;
+  margin-top: 100px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -607,5 +615,84 @@ export default {
   -webkit-box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
   -moz-box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
   box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
+}
+
+.repos__logoContainer{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 130px;
+  height: 130px;
+}
+
+.repos__logoContainer--hidden{
+  display: none;
+}
+.repos__logo{
+  width: 130px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  transform: translate3d(-50%, -50%, 0);
+}
+.repos__logoCircle{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3D(-50%, -50%, 0);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1px solid #C6D2D6;
+  animation-name: circleFade;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+.repos__logoCircle:before, .repos__logoCircle:after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3D(-50%, -50%, 0);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1px solid #C6D2D6;
+  animation-name: circleFade;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.repos__logoCircle:before{
+  animation-delay: 0.3s;
+}
+
+.repos__logoCircle:after{
+  animation-delay: 0.6s;
+}
+
+@keyframes circleFade {
+  0% {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+  }
+  70% {
+    width: 224px;
+    height: 224px;
+    opacity: 0.7;
+  }
+  80% {
+    width: 224px;
+    height: 224px;
+    opacity: 0;
+  }
+  100% {
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+  }
 }
 </style>
