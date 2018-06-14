@@ -149,6 +149,8 @@ export default {
   border-bottom: 1px solid #e7e7e7;
   border-top: 1px solid #e7e7e7;
   padding-left: 30px;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
 }
 .sidebar__repoNameContainer i {
