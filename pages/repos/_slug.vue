@@ -48,6 +48,7 @@ export default {
   },
   mounted() {
     this.init();
+    this.$store.dispatch("setActiveCategory", null);
   },
   methods: {
     init() {
@@ -184,6 +185,7 @@ export default {
   width: calc(100% - 301px);
   min-height: 100vh;
   margin-left: 301px;
+  padding-top: 40px;
 }
 .welcome-text {
   padding-left: 30px;
