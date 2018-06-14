@@ -204,7 +204,7 @@ export default {
   padding-bottom: 80px;
 }
 .heading-logo {
-  margin-top: 20px;
+  margin-top: 50px;
 }
 .heading-logo img {
   width: 80px;
