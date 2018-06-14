@@ -137,8 +137,8 @@ export default {
   padding: 50px 0;
   margin-top: 30px;
   padding-left: 30px;
-  border-bottom: 1px solid grey;
-  border-top: 1px solid grey;
+  border-bottom: 1px solid #E7E7E7;
+  border-top: 1px solid #E7E7E7;
   padding-left: 30px;
   display: flex;
   align-items: center;

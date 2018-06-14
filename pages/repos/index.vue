@@ -5,7 +5,7 @@
     <h2 class="repos__subtitle">To start, please select one of your accio workspaces, or create a new one.</h2>
     <form v-if="!$store.getters.isLoading" ref="form" class="create__repoContainer" name="createRepo"  @submit.prevent="submitRepo">
       <input class="create__repoInput" type="text" name="repoName" />
-      <button class="create__repoSubmit" type="submit">create</button>
+      <button class="create__repoSubmit" type="submit">Create</button>
     </form>
     <div v-if="!$store.getters.isLoading" class="repos__reposList">
       <div v-for="(repo, name) in repos" :key="name" class="repos__repoCard">
