@@ -389,11 +389,10 @@ form {
   justify-content: center;
   align-items: center;
   flex: 1;
-  height: 128px;
   text-align: center;
   background: white;
   border: 1px solid #dddbfb;
-  padding: 42px 25px;
+  padding: 32px 25px;
 }
 .inline-input input {
   justify-content: center;
@@ -455,7 +454,7 @@ textarea {
 }
 .difficulty {
   padding: 20px;
-  height: 168px;
+  height: 129px;
   align-items: flex-start;
   justify-content: flex-start;
 }
@@ -556,7 +555,7 @@ textarea {
 .tags-wrapper {
   background: white;
   border: 1px solid #dddbfb;
-  margin-top: 75px;
+  margin-top: 72px;
   padding: 25px 15px;
 }
 .tags-wrapper p {

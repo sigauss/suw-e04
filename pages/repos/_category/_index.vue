@@ -84,7 +84,7 @@
       <div v-for="(component, name) in $store.getters.components" :key="name" class="components__componentCard">
         <template v-if="component.component.type === 'dir'">
           <div class="components__componentLink" @click="setActiveComponent(component.component.name)">
-            <span><i class="fa fa-folder-o"></i> {{ component.component.name }}</span>
+            <span><i class="fa fa-folder"></i> {{ component.component.name }}</span>
             <div class="flex justify-between componentInfosIcons">
               <p><i class="fa fa-money"></i> {{ component.content.pricing }}€</p>
               <p v-if="component.content.difficulty === '1'"><i class="fa fa-tachometer"></i> Very easy</p>
@@ -634,12 +634,13 @@ export default {
   box-sizing: border-box;
   background-color: #f5f6fa;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  -webkit-box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.07);
 }
 .components__componentCard:hover {
-  transition: all 0.2s ease-in;
-  -webkit-box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
-  -moz-box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
-  box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
+  -webkit-box-shadow: 0px 9px 8px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 9px 8px 0px rgba(0, 0, 0, 0.1);
 }
 
 .repos__logoContainer {
