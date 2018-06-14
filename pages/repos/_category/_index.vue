@@ -374,7 +374,7 @@ export default {
   margin-left: 301px;
   min-height: 100vh;
   background-color: #fbfbfd;
-  padding: 50px 30px;
+  padding: 100px 30px;
   box-sizing: border-box;
   flex-direction: column;
 }

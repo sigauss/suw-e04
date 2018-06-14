@@ -328,7 +328,6 @@ export default {
   width: calc(100% - 301px);
   min-height: 100vh;
   margin-left: 301px;
-  padding-top: 100px;
   padding-left: 30px;
   padding-right: 30px;
   background-color: #fbfbfd;
@@ -535,7 +534,7 @@ textarea {
   left: -10px;
   margin: 0;
 }
-.preview-tag-wrapper .tab{
+.preview-tag-wrapper .tab {
   margin-top: 71px;
 }
 .tags {
