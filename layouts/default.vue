@@ -96,6 +96,7 @@ export default {
   animation-fill-mode: forwards;
 }
 .container {
+  overflow-x: hidden;
   display: flex;
   position: relative;
   flex-direction: row;

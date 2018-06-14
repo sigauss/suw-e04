@@ -352,6 +352,7 @@ form {
 .flex {
   display: flex;
 }
+
 .justify-between {
   justify-content: space-between;
 }
@@ -652,5 +653,24 @@ pre {
 }
 .tabcontent:not(.active) {
   display: none;
+}
+
+@media screen and (max-width: 1200px){
+  form.flex{
+    flex-direction: column;
+  }
+  .right-col{
+    margin-left: 0;
+    width: 80%;
+  }
+  .tags-wrapper{
+    margin-top: 20px;
+  }
+  .left-col{
+    width: 80%;
+  }
+  .left-col > div{
+    flex-direction: column;
+  }
 }
 </style>
