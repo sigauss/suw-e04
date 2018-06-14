@@ -131,6 +131,7 @@ export default {
     },
     displayForm() {
       this.createMode = !this.createMode;
+      this.preventEnterKey();
       this.newComponent.tags = [];
       if (this.createMode) {
         document.querySelector(".newComponent").innerHTML = "Cancel";
@@ -138,9 +139,15 @@ export default {
         document.querySelector(".newComponent").innerHTML = "New component";
       }
     },
+    isEmpty(str) {
+      return !str.replace(/^\s+/g, "").length;
+    },
     createTag() {
       var newTag = document.getElementsByName("tags");
       var newTagInput = document.getElementById("tags");
+      if (this.isEmpty(newTagInput.value)) {
+        return;
+      }
       newTag.forEach(tag => {
         if (this.newComponent.tags.indexOf(tag.value) > -1) {
           alert("This tag already added !");
@@ -149,6 +156,18 @@ export default {
           newTagInput.value = "";
         }
       });
+    },
+    preventEnterKey() {
+      var _this = this;
+      setTimeout(() => {
+        document.getElementById("tags").onkeypress = function(e) {
+          var key = e.charCode || e.keyCode || 0;
+          if (key == 13) {
+            e.preventDefault();
+            _this.createTag();
+          }
+        };
+      }, 500);
     },
     deleteTag(tag) {
       var tags = this.newComponent.tags;
@@ -204,7 +223,7 @@ export default {
         this.$store.dispatch("deleteComponents");
       }
       let categoryName = null;
-      this.$store.dispatch('setLoaderState', true);
+      this.$store.dispatch("setLoaderState", true);
       return axios
         .get(
           "https://api.github.com/repos/" +
@@ -244,7 +263,7 @@ export default {
                 });
             }
           }, this);
-          this.$store.dispatch('setLoaderState', false);
+          this.$store.dispatch("setLoaderState", false);
         })
         .catch(e => {
           console.log(e);
@@ -252,7 +271,7 @@ export default {
     },
     githubAction(componentName) {
       this.createMode = false;
-      this.$store.dispatch('setLoaderState', true);
+      this.$store.dispatch("setLoaderState", true);
       const configJson = {
         devTime: {
           days: this.$refs.form.devTimeDays.value,
@@ -294,7 +313,7 @@ export default {
             )
             .then(res => {
               this.creatingComponent = true;
-              this.$store.dispatch('setLoaderState', false);
+              this.$store.dispatch("setLoaderState", false);
               document.querySelector(".newComponent").innerHTML =
                 "New component";
               this.$store.dispatch("deleteComponents");
@@ -603,6 +622,7 @@ export default {
   margin: 0;
 }
 .components__componentCard {
+  cursor: pointer;
   width: 232px;
   padding: 20px;
   margin-right: 20px;
@@ -618,7 +638,7 @@ export default {
   box-shadow: 10px 10px 12px -8px rgba(0, 0, 0, 0.36);
 }
 
-.repos__logoContainer{
+.repos__logoContainer {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -627,10 +647,10 @@ export default {
   height: 130px;
 }
 
-.repos__logoContainer--hidden{
+.repos__logoContainer--hidden {
   display: none;
 }
-.repos__logo{
+.repos__logo {
   width: 130px;
   position: absolute;
   top: 50%;
@@ -638,7 +658,7 @@ export default {
   z-index: 10;
   transform: translate3d(-50%, -50%, 0);
 }
-.repos__logoCircle{
+.repos__logoCircle {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -646,13 +666,14 @@ export default {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 1px solid #C6D2D6;
+  border: 1px solid #c6d2d6;
   animation-name: circleFade;
   animation-duration: 3s;
   animation-iteration-count: infinite;
 }
-.repos__logoCircle:before, .repos__logoCircle:after{
-  content: '';
+.repos__logoCircle:before,
+.repos__logoCircle:after {
+  content: "";
   position: absolute;
   left: 50%;
   top: 50%;
@@ -660,17 +681,17 @@ export default {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 1px solid #C6D2D6;
+  border: 1px solid #c6d2d6;
   animation-name: circleFade;
   animation-duration: 3s;
   animation-iteration-count: infinite;
 }
 
-.repos__logoCircle:before{
+.repos__logoCircle:before {
   animation-delay: 0.3s;
 }
 
-.repos__logoCircle:after{
+.repos__logoCircle:after {
   animation-delay: 0.6s;
 }
 

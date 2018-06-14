@@ -131,7 +131,7 @@ export default {
       editMode: false,
       isCopied: false,
       configValues: [],
-      previewUrl: null,
+      previewUrl: null
     };
   },
   head() {
@@ -153,6 +153,9 @@ export default {
     },
     toggleEditMode() {
       this.editMode = !this.editMode;
+    },
+    isEmpty(str) {
+      return !str.replace(/^\s+/g, "").length;
     },
     openContent(index) {
       this.isCopied = false;
@@ -195,6 +198,7 @@ export default {
     displayInputs() {
       if (!this.editMode) {
         this.editMode = true;
+        this.preventEnterKey();
       } else {
         this.editMode = false;
       }
@@ -202,12 +206,27 @@ export default {
     addTag() {
       var newTagInput = document.querySelector("#newTag");
       var newTag = newTagInput.value;
+      if (this.isEmpty(newTagInput.value)) {
+        return;
+      }
       if (this.configFile.content.tags.indexOf(newTag) > -1) {
         alert("This tag already exist !");
       } else {
         newTagInput.value = "";
         this.configFile.content.tags.push(newTag);
       }
+    },
+    preventEnterKey() {
+      var _this = this;
+      setTimeout(() => {
+        document.getElementById("newTag").onkeypress = function(e) {
+          var key = e.charCode || e.keyCode || 0;
+          if (key == 13) {
+            e.preventDefault();
+            _this.addTag();
+          }
+        };
+      }, 500);
     },
     deleteTag(tag) {
       var tags = this.configFile.content.tags;
