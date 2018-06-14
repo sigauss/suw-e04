@@ -651,6 +651,7 @@ pre {
   padding: 6px 12px;
   border: 1px solid #e3e7eb;
   border-top: none;
+  overflow-x: scroll;
 }
 .tabcontent:not(.active) {
   display: none;
