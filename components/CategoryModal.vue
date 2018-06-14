@@ -37,44 +37,46 @@
                 this.categoryName = value;
             },
             createCategory() {
-                this.creationMessage = 'Your category is being created..'
+                this.$store.dispatch('setLoaderState', true);
+                this.closeModal();
                 return axios
-                    .put(
-                        `https://api.github.com/repos/${
-                            this.$store.getters.active_repo.owner
-                        }/${
-                            this.$store.getters.active_repo.name
-                        }/contents/${this.categoryName}/README.md?access_token=${
+                .put(
+                    `https://api.github.com/repos/${
+                        this.$store.getters.active_repo.owner
+                    }/${
+                        this.$store.getters.active_repo.name
+                    }/contents/${this.categoryName}/README.md?access_token=${
+                        this.$store.getters.access_token
+                    }`,
+                    {
+                        message: `:octopus: Accio :tophat: • ${Date.now()}`,
+                        content: btoa("<h1>Hello</h1>Congratulations you just created your category of component")
+                    }
+                )
+                .then(res => {
+                    setTimeout(() => {
+                        axios.get(
+                            "https://api.github.com/repos/" +
+                            this.$store.getters.active_repo.owner +
+                            "/" +
+                            this.$store.getters.slug +
+                            "/contents/?access_token=" +
                             this.$store.getters.access_token
-                        }`,
-                        {
-                            message: `:octopus: Accio :tophat: • ${Date.now()}`,
-                            content: btoa("<h1>Hello</h1>Congratulations you just created your category of component")
-                        }
-                    )
-                    .then(res => {
-                        setTimeout(() => {
-                            axios.get(
-                                "https://api.github.com/repos/" +
-                                this.$store.getters.active_repo.owner +
-                                "/" +
-                                this.$store.getters.slug +
-                                "/contents/?access_token=" +
-                                this.$store.getters.access_token
-                            )
-                            .then(res => {
-                                this.$store.dispatch('setActiveRepoCategories', res.data);
-                                this.closeModal();
-                            })
-                            .catch(e => {
-                                this.logoutMixin()
-                            })                            
-                        }, 5000);
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        this.logoutMixin()
-                    });
+                        )
+                        .then(res => {
+                            console.log(res.data);
+                            this.$store.dispatch('setActiveRepoCategories', res.data);
+                            this.$store.dispatch('setLoaderState', false);
+                        })
+                        .catch(e => {
+                            this.logoutMixin()
+                        })                            
+                    }, 5000);
+                })
+                .catch(e => {
+                    console.log(e);
+                    this.logoutMixin()
+                });
             }
         }
     }
@@ -114,9 +116,11 @@
         width: 100%;
         height: 40px;
         margin-top: 10px;
+        padding-left: 10px;
         border: 1px solid #C4CDD5;
         background-color: #F5F6FA;
         border: none;
+        outline: none;
     }
     .category__modalButtonContainer{
         display: flex;
@@ -131,7 +135,7 @@
         padding: 14px 60px;
         box-sizing: border-box;
         border-radius: 2px;
-        border: 2px solid #574BEB;
+        border: 1px solid #574BEB;
         cursor: pointer;
     }
     .category__modalSubmitButton{

@@ -20,6 +20,7 @@ const createStore = () => {
       all_components: [],
       category_modal_state: false,
       component_modal_state: false,
+      isLoading: false,
       logged: null
     },
     getters: {
@@ -58,6 +59,9 @@ const createStore = () => {
       },
       logged(state) {
         return state.logged;
+      },
+      isLoading(state) {
+        return state.isLoading;
       }
     },
     mutations: {
@@ -102,6 +106,9 @@ const createStore = () => {
       },
       SET_COMPONENTMODALSTATE: function(state, data){
         state.category_modal_state = data;
+      },
+      SET_LOADERSTATE: function(state, data){
+        state.isLoading = data;
       }
     },
     actions: {
@@ -171,6 +178,9 @@ const createStore = () => {
       },
       setComponentModalState({ commit }, data) {
         commit("SET_COMPONENTMODALSTATE", data);
+      },
+      setLoaderState({ commit }, data) {
+        commit("SET_LOADERSTATE", data);
       }
     }
   });

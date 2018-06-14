@@ -42,6 +42,7 @@ export default {
 <style>
 .container {
   display: flex;
+  position: relative;
   flex-direction: row;
   margin: 0;
   width: 100%;

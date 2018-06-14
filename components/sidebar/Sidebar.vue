@@ -1,23 +1,26 @@
 <template>
     <div class="sidebar">
         <div class="sidebar__header">
-            <div class="sidebar__logoContainer">
-                <img class="sidebar__logo" src="~assets/img/accio_logo_mini.png" alt="">
-            </div>
+          <div class="sidebar__logoContainer">
+            <img class="sidebar__logo" src="~assets/img/accio_logo_mini.png" alt="">
+          </div>
         </div>
-        <h1 v-if="repo" class="sidebar__repoName">{{repo.name}}</h1>
-        <div v-if="categories !== null" class="sidebar__count">Categories folders <span class="sidebar__categoriesCount">{{ categories.length }}</span></div>
-        <div class="sidebar__categoriesContainer">
-            <div v-if="categories !== null" v-for="(category, name) in categories" :key="name">
-                <template v-if="category.name !== 'README.md'">
-                    <div class="sidebar__categoryButton" v-bind:class="{'sidebar__categoryButton--active': category.name == $store.getters.active_category}" @click="toggleActiveCategory(category.name)">
-                        <span><i v-bind:class="{'fa-folder': category.name !== $store.getters.active_category,'fa-folder-open': category.name === $store.getters.active_category}" class="fa fa-inverse"></i></span>                        
-                        <span class="sidebar__categoryName">{{ category.name }}</span>
-                    </div>
-                </template>
-            </div>
+        <div class="sidebar__repoNameContainer">
+          <router-link to="/repos"><div class="sidebar__backToRepos"></div></router-link>
+          <h1 v-if="repo" class="sidebar__repoName">{{repo.name}}</h1>
         </div>
         <div @click="openCategoryModal" class="sidebar__newCategory"><span>+</span><span class="sidebar__newCategoryText">New category</span></div>
+        <div v-if="categories !== null" class="sidebar__count">Folders <span class="sidebar__categoriesCount">{{ categories.length }}</span></div>
+        <div class="sidebar__categoriesContainer">
+          <div v-if="categories !== null" v-for="(category, name) in categories" :key="name">
+            <template v-if="category.name !== 'README.md'">
+              <div class="sidebar__categoryButton" v-bind:class="{'sidebar__categoryButton--active': category.name == $store.getters.active_category}" @click="toggleActiveCategory(category.name)">
+                <span><i v-bind:class="{'fa-folder': category.name !== $store.getters.active_category,'fa-folder-open': category.name === $store.getters.active_category}" class="fa fa-inverse"></i></span>                        
+                <span class="sidebar__categoryName">{{ category.name }}</span>
+              </div>
+            </template>
+          </div>
+        </div>        
     </div>
 </template>
 <script>
@@ -42,9 +45,9 @@ export default {
             }
         });
         let categories = this.$store.subscribe((mutation, state) => {
-            if (mutation.type === 'SET_ACTIVEREPOCATEGORIES') {
-                this.categories = this.$store.getters.active_repo_categories;
-            }
+          if (mutation.type === 'SET_ACTIVEREPOCATEGORIES') {
+            this.categories = this.$store.getters.active_repo_categories.filter(repo => repo.type == 'dir');
+          }
         });
     },
     mounted() {
@@ -59,7 +62,7 @@ export default {
                 }
                 console.log(this.$route)
                 if(this.$route.name === 'repos-category'){
-                    this.$store.dispatch('setSlug', this.$route.params.category)
+                  this.$store.dispatch('setSlug', this.$route.params.category)
                 }
                 // if(this.$route.name === 'component-slug'){
                 //     this.$store.dispatch('setSlug', this.$route.params.category)
@@ -68,43 +71,42 @@ export default {
                 axios
                 .get(
                 "https://api.github.com/user/repos?access_token=" +
-                    this.$store.getters.access_token
+                  this.$store.getters.access_token
                 )
                 .then(res => {
-                    this.$store.dispatch("setUserRepos", res.data);
-                    res.data.forEach(repo => {
-                        if (repo.name === this.$store.getters.slug) {
-                            repoOwner = repo.owner.login;
-                            console.log(repo.name, repoOwner)
-                            this.$store.dispatch("setActiveRepo", {
-                                name: repo.name,
-                                owner: repoOwner
-                            });
-                        }
-                    });
-                    axios.get(
-                            "https://api.github.com/repos/" +
-                            this.$store.getters.active_repo.owner +
-                            "/" +
-                            this.$store.getters.active_repo.name +
-                            "/contents/?access_token=" +
-                            this.$store.getters.access_token
-                    )
-                    .then(res => {
-                        this.$store.dispatch('setActiveRepoCategories', res.data);
-                    });
+                  this.$store.dispatch("setUserRepos", res.data);
+                  res.data.forEach(repo => {
+                    if (repo.name === this.$store.getters.slug) {
+                      repoOwner = repo.owner.login;
+                      console.log(repo.name, repoOwner)
+                      this.$store.dispatch("setActiveRepo", {
+                        name: repo.name,
+                        owner: repoOwner
+                      });
+                    }
+                  });
+                  axios.get(
+                    "https://api.github.com/repos/" +
+                    this.$store.getters.active_repo.owner +
+                    "/" +
+                    this.$store.getters.active_repo.name +
+                    "/contents/?access_token=" +
+                    this.$store.getters.access_token
+                  )
+                  .then(res => {
+                    this.$store.dispatch('setActiveRepoCategories', res.data);
+                  });
                 });
             }
         },
         toggleActiveCategory(cat){
-            this.$store.dispatch('setActiveCategory', cat);
-            return axios.post('/api/update-session-active-category',{
-                activeCategory: cat,
-            })
-            .then(res => {
-              // console.log(res.data)
-              this.$nuxt.$router.replace({path: `/repos/${this.$store.getters.active_repo.name}/${cat}`})
-            })           
+          this.$store.dispatch('setActiveCategory', cat);
+          return axios.post('/api/update-session-active-category',{
+            activeCategory: cat,
+          })
+          .then(res => {
+            this.$nuxt.$router.replace({path: `/repos/${this.$store.getters.active_repo.name}/${cat}`})
+          })           
         },
         openCategoryModal(){
             this.$store.dispatch('setCategoryModalState', !this.$store.getters.category_modal_state);
@@ -114,45 +116,63 @@ export default {
 </script>
 <style scoped>
 .sidebar{
-    min-width: 301px;
-    height: 100vh;
-    background-color: #F5F6FA;
+  position: fixed;
+  min-width: 301px;
+  height: 100vh;
+  background-color: #F5F6FA;
 }
 .sidebar__logoContainer{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .sidebar__logo{
-    margin-top: 40px;
-    width: 140px;
+  margin-top: 40px;
+  width: 70px;
 }
+
+.sidebar__repoNameContainer{
+  padding: 50px 0;
+  margin-top: 30px;
+  padding-left: 30px;
+  border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
+  padding-left: 30px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
 .sidebar__repoName{
-    font-size: 16px;
-    margin-top: 40px;
-    width: 100%;
-    padding-bottom: 50px;
-    border-bottom: 1px solid grey;
-    padding-left: 30px;
-    box-sizing: border-box;
-    display: inline-block;
+  position: relative;
+  font-size: 16px;    
+  width: 100%;
+  margin-left: 20px;
+  color: #574BEB;
+  display: inline-block;
+}
+.sidebar__backToRepos{
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7.5px 13.0px 7.5px 0;
+  border-color: transparent #574BEB transparent transparent;
 }
 .sidebar__count{
     margin-left: 30px;
-    text-transform: uppercase;
 }
 .sidebar__categoriesCount{
     display: inline-block;
-    margin-left: 30px;
+    margin-left: 150px;
     padding: 5px 10px;
-    background-color: #fff;
-    color: #8A8CA2;
+    background-color: #574BEB;
+    color: #fff;
 }
 .sidebar__categoriesContainer{
     margin-top: 25px;
-    height: 60vh;
+    height: 40vh;
     width: 100%;
     overflow: scroll;
 }
@@ -174,6 +194,7 @@ export default {
     width: 80%;
     height: 50px;
     margin-top: 30px;
+    margin-bottom: 30px;
     margin-left: 10%;
     display: flex;
     align-items: center;
