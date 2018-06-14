@@ -4,8 +4,8 @@
       <div class="login__sideContent">
         <img class="login__logo" width="135" src="~assets/img/accio_logo.png">
         <div class="login__textContent">
-          <span class="login__mainHeadline">You are about to change<span class="blue"> the way you work.</span></span>
-          <p class="login__secondHeadline">Accio is the first collaborative development component tool for companies.</p>
+          <span class="login__mainHeadline">Discover what<span class="blue"> you already have done.</span></span>
+          <p class="login__secondHeadline">Accio lets everyone in the company browse your development history and load components with project management information.</p>
         </div>
         <div class="login__githubContainer">
           <a class="login__link" :href="'https://github.com/login/oauth/authorize?scope=user,repo,repo:invite,&client_id='+client_id">
