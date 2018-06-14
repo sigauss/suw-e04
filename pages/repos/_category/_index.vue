@@ -323,18 +323,18 @@ export default {
             });
         })
         .catch(e => {
-          // this.logoutMixin()
+          this.logoutMixin()
         });
     },
     createComponent() {
       this.githubAction(this.$refs.form.componentName.value);
     }
   },
-  // fetch({ store, redirect, params }) {
-  //   if (store.state.authUser != "logged") {
-  //     return redirect("/login");
-  //   }
-  // }
+  fetch({ store, redirect, params }) {
+    if (store.state.authUser != "logged") {
+      return redirect("/login");
+    }
+  }
 };
 </script>
 

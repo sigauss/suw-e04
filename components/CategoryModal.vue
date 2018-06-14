@@ -71,13 +71,13 @@ export default {
                 this.$store.dispatch("setLoaderState", false);
               })
               .catch(e => {
-                // this.logoutMixin();
+                this.logoutMixin();
               });
           }, 5000);
         })
         .catch(e => {
           console.log(e);
-          // this.logoutMixin();
+          this.logoutMixin();
         });
     }
   }

@@ -63,7 +63,7 @@ export default {
           this.$store.dispatch("setLoaderState", false);
         })
         .catch(e => {
-          // this.logoutMixin();
+          this.logoutMixin();
           console.log(e)
         });
     },
@@ -71,7 +71,7 @@ export default {
       axios
         .get("/api/logout")
         .then(res => {
-          // this.logoutMixin();
+          this.logoutMixin();
         })
         .catch(e => {
           console.log(e);
@@ -190,21 +190,21 @@ export default {
                 });
             })
             .catch(e => {
-              // this.logoutMixin();
+              this.logoutMixin();
               console.log(e)
             });
         })
         .catch(e => {
-          // this.logoutMixin();
+          this.logoutMixin();
           console.log(e)
         });
     }
   },
-  // fetch({ store, redirect }) {
-  //   if (store.state.authUser != "logged") {
-  //     return redirect("/login");
-  //   }
-  // }
+  fetch({ store, redirect }) {
+    if (store.state.authUser != "logged") {
+      return redirect("/login");
+    }
+  }
 };
 </script> 
 

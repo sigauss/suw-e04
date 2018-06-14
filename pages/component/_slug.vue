@@ -118,9 +118,9 @@ import axios from "~/plugins/axios";
 
 export default {
   fetch({ store, params, route, redirect }) {
-    // if (store.state.authUser != "logged") {
-    //   return redirect("/login");
-    // }
+    if (store.state.authUser != "logged") {
+      return redirect("/login");
+    }
     store.dispatch("setSlug", route.params.slug);
   },
   data() {
@@ -651,6 +651,7 @@ pre {
   padding: 6px 12px;
   border: 1px solid #e3e7eb;
   border-top: none;
+  overflow-x: scroll;
 }
 .tabcontent:not(.active) {
   display: none;

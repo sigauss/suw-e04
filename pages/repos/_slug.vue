@@ -98,12 +98,12 @@ export default {
               })
               .catch(e => {
                 console.log(e);
-                // this.logoutMixin();
+                this.logoutMixin();
               });
           })
           .catch(e => {
             console.log(e);
-            // this.logoutMixin();
+            this.logoutMixin();
           });
       } else {
         const repos = this.$store.getters.user.repos;
@@ -151,12 +151,12 @@ export default {
                 this.contents = res.data;
               })
               .catch(e => {
-                // this.logoutMixin();
+                this.logoutMixin();
                 console.log(e)
               });
           })
           .catch(e => {
-            // this.logoutMixin();
+            this.logoutMixin();
             console.log(e)
           });
       }
