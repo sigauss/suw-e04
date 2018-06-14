@@ -6,7 +6,7 @@
     <h1 class="repos__title">Hi ! Welcome to <span>Accio</span></h1>
     <p class="repos__subtitle">To start, please select one of your accio workspaces, or create a new one.</p>
     <form v-if="!$store.getters.isLoading" ref="form" class="create__repoContainer" name="createRepo"  @submit.prevent="submitRepo">
-      <input placeholder="Name of your repository.." class="create__repoInput" type="text" name="repoName" />
+      <input required placeholder="Name of your repository.." class="create__repoInput" type="text" name="repoName" />
       <button class="create__repoSubmit" type="submit">Create</button>
     </form>
     <div v-if="!$store.getters.isLoading" class="repos__reposList">
@@ -328,7 +328,7 @@ export default {
 }
 .repos__logoContainer {
   position: absolute;
-  top: 50%;
+  top: 55%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0);
   width: 130px;

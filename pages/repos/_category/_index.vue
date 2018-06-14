@@ -377,6 +377,10 @@ export default {
   padding: 100px 30px;
   box-sizing: border-box;
   flex-direction: column;
+  background-image: url("~assets/img/bg-illu.png");
+  background-size: contain;
+  background-position: right;
+  background-repeat: no-repeat;
 }
 .newComponent {
   margin-left: 2rem;
