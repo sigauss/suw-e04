@@ -381,6 +381,7 @@ export default {
   background-size: contain;
   background-position: right;
   background-repeat: no-repeat;
+  background-position-y: 150px;
 }
 .newComponent {
   margin-left: 2rem;

@@ -207,7 +207,7 @@ export default {
   margin-top: 50px;
 }
 .heading-logo img {
-  width: 80px;
+  width: 70px;
 }
 .create__repoContainer {
   display: flex;
