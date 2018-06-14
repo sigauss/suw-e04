@@ -6,7 +6,7 @@
     <h1 class="repos__title">Hi ! Welcome to <span>Accio</span></h1>
     <p class="repos__subtitle">To start, please select one of your accio workspaces, or create a new one.</p>
     <form v-if="!$store.getters.isLoading" ref="form" class="create__repoContainer" name="createRepo"  @submit.prevent="submitRepo">
-      <input required placeholder="Name of your repository.." class="create__repoInput" type="text" name="repoName" />
+      <input autocomplete="off" required placeholder="Name of your repository.." class="create__repoInput" type="text" name="repoName" />
       <button class="create__repoSubmit" type="submit">Create</button>
     </form>
     <div v-if="!$store.getters.isLoading" class="repos__reposList">
@@ -77,6 +77,17 @@ export default {
         });
     },
     submitRepo() {
+      var reposList = this.repos;
+      for (var i = 0; i < reposList.length; i++) {
+        if (
+          reposList[i].name.toUpperCase() ===
+          "ACCIO-" + this.$refs.form.repoName.value.toUpperCase()
+        ) {
+          alert("This repo already exists !");
+          this.$refs.form.repoName.value = "";
+          return;
+        }
+      }
       this.$store.dispatch("setLoaderState", true);
       return axios({
         method: "post",

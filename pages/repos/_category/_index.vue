@@ -205,7 +205,10 @@ export default {
                 .then(response => {
                   var decodeContent = atob(response.data.content);
                   let content = JSON.parse(decodeContent);
-                  // this.components += {component: component, content: content};
+                  this.creatingComponent = true;
+                  this.$store.dispatch("setLoaderState", false);
+                  document.querySelector(".newComponent").innerHTML =
+                    "New component";
                   this.$store.dispatch("setComponentContent", {
                     component: component,
                     content: content
@@ -312,10 +315,6 @@ export default {
               }
             )
             .then(res => {
-              this.creatingComponent = true;
-              this.$store.dispatch("setLoaderState", false);
-              document.querySelector(".newComponent").innerHTML =
-                "New component";
               this.$store.dispatch("deleteComponents");
               setTimeout(() => {
                 this.creatingComponent = false;

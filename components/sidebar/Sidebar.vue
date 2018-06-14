@@ -6,8 +6,8 @@
           </div>
         </div>
         <div class="sidebar__repoNameContainer">
-          <router-link to="/repos"><i class="fa fa-caret-left backToRepo"></i></router-link>
           <h1 v-if="repo" class="sidebar__repoName">{{repo.name}}</h1>
+          <router-link to="/repos"><i class="fa fa-caret-left"></i>Back to repos</router-link>
         </div>
         <div @click="openCategoryModal" class="sidebar__newCategory"><span>+</span><span class="sidebar__newCategoryText">New category</span></div>
         <div v-if="categories !== null" class="sidebar__count">Folders <span class="sidebar__categoriesCount">{{ categories.length }}</span></div>
@@ -149,9 +149,17 @@ export default {
   border-bottom: 1px solid #e7e7e7;
   border-top: 1px solid #e7e7e7;
   padding-left: 30px;
-  display: flex;
-  align-items: center;
   box-sizing: border-box;
+}
+.sidebar__repoNameContainer i {
+  padding-right: 10px;
+}
+.sidebar__repoNameContainer a {
+  padding-left: 10px;
+  text-decoration: none;
+}
+.sidebar__repoNameContainer a:hover {
+  text-decoration: underline;
 }
 
 .sidebar__repoName {
@@ -161,12 +169,6 @@ export default {
   margin-left: 10px;
   color: #574beb;
   display: inline-block;
-}
-.backToRepo {
-  color: #574beb !important;
-  font-size: 26px;
-  position: relative;
-  top: 1px;
 }
 .sidebar__count {
   margin-left: 30px;

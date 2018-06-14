@@ -37,7 +37,6 @@
               <div class="info componentInfo">
                 <span>6</span>
                 <label>Contributors</label>
-                <button>View all</button>
               </div>
             </div>
             <h2 v-if="previewUrl">Preview</h2>
@@ -281,19 +280,23 @@ export default {
             }`
           )
           .then(res => {
-            console.log(JSON.parse(res.data))
+            console.log(JSON.parse(res.data));
             if (JSON.parse(res.data).name === "config.json") {
               this.configFile = JSON.parse(res.data);
               this.configFile.content = JSON.parse(
                 atob(this.configFile.content)
               );
-            } else if (JSON.parse(res.data).name.includes('preview')) {
+            } else if (JSON.parse(res.data).name.includes("preview")) {
               this.preview = JSON.parse(res.data);
-              this.previewUrl = `https://github.com/${this.$store.getters.active_repo.owner}/${this.$store.getters.active_repo.name}//blob/master/${this.$store.getters.active_category}/${this.$route.params.slug}/${this.preview.name}?raw=true`
+              this.previewUrl = `https://github.com/${
+                this.$store.getters.active_repo.owner
+              }/${this.$store.getters.active_repo.name}//blob/master/${
+                this.$store.getters.active_category
+              }/${this.$route.params.slug}/${this.preview.name}?raw=true`;
             } else {
               this.files = this.files.filter(function(file) {
                 return (
-                  file.name !== "config.json" && !file.name.includes('preview')
+                  file.name !== "config.json" && !file.name.includes("preview")
                 );
               });
               this.files.forEach(file => {
@@ -654,21 +657,21 @@ pre {
   display: none;
 }
 
-@media screen and (max-width: 1200px){
-  form.flex{
+@media screen and (max-width: 1200px) {
+  form.flex {
     flex-direction: column;
   }
-  .right-col{
+  .right-col {
     margin-left: 0;
     width: 80%;
   }
-  .tags-wrapper{
+  .tags-wrapper {
     margin-top: 20px;
   }
-  .left-col{
+  .left-col {
     width: 80%;
   }
-  .left-col > div{
+  .left-col > div {
     flex-direction: column;
   }
 }

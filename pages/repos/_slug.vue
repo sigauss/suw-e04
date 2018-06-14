@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <div class="welcome-text">
+    <div v-if="!$store.getters.isLoading" class="welcome-text">
       <div class="flex align-center justify-center">
         <div class="left">
           <h1>Hello 🖐🏼 🐙</h1>

@@ -85,7 +85,9 @@ export default {
 </script>
 <style scoped>
 .category__modalLayout {
-  position: absolute;
+  position: fixed;
+  z-index: 100;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
