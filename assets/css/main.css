@@ -1,22 +1,46 @@
-html, body
-{
+@font-face {
+  font-family: "SF-Pro-Text-Regular";
+  src: url("~assets/fonts/SFProText-Regular.woff") format("woff"),
+    url("~assets/fonts/SFProText-Regular.otf") format("otf"),
+    url("~assets/fonts/SFProText-Regular.ttf") format("ttf"),
+    url("~assets/fonts/SFProText-Regular.eot") format("eot");
+}
+@font-face {
+  font-family: "SFProText-Semibold";
+  src: url("~assets/fonts/SFProText-Semibold.woff") format("woff"),
+    url("~assets/fonts/SFProText-Semibold.otf") format("otf"),
+    url("~assets/fonts/SFProText-Semibold.ttf") format("ttf"),
+    url("~assets/fonts/SFProText-Semibold.eot") format("eot");
+}
+
+html,
+body {
   background-color: #fff;
   color: #000;
   letter-spacing: 0.5px;
-  font-family: "Source Sans Pro", Arial, sans-serif;
+  font-family: "SF-Pro-Text-Regular";
   height: 100vh;
   margin: 0;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "SFProText-Semibold";
+}
 
-footer
-{
+footer {
   padding: 20px;
   text-align: center;
   border-top: 1px solid #ddd;
 }
 
-a, a:hover, a:focus, a:visited
-{
+a,
+a:hover,
+a:focus,
+a:visited {
   color: #000;
 }
 

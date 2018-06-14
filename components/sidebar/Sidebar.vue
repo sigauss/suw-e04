@@ -196,6 +196,7 @@ export default {
   background-color: #fff;
 }
 .sidebar__categoryName {
+  font-family: "SFProText-Semibold";
   display: inline-block;
   margin-left: 40px;
   font-size: 14px;

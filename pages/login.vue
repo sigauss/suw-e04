@@ -24,97 +24,98 @@
 import axios from "~/plugins/axios";
 
 export default {
-  data(){
+  data() {
     return {
       client_id: process.env.client_id
     };
   },
-  async asyncData () {
-  },
-  head () {
+  async asyncData() {},
+  head() {
     return {
       title: "Users"
     };
   },
-  fetch ({ store, redirect }) {
-    if (store.state.authUser == 'logged') {
-      return redirect('/repos')
+  fetch({ store, redirect }) {
+    if (store.state.authUser == "logged") {
+      return redirect("/repos");
     }
   }
 };
 </script>
 
 <style scoped>
-.container{
+.container {
   display: flex;
   flex-direction: row;
 }
 .login__sideContainer {
   /* width: 33%; */
-  background-color:white;
+  background-color: white;
   min-width: 464px;
   height: 100vh;
 }
-.login__sideContent{
+.login__sideContent {
   width: 80%;
   margin-left: 65px;
 }
-.login__logo{
+.login__logo {
   margin-top: 46px;
 }
-.login__mainHeadline{
+.login__mainHeadline {
   width: 80%;
   margin-top: 20vh;
-  color: #8A8CA2;
+  color: #8a8ca2;
   display: inline-block;
   font-size: 31px;
   text-align: left;
+  font-family: "SFProText-Semibold";
 }
 .blue {
-  color: #574BEB;
+  color: #574beb;
 }
-.login__githubContainer{
+.login__githubContainer {
   width: fit-content;
   display: flex;
   flex-direction: column;
   /* align-items: center; */
 }
-.login__link{
+.login__link {
   display: flex;
   margin-top: 15vh;
   text-decoration: none;
 }
-.login__githubSquare{
+.login__githubSquare {
   display: flex;
   justify-content: center;
   align-items: center;
   /* display: inline-block; */
   height: 70px;
   width: 70px;
-  background-color: #574BEB;
+  background-color: #574beb;
 }
-.login__logButton{
+.login__logButton {
   display: inline-block;
-  padding: 26px 46px;  
+  padding: 26px 46px;
   margin-left: 2px;
   font-size: 16px;
   cursor: pointer;
-  background-color: #574BEB;
-  color: white;  
+  background-color: #574beb;
+  color: white;
   border: none;
   outline: none;
 }
-.login__secondHeadline{
+.login__secondHeadline {
   width: 80%;
-  color: #C7CAD5;
+  color: #c7cad5;
   font-size: 16px;
   text-align: left;
 }
-.login__explanation{
-  /* align-self: center; */
+.login__explanation {
+  color: #c7cad5;
+  text-align: center;
   margin-top: 22px;
 }
-.login__backgroundImg{
+.login__backgroundImg {
   position: relative;
   width: 100%;
   height: 100vh;
