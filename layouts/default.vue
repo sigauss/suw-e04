@@ -19,11 +19,17 @@ export default {
   data() {
     return {
       categoryModalOpen: false,
+      keys: {37: 1, 38: 1, 39: 1, 40: 1}
     }
   },
   created() {
     let categoryModal = this.$store.subscribe((mutation, state) => {
         if (mutation.type === 'SET_CATEGORYMODALSTATE') {
+          if (this.$store.getters.category_modal_state === false){
+            this.enableScroll();
+          } else {
+            this.disableScroll();
+          }
           this.categoryModalOpen = this.$store.getters.category_modal_state;
         }
     });
@@ -34,6 +40,29 @@ export default {
   methods: {
     init() {
 
+    },
+    preventDefault(e) {
+      e = e || window.event;
+      if (e.preventDefault)
+          e.preventDefault();
+      e.returnValue = false;  
+    },
+    disableScroll() {
+      console.log('disabling');
+      if (process.browser) {
+        console.log(window)
+        window.onwheel = this.preventDefault; // modern standard
+        window.onmousewheel = document.onmousewheel = this.preventDefault; // older browsers, IE
+        window.ontouchmove  = this.preventDefault; // mobile
+      }
+    },
+    enableScroll() {
+      if (process.browser) {  
+        window.onmousewheel = document.onmousewheel = null; 
+        window.onwheel = null; 
+        window.ontouchmove = null;  
+        document.onkeydown = null;  
+      }
     }
   }
 };

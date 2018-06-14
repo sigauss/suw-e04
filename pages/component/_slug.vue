@@ -43,7 +43,7 @@
             <h2 v-if="previewUrl">Preview</h2>
             <div class="preview-tag-wrapper">
               <div class="meta__informations_preview">
-                <img  v-if="previewUrl" class="preview" :src="previewUrl" />
+                <img v-if="previewUrl" class="preview" :src="previewUrl" />
               </div>
               <div class="tab">
                 <a class="tablinks" v-on:click="openContent(index)" v-for="(file, index) in files" :key="index" v-bind:class="{active: index === 0}">
@@ -128,7 +128,6 @@ export default {
     return {
       configFile: null,
       files: [],
-      preview: null,
       editMode: false,
       isCopied: false,
       configValues: [],
@@ -145,8 +144,11 @@ export default {
   },
   methods: {
     init() {
-        console.log(this.$route)
       this.files = [];
+      this.$store.dispatch("setActiveRepo", {
+        name: this.$store.getters.active_repo.name,
+        owner: this.$store.getters.active_repo.owner
+      });
       this.getComponentInformations();
     },
     toggleEditMode() {
@@ -177,7 +179,6 @@ export default {
       this.isCopied = true;
     },
     getComponentInformations() {
-
       return axios
         .get(
           `/api/github/${this.$store.getters.active_repo.owner}/${
@@ -261,19 +262,15 @@ export default {
             }`
           )
           .then(res => {
-            console.log(JSON.parse(res.data))
             if (JSON.parse(res.data).name === "config.json") {
               this.configFile = JSON.parse(res.data);
               this.configFile.content = JSON.parse(
                 atob(this.configFile.content)
               );
-            } else if (JSON.parse(res.data).name.includes('preview')) {
-              this.preview = JSON.parse(res.data);
-              this.previewUrl = `https://github.com/${this.$store.getters.active_repo.owner}/${this.$store.getters.active_repo.name}//blob/master/${this.$store.getters.active_category}/${this.$route.params.slug}/${this.preview.name}?raw=true`
             } else {
               this.files = this.files.filter(function(file) {
                 return (
-                  file.name !== "config.json" && !file.name.includes('preview')
+                  file.name !== "config.json" && file.name !== "preview.png"
                 );
               });
               this.files.forEach(file => {
@@ -364,6 +361,7 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   flex: 1;
   height: 128px;
   text-align: center;
@@ -372,6 +370,7 @@ form {
   padding: 42px 25px;
 }
 .inline-input input {
+  justify-content: center;
   max-width: 43px;
 }
 .inline-input input:last-child {
@@ -400,6 +399,7 @@ form {
 }
 .componentInfo input {
   height: 34px;
+  width: 60px;
   padding-left: 10px;
   border-radius: 3px;
   border: 1px solid #dedede;
@@ -511,6 +511,9 @@ textarea {
   left: -10px;
   margin: 0;
 }
+.preview-tag-wrapper .tab{
+  margin-top: 71px;
+}
 .tags {
   display: block;
 }
@@ -601,6 +604,7 @@ pre {
 .copy {
   color: #574beb;
   position: absolute;
+  z-index: 9;
   right: 20px;
   top: 20px;
 }

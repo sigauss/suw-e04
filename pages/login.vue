@@ -12,7 +12,7 @@
             <div class="login__githubSquare"><img src="~assets/img/github_logo.png" alt="" width="36"></div>
             <button class="login__logButton">Register with GitHub</button>
           </a>
-          <div class="login__explanation">Why with github?</div>
+          <div class="login__explanation">Soon with Bitbucket and Gitlab ! 😀</div>
         </div>
       </div>
     </div>
@@ -74,7 +74,7 @@ export default {
   color: #574BEB;
 }
 .login__githubContainer{
-  width: 100%;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   /* align-items: center; */
@@ -122,9 +122,8 @@ export default {
 }
 .login__backgroundImg img {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 0;
-  width: 100%;
+  min-width: 100%;
+  height: 100vh;
+  object-fit: cover;
 }
 </style>

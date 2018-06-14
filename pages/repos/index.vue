@@ -50,7 +50,6 @@ export default {
   mixins: [logoutMixin],
   methods: {
     init() {
-      console.log(this.$store.getters.isLoading);
       axios
         .get(
           "https://api.github.com/user/repos?access_token=" +
@@ -92,11 +91,6 @@ export default {
       }).then(res => {
         const repOwner = res.data.owner.login
         const repoName = res.data.name
-
-        console.log('JJJJJJJ')
-        console.log(res.data)
-        console.log(repOwner)
-
         return axios
         .get(
           "https://api.github.com/user/repos?access_token=" +
@@ -183,7 +177,7 @@ export default {
                           }
                         )
                         .then(res =>{
-                          alert("repo created");
+                          this.$store.dispatch('setLoaderState', false);
                         })
                         .catch(e =>{
                           console.log(e)
@@ -282,6 +276,9 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+  &@media screen and (max-width: 890px){
+    
+  }
 }
 .repos__repoCard{
   width: 80%;
@@ -323,6 +320,20 @@ export default {
   margin-top: 11px;
 }
 
+@media screen and (max-width: 890px){
+  .repos__reposList{
+    width: 60%;
+  }
+  .create__repoContainer{
+    width: 60%;
+  }
+  .create__repoInput{
+    width: 100%;
+  }
+  .repos__subtitle{
+    width: 60%;
+  }
+}
 .repos__logoContainer{
   position: absolute;
   top: 50%;
