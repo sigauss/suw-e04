@@ -1,10 +1,12 @@
 <template>
   <section class="container">
-      <!-- <button @click="logout">Logout</button> -->
-    <h1 class="repos__title">Hi ! Welcome to Accio</h1>
-    <h2 class="repos__subtitle">To start, please select one of your accio workspaces, or create a new one.</h2>
+    <div class="heading-logo">
+      <img src="~assets/img/accio_logo_mini.png">
+    </div>
+    <h1 class="repos__title">Hi ! Welcome to <span>Accio</span></h1>
+    <p class="repos__subtitle">To start, please select one of your accio workspaces, or create a new one.</p>
     <form v-if="!$store.getters.isLoading" ref="form" class="create__repoContainer" name="createRepo"  @submit.prevent="submitRepo">
-      <input class="create__repoInput" type="text" name="repoName" />
+      <input placeholder="Name of your repository.." class="create__repoInput" type="text" name="repoName" />
       <button class="create__repoSubmit" type="submit">Create</button>
     </form>
     <div v-if="!$store.getters.isLoading" class="repos__reposList">
@@ -201,12 +203,17 @@ export default {
   min-height: 100vh;
   padding-bottom: 80px;
 }
-
+.heading-logo {
+  margin-top: 20px;
+}
+.heading-logo img {
+  width: 80px;
+}
 .create__repoContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .create__repoSubmit {
@@ -243,11 +250,12 @@ export default {
   outline: none;
 }
 .repos__title {
-  margin-top: 70px;
-  width: 280px;
   font-size: 31px;
   line-height: 39px;
   text-align: center;
+}
+.repos__title span {
+  color: #574beb;
 }
 .repos__subtitle {
   margin-top: 24px;
