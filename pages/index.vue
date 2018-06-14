@@ -16,10 +16,10 @@ export default {
     }
   },
   fetch ({ store, redirect }) {
-    if (store.state.authUser == 'logged') {
+    // if (store.state.authUser == 'logged') {
       // uncomment if we went to redirect directly from landing
-      // return redirect('/repos')
-    }
+      return redirect('/login')
+    // }
   }
 }
 </script>
